@@ -80,7 +80,7 @@ export class Union extends Expression {
   }
 
   listTypeArgs() {
-    return this.args?.some(arg => {
+    return this.args?.some((arg: any) => {
       return arg.asTypeSpecifier != null && arg.asTypeSpecifier.type === 'ListTypeSpecifier';
     });
   }
@@ -259,7 +259,7 @@ export class Length extends Expression {
     const arg = await this.execArgs(ctx);
     if (arg != null) {
       return arg.length;
-    } else if (this.arg.asTypeSpecifier.type === 'ListTypeSpecifier') {
+    } else if ((this.arg as any).asTypeSpecifier.type === 'ListTypeSpecifier') {
       return 0;
     } else {
       return null;

@@ -216,7 +216,7 @@ class AggregateClause extends Expression {
 export class Query extends Expression {
   sources: MultiSource;
   letClauses: LetClause[];
-  relationship: any[];
+  relationship: Expression[];
   where: any;
   returnClause: ReturnClause | null;
   aggregateClause: AggregateClause | null;
@@ -227,7 +227,7 @@ export class Query extends Expression {
     super(json);
     this.sources = new MultiSource(json.source.map((s: any) => new AliasedQuerySource(s)));
     this.letClauses = json.let != null ? json.let.map((d: any) => new LetClause(d)) : [];
-    this.relationship = json.relationship != null ? build(json.relationship) : [];
+    this.relationship = json.relationship != null ? (build(json.relationship) as Expression[]) : [];
     this.where = build(json.where);
     this.returnClause = json.return != null ? new ReturnClause(json.return) : null;
     this.aggregateClause = json.aggregate != null ? new AggregateClause(json.aggregate) : null;

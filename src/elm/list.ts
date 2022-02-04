@@ -5,11 +5,11 @@ import { equals } from '../util/comparison';
 import { Context } from '../runtime/context';
 
 export class List extends Expression {
-  elements: any[];
+  elements: Expression[];
 
   constructor(json: any) {
     super(json);
-    this.elements = build(json.element) || [];
+    this.elements = (build(json.element) as Expression[]) || [];
   }
 
   get isList() {
@@ -17,7 +17,7 @@ export class List extends Expression {
   }
 
   async exec(ctx: Context) {
-    return this.elements.map(item => item.execute(ctx));
+    return await Promise.all(this.elements.map(async item => await item.execute(ctx)));
   }
 }
 
@@ -99,19 +99,19 @@ export class ToList extends Expression {
 }
 
 export class IndexOf extends Expression {
-  source: any;
-  element: any;
+  source: Expression;
+  element: Expression;
 
   constructor(json: any) {
     super(json);
-    this.source = build(json.source);
-    this.element = build(json.element);
+    this.source = build(json.source) as Expression;
+    this.element = build(json.element) as Expression;
   }
 
   async exec(ctx: Context) {
     let index;
-    const src = this.source.execute(ctx);
-    const el = this.element.execute(ctx);
+    const src = await this.source.execute(ctx);
+    const el = await this.element.execute(ctx);
     if (src == null || el == null) {
       return null;
     }
@@ -211,11 +211,11 @@ function removeDuplicateNulls(list: any[]) {
 export class Current extends UnimplementedExpression {}
 
 export class First extends Expression {
-  source: any;
+  source: Expression;
 
   constructor(json: any) {
     super(json);
-    this.source = build(json.source);
+    this.source = build(json.source) as Expression;
   }
 
   async exec(ctx: Context) {
@@ -229,11 +229,11 @@ export class First extends Expression {
 }
 
 export class Last extends Expression {
-  source: any;
+  source: Expression;
 
   constructor(json: any) {
     super(json);
-    this.source = build(json.source);
+    this.source = build(json.source) as Expression;
   }
 
   async exec(ctx: Context) {
@@ -247,15 +247,15 @@ export class Last extends Expression {
 }
 
 export class Slice extends Expression {
-  source: any;
-  startIndex: any;
-  endIndex: any;
+  source: Expression;
+  startIndex: Expression;
+  endIndex: Expression;
 
   constructor(json: any) {
     super(json);
-    this.source = build(json.source);
-    this.startIndex = build(json.startIndex);
-    this.endIndex = build(json.endIndex);
+    this.source = build(json.source) as Expression;
+    this.startIndex = build(json.startIndex) as Expression;
+    this.endIndex = build(json.endIndex) as Expression;
   }
 
   async exec(ctx: Context) {
