@@ -393,7 +393,7 @@ describe('Modulo', () => {
     setup(this, data);
 
     it('should be able to return the remainder of a division', async function () {
-     (await  this.mod.exec(this.ctx)).should.equal(1);
+      (await this.mod.exec(this.ctx)).should.equal(1);
     });
   });
 });
@@ -424,7 +424,7 @@ describe('Round', () => {
     (await this.down.exec(this.ctx)).should.equal(4);
   });
   it('should be able to round a number up or down to the closest decimal place ', async function () {
-   (await this.up_percent.exec(this.ctx)).should.equal(4.6);
+    (await this.up_percent.exec(this.ctx)).should.equal(4.6);
     (await this.down_percent.exec(this.ctx)).should.equal(4.4);
   });
 });
@@ -442,7 +442,7 @@ describe('Successor', () => {
   });
 
   it('should return null for Successor greater than Integer Max value', async function () {
-    should((await this.ofr.exec(this.ctx))).be.null();
+    should(await this.ofr.exec(this.ctx)).be.null();
   });
 
   it('should be able to get Date Successor for year', async function () {
@@ -533,13 +533,13 @@ describe('Predecessor', () => {
   });
 
   it('should be able to get Integer Predecessor', async function () {
-   (await this.is.exec(this.ctx)).should.equal(1);
+    (await this.is.exec(this.ctx)).should.equal(1);
   });
   it('should be able to get Real Predecessor', async function () {
     (await this.rs.exec(this.ctx)).should.equal(2.2 - Math.pow(10, -8));
   });
   it('should return null for Predecessor greater than Integer Max value', async function () {
-    should((await this.ufr.exec(this.ctx))).be.null();
+    should(await this.ufr.exec(this.ctx)).be.null();
   });
 
   it('should be able to get Date Predecessor for year', async function () {
@@ -586,7 +586,7 @@ describe('Predecessor', () => {
   });
 
   it('should be able to get Date Predecessor for year,month,day,hour,minute', async function () {
-    const dp = await  this.ymdhm_date.exec(this.ctx);
+    const dp = await this.ymdhm_date.exec(this.ctx);
     dp.year.should.equal(2014);
     dp.month.should.equal(12);
     dp.day.should.equal(31);
@@ -618,7 +618,7 @@ describe('Predecessor', () => {
   });
 
   it('should return null when attempting to get the Predecessor of the minimum allowed date', async function () {
-    should((await this.min_date.exec(this.ctx))).be.null();
+    should(await this.min_date.exec(this.ctx)).be.null();
   });
 });
 
@@ -629,36 +629,36 @@ describe('Quantity', () => {
 
   it('should be able to perform Quantity Addition', async function () {
     //this seems like it could be off
-    validateQuantity((await this.add_q_q.exec(this.ctx)), 20, 'days');
-    const adq =await  this.add_d_q.exec(this.ctx);
+    validateQuantity(await this.add_q_q.exec(this.ctx), 20, 'days');
+    const adq = await this.add_d_q.exec(this.ctx);
     adq.isDateTime.should.be.true();
     adq.year.should.equal(2000);
     adq.month.should.equal(1);
     adq.day.should.equal(11);
-    validateQuantity((await this.add_q_q_diff.exec(this.ctx)), 10 + 10 / (24 * 60), 'days');
+    validateQuantity(await this.add_q_q_diff.exec(this.ctx), 10 + 10 / (24 * 60), 'days');
   });
 
   it('should be able to perform Quantity Subtraction', async function () {
-    validateQuantity((await this.sub_q_q.exec(this.ctx)), 0, 'days');
+    validateQuantity(await this.sub_q_q.exec(this.ctx), 0, 'days');
     const sdq = await this.sub_d_q.exec(this.ctx);
     sdq.isDateTime.should.be.true();
     sdq.year.should.equal(1999);
     sdq.month.should.equal(12);
     sdq.day.should.equal(22);
-    validateQuantity((await this.sub_q_q_diff.exec(this.ctx)), 10 - 10 / (24 * 60), 'days');
+    validateQuantity(await this.sub_q_q_diff.exec(this.ctx), 10 - 10 / (24 * 60), 'days');
   });
 
   it('should be able to perform Quantity Division', async function () {
-    validateQuantity((await this.div_q_d.exec(this.ctx)), 5, 'days');
-    validateQuantity((await this.div_q_q.exec(this.ctx)), 1, '1');
+    validateQuantity(await this.div_q_d.exec(this.ctx), 5, 'days');
+    validateQuantity(await this.div_q_q.exec(this.ctx), 1, '1');
   });
 
   it('should be able to perform Quantity Multiplication', async function () {
     // decimal to quantity multiplication results in decimal value only
-    validateQuantity((await this.mul_d_q.exec(this.ctx)), 20, 'days');
-    validateQuantity((await this.mul_q_d.exec(this.ctx)), 20, 'days');
-    validateQuantity((await this.mul_q_q.exec(this.ctx)), 20, 'm2');
-    validateQuantity((await this.mul_q_q_diff.exec(this.ctx)), 20, 'm/d');
+    validateQuantity(await this.mul_d_q.exec(this.ctx), 20, 'days');
+    validateQuantity(await this.mul_q_d.exec(this.ctx), 20, 'days');
+    validateQuantity(await this.mul_q_q.exec(this.ctx), 20, 'm2');
+    validateQuantity(await this.mul_q_q_diff.exec(this.ctx), 20, 'm/d');
   });
 
   it('should be able to perform Quantity Absolution', async function () {
@@ -668,7 +668,7 @@ describe('Quantity', () => {
   });
 
   it('should be able to perform Quantity Negation', async function () {
-    const q =await this.neg.exec(this.ctx);
+    const q = await this.neg.exec(this.ctx);
     q.value.should.equal(-10);
     q.unit.should.equal('days');
   });
@@ -738,187 +738,187 @@ describe('OutOfBounds', () => {
 
   describe('Integer', () => {
     it('should return null for Add overflow', async function () {
-      should((await this.integerAddOverflow.exec(this.ctx))).be.null();
+      should(await this.integerAddOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Add underflow', async function () {
-      should((await this.integerAddUnderflow.exec(this.ctx))).be.null();
+      should(await this.integerAddUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract overflow', async function () {
-      should((await this.integerSubtractOverflow.exec(this.ctx))).be.null();
+      should(await this.integerSubtractOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract underflow', async function () {
-      should((await this.integerSubtractUnderflow.exec(this.ctx))).be.null();
+      should(await this.integerSubtractUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Multiply overflow', async function () {
-      should((await this.integerMultiplyOverflow.exec(this.ctx))).be.null();
+      should(await this.integerMultiplyOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Multiply underflow', async function () {
-      should((await this.integerMultiplyUnderflow.exec(this.ctx))).be.null();
+      should(await this.integerMultiplyUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide overflow', async function () {
-      should((await this.integerDivideOverflow.exec(this.ctx))).be.null();
+      should(await this.integerDivideOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide underflow', async function () {
-      should((await this.integerDivideUnderflow.exec(this.ctx))).be.null();
+      should(await this.integerDivideUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide By Zero', async function () {
-      should((await this.integerDivideByZero.exec(this.ctx))).be.null();
+      should(await this.integerDivideByZero.exec(this.ctx)).be.null();
     });
 
     it('should return null for Power overflow', async function () {
-      should((await this.integerPowerOverflow.exec(this.ctx))).be.null();
+      should(await this.integerPowerOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Power underflow', async function () {
-      should((await this.integerPowerUnderflow.exec(this.ctx))).be.null();
+      should(await this.integerPowerUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for successor overflow', async function () {
-      should((await this.integerSuccessorOverflow.exec(this.ctx))).be.null();
+      should(await this.integerSuccessorOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for predecessor underflow', async function () {
-      should((await this.integerPredecessorUnderflow.exec(this.ctx))).be.null();
+      should(await this.integerPredecessorUnderflow.exec(this.ctx)).be.null();
     });
   });
 
   describe('Decimal', () => {
     it('should return null for Add overflow', async function () {
-      should((await this.decimalAddOverflow.exec(this.ctx))).be.null();
+      should(await this.decimalAddOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Add underflow', async function () {
-      should((await this.decimalAddUnderflow.exec(this.ctx))).be.null();
+      should(await this.decimalAddUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract overflow', async function () {
-      should((await this.decimalSubtractOverflow.exec(this.ctx))).be.null();
+      should(await this.decimalSubtractOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract underflow', async function () {
-      should((await this.decimalSubtractUnderflow.exec(this.ctx))).be.null();
+      should(await this.decimalSubtractUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Multiply overflow', async function () {
-      should((await this.decimalMultiplyOverflow.exec(this.ctx))).be.null();
+      should(await this.decimalMultiplyOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Multiply underflow', async function () {
-      should((await this.decimalMultiplyUnderflow.exec(this.ctx))).be.null();
+      should(await this.decimalMultiplyUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide overflow', async function () {
-      should((await this.decimalDivideOverflow.exec(this.ctx))).be.null();
+      should(await this.decimalDivideOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide underflow', async function () {
-      should((await this.decimalDivideUnderflow.exec(this.ctx))).be.null();
+      should(await this.decimalDivideUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide By Zero', async function () {
-      should((await this.decimalDivideByZero.exec(this.ctx))).be.null();
+      should(await this.decimalDivideByZero.exec(this.ctx)).be.null();
     });
 
     it('should return null for Power overflow', async function () {
-      should((await this.decimalPowerOverflow.exec(this.ctx))).be.null();
+      should(await this.decimalPowerOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Power underflow', async function () {
-      should((await this.decimalPowerUnderflow.exec(this.ctx))).be.null();
+      should(await this.decimalPowerUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for successor overflow', async function () {
-      should((await this.decimalSuccessorOverflow.exec(this.ctx))).be.null();
+      should(await this.decimalSuccessorOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for predecessor underflow', async function () {
-      should((await this.decimalPredecessorUnderflow.exec(this.ctx))).be.null();
+      should(await this.decimalPredecessorUnderflow.exec(this.ctx)).be.null();
     });
   });
 
   describe('Quantity', () => {
     it('should return null for Add overflow', async function () {
-      should((await this.quantityAddOverflow.exec(this.ctx))).be.null();
+      should(await this.quantityAddOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Add underflow', async function () {
-      should((await this.quantityAddUnderflow.exec(this.ctx))).be.null();
+      should(await this.quantityAddUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract overflow', async function () {
-      should((await this.quantitySubtractOverflow.exec(this.ctx))).be.null();
+      should(await this.quantitySubtractOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract underflow', async function () {
-      should((await this.quantitySubtractUnderflow.exec(this.ctx))).be.null();
+      should(await this.quantitySubtractUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Multiply overflow', async function () {
-      should((await this.quantityMultiplyOverflow.exec(this.ctx))).be.null();
+      should(await this.quantityMultiplyOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Multiply underflow', async function () {
-      should((await this.quantityMultiplyUnderflow.exec(this.ctx))).be.null();
+      should(await this.quantityMultiplyUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide overflow', async function () {
-      should((await this.quantityDivideOverflow.exec(this.ctx))).be.null();
+      should(await this.quantityDivideOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide underflow', async function () {
-      should((await this.quantityDivideUnderflow.exec(this.ctx))).be.null();
+      should(await this.quantityDivideUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Divide By Zero', async function () {
-      should((await this.quantityDivideByZero.exec(this.ctx))).be.null();
+      should(await this.quantityDivideByZero.exec(this.ctx)).be.null();
     });
 
     it('should return null for successor overflow', async function () {
-      should((await this.quantitySuccessorOverflow.exec(this.ctx))).be.null();
+      should(await this.quantitySuccessorOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for predecessor underflow', async function () {
-      should((await this.quantityPredecessorUnderflow.exec(this.ctx))).be.null();
+      should(await this.quantityPredecessorUnderflow.exec(this.ctx)).be.null();
     });
   });
 
   describe('DateTime', () => {
     it('should return null for Add overflow', async function () {
-      should((await this.dateTimeAddOverflow.exec(this.ctx))).be.null();
+      should(await this.dateTimeAddOverflow.exec(this.ctx)).be.null();
     });
 
     // TODO: Fix the logic so this test passes. It's been broken for a long time, but due to a
     // faulty test, this was not noticed until now. The cause of the failure is not obvious, so
     // this should be revisited (but is lower priority since it's an extremely rare use case).
     it.skip('should return null for Add underflow', async function () {
-      should((await this.dateTimeAddUnderflow.exec(this.ctx))).be.null();
+      should(await this.dateTimeAddUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract overflow', async function () {
-      should((await this.dateTimeSubtractOverflow.exec(this.ctx))).be.null();
+      should(await this.dateTimeSubtractOverflow.exec(this.ctx)).be.null();
     });
 
     // TODO: Fix the logic so this test passes. It's been broken for a long time, but due to a
     // faulty test, this was not noticed until now. The cause of the failure is not obvious, so
     // this should be revisited (but is lower priority since it's an extremely rare use case).
     it.skip('should return null for Subtract underflow', async function () {
-      should((await this.dateTimeSubtractUnderflow.exec(this.ctx))).be.null();
+      should(await this.dateTimeSubtractUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for successor overflow', async function () {
-      should((await this.dateTimeSuccessorOverflow.exec(this.ctx))).be.null();
+      should(await this.dateTimeSuccessorOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for predecessor underflow', async function () {
-      should((await this.dateTimePredecessorUnderflow.exec(this.ctx))).be.null();
+      should(await this.dateTimePredecessorUnderflow.exec(this.ctx)).be.null();
     });
 
     // Tests for Precision are include in the spec tests
@@ -926,33 +926,33 @@ describe('OutOfBounds', () => {
 
   describe('Date', () => {
     it('should return null for Add overflow', async function () {
-      should((await this.dateAddOverflow.exec(this.ctx))).be.null();
+      should(await this.dateAddOverflow.exec(this.ctx)).be.null();
     });
 
     // TODO: Fix the logic so this test passes. It's been broken for a long time, but due to a
     // faulty test, this was not noticed until now. The cause of the failure is not obvious, so
     // this should be revisited (but is lower priority since it's an extremely rare use case).
     it.skip('should return null for Add underflow', async function () {
-      should((await this.dateAddUnderflow.exec(this.ctx))).be.null();
+      should(await this.dateAddUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract overflow', async function () {
-      should((await this.dateSubtractOverflow.exec(this.ctx)).be.null();
+      should(await this.dateSubtractOverflow.exec(this.ctx)).be.null();
     });
 
     // TODO: Fix the logic so this test passes. It's been broken for a long time, but due to a
     // faulty test, this was not noticed until now. The cause of the failure is not obvious, so
     // this should be revisited (but is lower priority since it's an extremely rare use case).
     it.skip('should return null for Subtract underflow', async function () {
-      should((await this.dateSubtractUnderflow.exec(this.ctx))).be.null();
+      should(await this.dateSubtractUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for successor overflow', async function () {
-      should(await this.dateSuccessorOverflow.exec(this.ctx))).be.null();
+      should(await this.dateSuccessorOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for predecessor underflow', async function () {
-      should((await this.datePredecessorUnderflow.exec(this.ctx))).be.null();
+      should(await this.datePredecessorUnderflow.exec(this.ctx)).be.null();
     });
 
     // Tests for Precision are include in the spec tests
@@ -960,33 +960,33 @@ describe('OutOfBounds', () => {
 
   describe('Time', () => {
     it('should return null for Add overflow', async function () {
-      should((await this.timeAddOverflow.exec(this.ctx))).be.null();
+      should(await this.timeAddOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Add underflow', async function () {
-      should((await this.timeAddUnderflow.exec(this.ctx))).be.null();
+      should(await this.timeAddUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract overflow', async function () {
-      should((await this.timeSubtractOverflow.exec(this.ctx))).be.null();
+      should(await this.timeSubtractOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for Subtract underflow', async function () {
-      should((await this.timeSubtractUnderflow.exec(this.ctx))).be.null();
+      should(await this.timeSubtractUnderflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for successor overflow', async function () {
-      should((this.timeSuccessorOverflow.exec(this.ctx))).be.null();
+      should(this.timeSuccessorOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for predecessor underflow', async function () {
-      should((await this.timePredecessorUnderflow.exec(this.ctx))).be.null();
+      should(await this.timePredecessorUnderflow.exec(this.ctx)).be.null();
     });
 
     // Tests for Precision are include in the spec tests
   });
 
   it('Exp should return null for overflow', async function () {
-    should((await this.expOverflow.exec(this.ctx))).be.null();
+    should(await this.expOverflow.exec(this.ctx)).be.null();
   });
 });
