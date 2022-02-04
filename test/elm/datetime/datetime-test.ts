@@ -179,6 +179,7 @@ describe('Today', () => {
     ['hour', 'minute', 'second', 'millisecond', 'timezoneOffset'].forEach(field =>
       should.not.exist(today[field])
     );
+    return this.todayVar.exec(this.ctx).should.not.be.rejected();
   });
 
   it('should throw an exception because no execution datetime has been set', async function () {
@@ -190,7 +191,9 @@ describe('Today', () => {
       DT.DateTime.fromJSDate(new Date(), '0')
     );
     this.ctx.executionDateTime = this.ctx.executionDateTime = null;
-    this.todayVar.exec(this.ctx).should.be.rejectedWith('No Execution DateTime has been set');
+    return this.todayVar
+      .exec(this.ctx)
+      .should.be.rejectedWith('No Execution DateTime has been set');
   });
 });
 
