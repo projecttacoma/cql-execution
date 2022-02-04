@@ -223,7 +223,7 @@ class Width extends Expression {
   }
 
   async exec(ctx: Context) {
-    const interval = await this.arg.execute(ctx);
+    const interval = await this.arg?.execute(ctx);
     if (interval == null) {
       return null;
     }
@@ -237,7 +237,7 @@ class Size extends Expression {
   }
 
   async exec(ctx: Context) {
-    const interval = await this.arg.execute(ctx);
+    const interval = await this.arg?.execute(ctx);
     if (interval == null) {
       return null;
     }
@@ -251,7 +251,7 @@ class Start extends Expression {
   }
 
   async exec(ctx: Context) {
-    const interval = await this.arg.execute(ctx);
+    const interval = await this.arg?.execute(ctx);
     if (interval == null) {
       return null;
     }
@@ -270,7 +270,7 @@ class End extends Expression {
   }
 
   async exec(ctx: Context) {
-    const interval = await this.arg.execute(ctx);
+    const interval = await this.arg?.execute(ctx);
     if (interval == null) {
       return null;
     }

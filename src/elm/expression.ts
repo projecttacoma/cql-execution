@@ -5,16 +5,16 @@ import { build } from './builder';
 
 export class Expression {
   localId?: string;
-  arg?: any;
-  args?: any[];
+  arg?: Expression;
+  args?: Expression[];
 
   constructor(json: any) {
     if (json.operand != null) {
       const op = build(json.operand);
       if (typeIsArray(json.operand)) {
-        this.args = op;
+        this.args = op as Expression[];
       } else {
-        this.arg = op;
+        this.arg = op as Expression;
       }
     }
     if (json.localId != null) {
