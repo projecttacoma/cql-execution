@@ -14,8 +14,8 @@ class Equal extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const args = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const args = await this.execArgs(ctx);
     if (args[0] == null || args[1] == null) {
       return null;
     }
@@ -29,8 +29,8 @@ class Equivalent extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const [a, b] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [a, b] = await this.execArgs(ctx);
     if (a == null && b == null) {
       return true;
     } else if (a == null || b == null) {
@@ -46,13 +46,14 @@ class NotEqual extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const args = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const args = await this.execArgs(ctx);
     if (args[0] == null || args[1] == null) {
       return null;
     }
+    // TODO (MATT): check this
     // @ts-ignore
-    return ThreeValuedLogic.not(equals(...this.execArgs(ctx)));
+    return ThreeValuedLogic.not(equals(...(await this.execArgs(ctx))));
   }
 }
 
@@ -61,8 +62,8 @@ class Union extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const [a, b] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [a, b] = await this.execArgs(ctx);
     if (a == null && b == null) {
       return this.listTypeArgs() ? [] : null;
     }
@@ -90,8 +91,8 @@ class Except extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const [a, b] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [a, b] = await this.execArgs(ctx);
     if (a == null) {
       return null;
     }
@@ -108,8 +109,8 @@ class Intersect extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const [a, b] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [a, b] = await this.execArgs(ctx);
     if (a == null || b == null) {
       return null;
     }
@@ -123,8 +124,8 @@ class Indexer extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const [operand, index] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [operand, index] = await this.execArgs(ctx);
     if (operand == null || index == null) {
       return null;
     }
@@ -143,8 +144,8 @@ class In extends Expression {
     this.precision = json.precision != null ? json.precision.toLowerCase() : undefined;
   }
 
-  exec(ctx: Context) {
-    const [item, container] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [item, container] = await this.execArgs(ctx);
     if (item == null) {
       return null;
     }
@@ -164,8 +165,8 @@ class Contains extends Expression {
     this.precision = json.precision != null ? json.precision.toLowerCase() : undefined;
   }
 
-  exec(ctx: Context) {
-    const [container, item] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [container, item] = await this.execArgs(ctx);
     if (container == null) {
       return false;
     }
@@ -185,8 +186,8 @@ class Includes extends Expression {
     this.precision = json.precision != null ? json.precision.toLowerCase() : undefined;
   }
 
-  exec(ctx: Context) {
-    const [container, contained] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [container, contained] = await this.execArgs(ctx);
     if (container == null || contained == null) {
       return null;
     }
@@ -203,8 +204,8 @@ class IncludedIn extends Expression {
     this.precision = json.precision != null ? json.precision.toLowerCase() : undefined;
   }
 
-  exec(ctx: Context) {
-    const [contained, container] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [contained, container] = await this.execArgs(ctx);
     if (container == null || contained == null) {
       return null;
     }
@@ -221,8 +222,8 @@ class ProperIncludes extends Expression {
     this.precision = json.precision != null ? json.precision.toLowerCase() : undefined;
   }
 
-  exec(ctx: Context) {
-    const [container, contained] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [container, contained] = await this.execArgs(ctx);
     if (container == null || contained == null) {
       return null;
     }
@@ -239,8 +240,8 @@ class ProperIncludedIn extends Expression {
     this.precision = json.precision != null ? json.precision.toLowerCase() : undefined;
   }
 
-  exec(ctx: Context) {
-    const [contained, container] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [contained, container] = await this.execArgs(ctx);
     if (container == null || contained == null) {
       return null;
     }
@@ -254,8 +255,8 @@ class Length extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       return arg.length;
     } else if (this.arg.asTypeSpecifier.type === 'ListTypeSpecifier') {
@@ -274,8 +275,8 @@ class After extends Expression {
     this.precision = json.precision != null ? json.precision.toLowerCase() : undefined;
   }
 
-  exec(ctx: Context) {
-    const [a, b] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [a, b] = await this.execArgs(ctx);
     if (a == null || b == null) {
       return null;
     }
@@ -292,8 +293,8 @@ class Before extends Expression {
     this.precision = json.precision != null ? json.precision.toLowerCase() : undefined;
   }
 
-  exec(ctx: Context) {
-    const [a, b] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [a, b] = await this.execArgs(ctx);
     if (a == null || b == null) {
       return null;
     }
@@ -310,8 +311,8 @@ class SameAs extends Expression {
     this.precision = json.precision;
   }
 
-  exec(ctx: Context) {
-    const [a, b] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [a, b] = await this.execArgs(ctx);
     if (a != null && b != null) {
       return a.sameAs(b, this.precision != null ? this.precision.toLowerCase() : undefined);
     } else {
@@ -328,8 +329,8 @@ class SameOrAfter extends Expression {
     this.precision = json.precision;
   }
 
-  exec(ctx: Context) {
-    const [d1, d2] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [d1, d2] = await this.execArgs(ctx);
     if (d1 != null && d2 != null) {
       return d1.sameOrAfter(d2, this.precision != null ? this.precision.toLowerCase() : undefined);
     } else {
@@ -346,8 +347,8 @@ class SameOrBefore extends Expression {
     this.precision = json.precision;
   }
 
-  exec(ctx: Context) {
-    const [d1, d2] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [d1, d2] = await this.execArgs(ctx);
     if (d1 != null && d2 != null) {
       return d1.sameOrBefore(d2, this.precision != null ? this.precision.toLowerCase() : undefined);
     } else {
@@ -362,8 +363,8 @@ class Precision extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg == null) {
       return null;
     }

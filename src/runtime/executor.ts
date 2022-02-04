@@ -43,7 +43,7 @@ export class Executor {
     return this;
   }
 
-  exec_expression(expression: any, patientSource: any, executionDateTime: DateTime) {
+  async exec_expression(expression: any, patientSource: any, executionDateTime: DateTime) {
     const r = new Results();
     const expr = this.library.expressions[expression];
     if (expr != null) {
@@ -63,8 +63,8 @@ export class Executor {
     return r;
   }
 
-  exec(patientSource: any, executionDateTime?: DateTime) {
-    const r = this.exec_patient_context(patientSource, executionDateTime);
+  async exec(patientSource: any, executionDateTime?: DateTime) {
+    const r = await this.exec_patient_context(patientSource, executionDateTime);
     const unfilteredContext = new UnfilteredContext(
       this.library,
       r,
@@ -74,17 +74,18 @@ export class Executor {
       this.messageListener
     );
     const resultMap: any = {};
+    // TODO (MATT): check this
     for (const key in this.library.expressions) {
       const expr = this.library.expressions[key];
       if (expr.context === 'Unfiltered') {
-        resultMap[key] = expr.exec(unfilteredContext);
+        resultMap[key] = await expr.exec(unfilteredContext);
       }
     }
     r.recordUnfilteredResults(resultMap);
     return r;
   }
 
-  exec_patient_context(patientSource: any, executionDateTime?: DateTime) {
+  async exec_patient_context(patientSource: any, executionDateTime?: DateTime) {
     const r = new Results();
     while (patientSource.currentPatient()) {
       const patient_ctx = new PatientContext(
@@ -96,10 +97,11 @@ export class Executor {
         this.messageListener
       );
       const resultMap: any = {};
+      // TODO (MATT): check this
       for (const key in this.library.expressions) {
         const expr = this.library.expressions[key];
         if (expr.context === 'Patient') {
-          resultMap[key] = expr.execute(patient_ctx);
+          resultMap[key] = await expr.execute(patient_ctx);
         }
       }
       r.recordPatientResults(patient_ctx, resultMap);

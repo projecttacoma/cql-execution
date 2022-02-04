@@ -22,7 +22,7 @@ class Ratio extends Expression {
     }
   }
 
-  exec(_ctx: Context) {
+  async exec(_ctx: Context) {
     return new DT.Ratio(this.numerator, this.denominator);
   }
 }

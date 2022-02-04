@@ -29,8 +29,8 @@ class As extends Expression {
     this.strict = json.strict != null ? json.strict : false;
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     // If it is null, return null
     if (arg == null) {
       return null;
@@ -53,8 +53,8 @@ class ToBoolean extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       const strArg = arg.toString().toLowerCase();
       if (['true', 't', 'yes', 'y', '1'].includes(strArg)) {
@@ -72,8 +72,8 @@ class ToConcept extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       return new Concept([arg], arg.display);
     } else {
@@ -87,8 +87,8 @@ class ToDate extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg == null) {
       return null;
     } else if (arg.isDateTime) {
@@ -104,8 +104,8 @@ class ToDateTime extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg == null) {
       return null;
     } else if (arg.isDate) {
@@ -121,8 +121,8 @@ class ToDecimal extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       if (arg.isUncertainty) {
         const low = limitDecimalPrecision(parseFloat(arg.low.toString()));
@@ -144,8 +144,8 @@ class ToInteger extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (typeof arg === 'string') {
       const integer = parseInt(arg);
       if (isValidInteger(integer)) {
@@ -163,8 +163,8 @@ class ToQuantity extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    return this.convertValue(this.execArgs(ctx));
+  async exec(ctx: Context) {
+    return this.convertValue(await this.execArgs(ctx));
   }
 
   convertValue(val: any): any {
@@ -189,8 +189,8 @@ class ToRatio extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       // Argument will be of form '<quantity>:<quantity>'
       let denominator, numerator;
@@ -225,8 +225,8 @@ class ToString extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       return arg.toString();
     } else {
@@ -240,15 +240,16 @@ class ToTime extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       const timeString = arg.toString();
       // Return null if string doesn't represent a valid ISO-8601 Time
       // hh:mm:ss.fff or hh:mm:ss.fff
-      const matches = /^T?((\d{2})(:(\d{2})(:(\d{2})(\.(\d+))?)?)?)?(Z|(([+-])(\d{2})(:?(\d{2}))?))?$/.exec(
-        timeString
-      );
+      const matches =
+        /^T?((\d{2})(:(\d{2})(:(\d{2})(\.(\d+))?)?)?)?(Z|(([+-])(\d{2})(:?(\d{2}))?))?$/.exec(
+          timeString
+        );
       if (matches == null) {
         return null;
       }
@@ -297,7 +298,7 @@ class Convert extends Expression {
     this.toType = json.toType;
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     switch (this.toType) {
       case '{urn:hl7-org:elm-types:r1}Boolean':
         return new ToBoolean({ type: 'ToBoolean', operand: this.operand }).execute(ctx);
@@ -331,8 +332,8 @@ class ConvertsToBoolean extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -349,8 +350,8 @@ class ConvertsToDate extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -367,8 +368,8 @@ class ConvertsToDateTime extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -385,8 +386,8 @@ class ConvertsToDecimal extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -403,8 +404,8 @@ class ConvertsToInteger extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -421,8 +422,8 @@ class ConvertsToQuantity extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -439,8 +440,8 @@ class ConvertsToRatio extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -457,8 +458,8 @@ class ConvertsToString extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -475,8 +476,8 @@ class ConvertsToTime extends Expression {
     this.operand = json.operand;
   }
 
-  exec(ctx: Context) {
-    const operatorValue = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const operatorValue = await this.execArgs(ctx);
     if (operatorValue === null) {
       return null;
     } else {
@@ -503,8 +504,8 @@ class ConvertQuantity extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const [quantity, newUnit] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [quantity, newUnit] = await this.execArgs(ctx);
 
     if (quantity != null && newUnit != null) {
       try {
@@ -522,8 +523,8 @@ class CanConvertQuantity extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const [quantity, newUnit] = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const [quantity, newUnit] = await this.execArgs(ctx);
 
     if (quantity != null && newUnit != null) {
       try {
@@ -553,8 +554,8 @@ class Is extends Expression {
     }
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg === null) {
       return false;
     }

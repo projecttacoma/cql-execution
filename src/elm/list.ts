@@ -16,7 +16,7 @@ class List extends Expression {
     return true;
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     return this.elements.map(item => item.execute(ctx));
   }
 }
@@ -26,8 +26,8 @@ class Exists extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const list = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const list = await this.execArgs(ctx);
     // if list exists and has non empty length we need to make sure it isnt just full of nulls
     if (list) {
       return list.some((item: any) => item != null);
@@ -71,8 +71,8 @@ class SingletonFrom extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null && arg.length > 1) {
       throw new Error("IllegalArgument: 'SingletonFrom' requires a 0 or 1 arg array");
     } else if (arg != null && arg.length === 1) {
@@ -88,8 +88,8 @@ class ToList extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       return [arg];
     } else {
@@ -108,7 +108,7 @@ class IndexOf extends Expression {
     this.element = build(json.element);
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     let index;
     const src = this.source.execute(ctx);
     const el = this.element.execute(ctx);
@@ -157,8 +157,8 @@ class Flatten extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (typeIsArray(arg) && (arg as any[]).every(x => typeIsArray(x))) {
       return (arg as any[]).reduce((x, y) => x.concat(y), []);
     } else {
@@ -172,8 +172,8 @@ class Distinct extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const result = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const result = await this.execArgs(ctx);
     if (result == null) {
       return null;
     }
@@ -218,8 +218,8 @@ class First extends Expression {
     this.source = build(json.source);
   }
 
-  exec(ctx: Context) {
-    const src = this.source.exec(ctx);
+  async exec(ctx: Context) {
+    const src = await this.source.exec(ctx);
     if (src != null && typeIsArray(src) && src.length > 0) {
       return src[0];
     } else {
@@ -236,8 +236,8 @@ class Last extends Expression {
     this.source = build(json.source);
   }
 
-  exec(ctx: Context) {
-    const src = this.source.exec(ctx);
+  async exec(ctx: Context) {
+    const src = await this.source.exec(ctx);
     if (src != null && typeIsArray(src) && src.length > 0) {
       return src[src.length - 1];
     } else {
@@ -258,11 +258,11 @@ class Slice extends Expression {
     this.endIndex = build(json.endIndex);
   }
 
-  exec(ctx: Context) {
-    const src = this.source.exec(ctx);
+  async exec(ctx: Context) {
+    const src = await this.source.exec(ctx);
     if (src != null && typeIsArray(src)) {
-      const startIndex = this.startIndex.exec(ctx);
-      const endIndex = this.endIndex.exec(ctx);
+      const startIndex = await this.startIndex.exec(ctx);
+      const endIndex = await this.endIndex.exec(ctx);
       const start = startIndex != null ? startIndex : 0;
       const end = endIndex != null ? endIndex : src.length;
       if (src.length === 0 || start < 0 || end < 0 || end < start) {

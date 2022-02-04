@@ -75,7 +75,7 @@ export class Context {
     }
   }
 
-  findRecords(profile: any): any {
+  async findRecords(profile: any): Promise<any> {
     return this.parent && this.parent.findRecords(profile);
   }
 
@@ -464,7 +464,7 @@ export class PatientContext extends Context {
     return this.localId_context[localId];
   }
 
-  findRecords(profile: any) {
+  async findRecords(profile: any) {
     return this.patient && this.patient.findRecords(profile);
   }
 }
@@ -490,7 +490,7 @@ export class UnfilteredContext extends Context {
     return this;
   }
 
-  findRecords(_template: any) {
+  async findRecords(_template: any) {
     throw new Exception('Retreives are not currently supported in Unfiltered Context');
   }
 

@@ -35,8 +35,8 @@ class With extends Expression {
     this.expression = build(json.expression);
     this.suchThat = build(json.suchThat);
   }
-  exec(ctx: Context) {
-    let records = this.expression.execute(ctx);
+  async exec(ctx: Context) {
+    let records = await this.expression.execute(ctx);
     if (!typeIsArray(records)) {
       records = [records];
     }
@@ -53,8 +53,9 @@ class Without extends With {
   constructor(json: any) {
     super(json);
   }
-  exec(ctx: Context) {
-    return !super.exec(ctx);
+  async exec(ctx: Context) {
+    // TODO (MATT): check this
+    return !(await super.exec(ctx));
   }
 }
 
@@ -75,7 +76,7 @@ class ByDirection extends Expression {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  exec(ctx: Context, a: any, b: any) {
+  async exec(ctx: Context, a: any, b: any) {
     if (a === b) {
       return 0;
     } else if (a.isQuantity && b.isQuantity) {
@@ -108,11 +109,11 @@ class ByExpression extends Expression {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  exec(ctx: Context, a: any, b: any) {
+  async exec(ctx: Context, a: any, b: any) {
     let sctx = ctx.childContext(a);
-    const a_val = this.expression.execute(sctx);
+    const a_val = await this.expression.execute(sctx);
     sctx = ctx.childContext(b);
-    const b_val = this.expression.execute(sctx);
+    const b_val = await this.expression.execute(sctx);
 
     if (a_val === b_val || (a_val == null && b_val == null)) {
       return 0;
@@ -159,6 +160,7 @@ class SortClause {
         let order = 0;
         for (const item of this.by) {
           // Do not use execute here because the value of the sort order is not important.
+          // TODO (MATT) ALERT: doesn't work yet
           order = item.exec(ctx, a, b);
           if (order !== 0) {
             break;
@@ -194,13 +196,19 @@ class AggregateClause extends Expression {
     this.distinct = json.distinct != null ? json.distinct : true;
   }
 
-  aggregate(returnedValues: any, ctx: Context) {
-    let aggregateValue = this.starting != null ? this.starting.exec(ctx) : null;
-    returnedValues.forEach((contextValues: any) => {
+  async aggregate(returnedValues: any, ctx: Context) {
+    let aggregateValue = this.starting != null ? await this.starting.exec(ctx) : null;
+    // TODO (MATT): check this
+    for await (const contextValues of returnedValues) {
+      const childContext = ctx.childContext(contextValues);
+      childContext.set(this.identifier, aggregateValue);
+      aggregateValue = await this.expression.exec(childContext);
+    }
+    /* returnedValues.forEach((contextValues: any) => {
       const childContext = ctx.childContext(contextValues);
       childContext.set(this.identifier, aggregateValue);
       aggregateValue = this.expression.exec(childContext);
-    });
+    }); */
     return aggregateValue;
   }
 }
@@ -236,21 +244,23 @@ class Query extends Expression {
     return true;
   }
 
-  exec(ctx: Context) {
+  // TODO (MATT) ALERT: might not work yet
+  async exec(ctx: Context) {
     let returnedValues: any[] = [];
-    this.sources.forEach(ctx, (rctx: any) => {
+    // TODO (MATT): there's no way this works, right?
+    await this.sources.forEach(ctx, async (rctx: any) => {
       for (const def of this.letClauses) {
-        rctx.set(def.identifier, def.expression.execute(rctx));
+        rctx.set(def.identifier, await def.expression.execute(rctx));
       }
 
       const relations = this.relationship.map(rel => {
         const child_ctx = rctx.childContext();
         return rel.execute(child_ctx);
       });
-      const passed = allTrue(relations) && (this.where ? this.where.execute(rctx) : true);
+      const passed = allTrue(relations) && (this.where ? await this.where.execute(rctx) : true);
       if (passed) {
         if (this.returnClause != null) {
-          const val = this.returnClause.expression.execute(rctx);
+          const val = await this.returnClause.expression.execute(rctx);
           returnedValues.push(val);
         } else {
           if (this.aliases.length === 1 && this.aggregateClause == null) {
@@ -267,7 +277,7 @@ class Query extends Expression {
     }
 
     if (this.aggregateClause != null) {
-      returnedValues = this.aggregateClause.aggregate(returnedValues, ctx);
+      returnedValues = await this.aggregateClause.aggregate(returnedValues, ctx);
     }
 
     if (this.sortClause != null) {
@@ -289,7 +299,7 @@ class AliasRef extends Expression {
     this.name = json.name;
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     return ctx != null ? ctx.get(this.name) : undefined;
   }
 }
@@ -331,19 +341,23 @@ class MultiSource {
     return this.isList || (this.rest && this.rest.returnsList());
   }
 
-  forEach(ctx: Context, func: any) {
-    let records = this.expression.execute(ctx);
+  // TODO (MATT): check this (usage anywhere else in code needs to await)
+  // TODO (MATT) ALERT: might not work
+  async forEach(ctx: Context, func: any) {
+    let records = await this.expression.execute(ctx);
     this.isList = typeIsArray(records);
     records = this.isList ? records : [records];
-    return records.map((rec: any) => {
-      const rctx = new Context(ctx);
-      rctx.set(this.alias, rec);
-      if (this.rest) {
-        return this.rest.forEach(rctx, func);
-      } else {
-        return func(rctx);
-      }
-    });
+    return Promise.all(
+      records.map(async (rec: any) => {
+        const rctx = new Context(ctx);
+        rctx.set(this.alias, rec);
+        if (this.rest) {
+          return this.rest.forEach(rctx, func);
+        } else {
+          return func(rctx);
+        }
+      })
+    );
   }
 }
 
