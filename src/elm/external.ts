@@ -21,11 +21,11 @@ export class Retrieve extends Expression {
     this.dateRange = build(json.dateRange);
   }
 
-  exec(ctx: Context) {
-    let records = ctx.findRecords(this.templateId != null ? this.templateId : this.datatype);
+  async exec(ctx: Context) {
+    let records = await ctx.findRecords(this.templateId != null ? this.templateId : this.datatype);
     let codes = this.codes;
     if (this.codes && typeof this.codes.exec === 'function') {
-      codes = this.codes.execute(ctx);
+      codes = await this.codes.execute(ctx);
       if (codes == null) {
         return [];
       }
@@ -35,7 +35,7 @@ export class Retrieve extends Expression {
     }
     // TODO: Added @dateProperty check due to previous fix in cql4browsers in cql_qdm_patient_api hash: ddbc57
     if (this.dateRange && this.dateProperty) {
-      const range = this.dateRange.execute(ctx);
+      const range = await this.dateRange.execute(ctx);
       records = records.filter((r: any) => range.includes(r.getDateOrInterval(this.dateProperty)));
     }
 

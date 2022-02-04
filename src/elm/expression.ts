@@ -22,10 +22,10 @@ export class Expression {
     }
   }
 
-  execute(ctx: Context) {
+  async execute(ctx: Context) {
     if (this.localId != null) {
       // Store the localId and result on the root context of this library
-      const execValue = this.exec(ctx);
+      const execValue = await this.exec(ctx);
       ctx.rootContext().setLocalIdWithResult(this.localId, execValue);
       return execValue;
     } else {
@@ -33,13 +33,14 @@ export class Expression {
     }
   }
 
-  exec(_ctx: Context): any {
+  async exec(_ctx: Context): Promise<any> {
     return this;
   }
 
-  execArgs(ctx: Context) {
+  async execArgs(ctx: Context) {
     if (this.args != null) {
-      return this.args.map(arg => arg.execute(ctx));
+      // TODO (MATT): check this
+      return Promise.all(this.args.map(async arg => arg.execute(ctx)));
     } else if (this.arg != null) {
       return this.arg.execute(ctx);
     } else {
@@ -56,7 +57,7 @@ export class UnimplementedExpression extends Expression {
     this.json = json;
   }
 
-  exec(_ctx: Context) {
+  async exec(_ctx: Context) {
     throw new Error(`Unimplemented Expression: ${this.json.type}`);
   }
 }

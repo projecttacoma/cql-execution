@@ -24,7 +24,7 @@ export class DateTime extends Expression {
     this.json = json;
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     for (const property of DateTime.PROPERTIES) {
       // if json does not contain 'timezoneOffset' set it to the executionDateTime from the context
       if (this.json[property] != null) {
@@ -39,8 +39,11 @@ export class DateTime extends Expression {
         });
       }
     }
-    // @ts-ignore
-    const args = DateTime.PROPERTIES.map(p => (this[p] != null ? this[p].execute(ctx) : undefined));
+    // TODO (MATT): check this
+    const args = await Promise.all(
+      // @ts-ignore
+      DateTime.PROPERTIES.map(async p => (this[p] != null ? this[p].execute(ctx) : undefined))
+    );
     return new DT.DateTime(...args);
   }
 }
@@ -55,15 +58,18 @@ export class Date extends Expression {
     this.json = json;
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     for (const property of Date.PROPERTIES) {
       if (this.json[property] != null) {
         // @ts-ignore
         this[property] = build(this.json[property]);
       }
     }
-    // @ts-ignore
-    const args = Date.PROPERTIES.map(p => (this[p] != null ? this[p].execute(ctx) : undefined));
+    // TODO (MATT): check this
+    const args = await Promise.all(
+      // @ts-ignore
+      Date.PROPERTIES.map(async p => (this[p] != null ? this[p].execute(ctx) : undefined))
+    );
     return new DT.Date(...args);
   }
 }
@@ -80,9 +86,11 @@ export class Time extends Expression {
     }
   }
 
-  exec(ctx: Context) {
-    // @ts-ignore
-    const args = Time.PROPERTIES.map(p => (this[p] != null ? this[p].execute(ctx) : undefined));
+  async exec(ctx: Context) {
+    const args = await Promise.all(
+      // @ts-ignore
+      Time.PROPERTIES.map(async p => (this[p] != null ? this[p].execute(ctx) : undefined))
+    );
     return new DT.DateTime(0, 1, 1, ...args).getTime();
   }
 }
@@ -92,7 +100,7 @@ export class Today extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     return ctx.getExecutionDateTime().getDate();
   }
 }
@@ -102,7 +110,7 @@ export class Now extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     return ctx.getExecutionDateTime();
   }
 }
@@ -112,7 +120,7 @@ export class TimeOfDay extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
+  async exec(ctx: Context) {
     return ctx.getExecutionDateTime().getTime();
   }
 }
@@ -125,8 +133,8 @@ export class DateTimeComponentFrom extends Expression {
     this.precision = json.precision;
   }
 
-  exec(ctx: Context) {
-    const arg = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const arg = await this.execArgs(ctx);
     if (arg != null) {
       return arg[this.precision.toLowerCase()];
     } else {
@@ -140,8 +148,8 @@ export class DateFrom extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const date = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const date = await this.execArgs(ctx);
     if (date != null) {
       return date.getDate();
     } else {
@@ -155,8 +163,8 @@ export class TimeFrom extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const date = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const date = await this.execArgs(ctx);
     if (date != null) {
       return date.getTime();
     } else {
@@ -170,8 +178,8 @@ export class TimezoneOffsetFrom extends Expression {
     super(json);
   }
 
-  exec(ctx: Context) {
-    const date = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const date = await this.execArgs(ctx);
     if (date != null) {
       return date.timezoneOffset;
     } else {
@@ -198,8 +206,8 @@ export class DifferenceBetween extends Expression {
     this.precision = json.precision;
   }
 
-  exec(ctx: Context) {
-    const args = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const args = await this.execArgs(ctx);
     // Check to make sure args exist and that they have differenceBetween functions so that they can be compared to one another
     if (
       args[0] == null ||
@@ -229,8 +237,8 @@ export class DurationBetween extends Expression {
     this.precision = json.precision;
   }
 
-  exec(ctx: Context) {
-    const args = this.execArgs(ctx);
+  async exec(ctx: Context) {
+    const args = await this.execArgs(ctx);
     // Check to make sure args exist and that they have durationBetween functions so that they can be compared to one another
     if (
       args[0] == null ||
