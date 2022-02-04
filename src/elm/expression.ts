@@ -39,7 +39,7 @@ export class Expression {
 
   async execArgs(ctx: Context) {
     if (this.args != null) {
-      // TODO (MATT): check this
+      // TODO (MATT) ALERT: check this. doesn't work at all. sad
       return Promise.all(this.args.map(async arg => arg.execute(ctx)));
     } else if (this.arg != null) {
       return this.arg.execute(ctx);
