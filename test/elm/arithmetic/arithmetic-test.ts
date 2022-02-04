@@ -866,7 +866,7 @@ describe('OutOfBounds', () => {
     });
 
     it('should return null for Multiply underflow', async function () {
-      should((await this.quantityMultiplyUnderflow.exec(this.ctx)).be.null();
+      should((await this.quantityMultiplyUnderflow.exec(this.ctx))).be.null();
     });
 
     it('should return null for Divide overflow', async function () {
