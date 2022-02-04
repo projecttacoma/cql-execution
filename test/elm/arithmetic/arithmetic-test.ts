@@ -183,7 +183,7 @@ describe('Divide', () => {
   });
 
   it('should divide uncertainty by number', async function () {
-    const result = await his.divideUncertaintyByNumber.exec(this.ctx);
+    const result = await this.divideUncertaintyByNumber.exec(this.ctx);
     result.low.should.equal(3);
     result.high.should.equal(9);
   });
