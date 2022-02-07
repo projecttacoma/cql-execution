@@ -27,24 +27,26 @@ class LetClause {
 class With extends Expression {
   alias: any;
   expression: any;
-  suchThat: any;
+  suchThat: Expression;
 
   constructor(json: any) {
     super(json);
     this.alias = json.alias;
     this.expression = build(json.expression);
-    this.suchThat = build(json.suchThat);
+    this.suchThat = build(json.suchThat) as Expression;
   }
   async exec(ctx: Context) {
-    let records = await this.expression.execute(ctx);
+    let records: any[] = await this.expression.execute(ctx);
     if (!typeIsArray(records)) {
       records = [records];
     }
-    const returns = records.map((rec: any) => {
-      const childCtx = ctx.childContext();
-      childCtx.set(this.alias, rec);
-      return this.suchThat.execute(childCtx);
-    });
+    const returns = await Promise.all(
+      records.map((rec: any) => {
+        const childCtx = ctx.childContext();
+        childCtx.set(this.alias, rec);
+        return this.suchThat.execute(childCtx);
+      })
+    );
     return returns.some((x: any) => x);
   }
 }
@@ -253,10 +255,12 @@ class Query extends Expression {
         rctx.set(def.identifier, await def.expression.execute(rctx));
       }
 
-      const relations = this.relationship.map(rel => {
-        const child_ctx = rctx.childContext();
-        return rel.execute(child_ctx);
-      });
+      const relations = await Promise.all(
+        this.relationship.map(rel => {
+          const child_ctx = rctx.childContext();
+          return rel.execute(child_ctx);
+        })
+      );
       const passed = allTrue(relations) && (this.where ? await this.where.execute(rctx) : true);
       if (passed) {
         if (this.returnClause != null) {
