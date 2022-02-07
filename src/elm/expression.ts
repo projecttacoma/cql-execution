@@ -5,16 +5,16 @@ import { build } from './builder';
 
 export class Expression {
   localId?: string;
-  arg?: any;
-  args?: any[];
+  arg?: Expression;
+  args?: Expression[];
 
   constructor(json: any) {
     if (json.operand != null) {
       const op = build(json.operand);
       if (typeIsArray(json.operand)) {
-        this.args = op;
+        this.args = op as Expression[];
       } else {
-        this.arg = op;
+        this.arg = op as Expression;
       }
     }
     if (json.localId != null) {
@@ -39,7 +39,7 @@ export class Expression {
 
   async execArgs(ctx: Context) {
     if (this.args != null) {
-      // TODO (MATT): check this
+      // TODO (MATT) ALERT: check this. doesn't work at all. sad
       return Promise.all(this.args.map(async arg => arg.execute(ctx)));
     } else if (this.arg != null) {
       return this.arg.execute(ctx);
