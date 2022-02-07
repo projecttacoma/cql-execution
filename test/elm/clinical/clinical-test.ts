@@ -38,8 +38,8 @@ describe('ValueSetRef', () => {
     setup(this, data);
   });
 
-  it('should have a name', async function () {
-    (await this.foo.name).should.equal('Acute Pharyngitis');
+  it('should have a name', function () {
+    this.foo.name.should.equal('Acute Pharyngitis');
   });
 
   it('should execute to the defined value set', async function () {
@@ -156,14 +156,14 @@ describe('CodeDef', () => {
     setup(this, data, []);
   });
 
-  it('should return a CodeDef', async function () {
-    const codeDef = await this.lib.getCode('Tobacco smoking status code');
+  it('should return a CodeDef', function () {
+    const codeDef = this.lib.getCode('Tobacco smoking status code');
     codeDef.constructor.name.should.equal('CodeDef');
     codeDef.name.should.equal('Tobacco smoking status code');
   });
 
   it('should execute to a Code datatype', async function () {
-    const codeDef = await this.lib.getCode('Tobacco smoking status code');
+    const codeDef = this.lib.getCode('Tobacco smoking status code');
     const code = await codeDef.exec(this.ctx);
     code.code.should.equal('72166-2');
     code.system.should.equal('http://loinc.org');
@@ -173,12 +173,12 @@ describe('CodeDef', () => {
 });
 
 describe('CodeRef', () => {
-  beforeEach(async function () {
+  beforeEach(function () {
     setup(this, data);
   });
 
-  it('should have a name', async function () {
-    (await this.foo.name).should.equal('Tobacco smoking status code');
+  it('should have a name', function () {
+    this.foo.name.should.equal('Tobacco smoking status code');
   });
 
   it('should execute to the defined code', async function () {
@@ -195,8 +195,8 @@ describe('ConceptDef', () => {
     setup(this, data, []);
   });
 
-  it('should return a ConceptDef', async function () {
-    const conceptDef = await this.lib.getConcept('Tobacco smoking status');
+  it('should return a ConceptDef', function () {
+    const conceptDef = this.lib.getConcept('Tobacco smoking status');
     conceptDef.constructor.name.should.equal('ConceptDef');
     conceptDef.name.should.equal('Tobacco smoking status');
   });
@@ -218,8 +218,8 @@ describe('ConceptRef', () => {
     setup(this, data);
   });
 
-  it('should have a name', async function () {
-    (await this.foo.name).should.equal('Tobacco smoking status');
+  it('should have a name', function () {
+    this.foo.name.should.equal('Tobacco smoking status');
   });
 
   it('should execute to the defined concept', async function () {
@@ -233,8 +233,8 @@ describe('ConceptRef', () => {
   });
 });
 
-describe('CalculateAge', () => {
-  beforeEach(async function () {
+describe('CalculateAge', function () {
+  beforeEach(function () {
     setup(this, data, [p1]);
     // Note, tests are inexact (otherwise test needs to repeat exact logic we're testing)
     // p1 birth date is 1980-06-17
@@ -248,11 +248,10 @@ describe('CalculateAge', () => {
       DT.DateTime.fromJSDate(this.bdayPlus20)
     );
 
-    this.today = await this.ctx.getExecutionDateTime();
+    this.today = this.ctx.getExecutionDateTime();
     // according to spec, dates without timezones are in *current* time offset, so need to adjust
-    const offsetDiff =
-      (await this.today.toJSDate().getTimezoneOffset()) - this.bday.getTimezoneOffset();
-    await this.bday.setMinutes(this.bday.getMinutes() + offsetDiff);
+    const offsetDiff = this.today.toJSDate().getTimezoneOffset() - this.bday.getTimezoneOffset();
+    this.bday.setMinutes(this.bday.getMinutes() + offsetDiff);
 
     // this is getting the possible number of months in years with the addtion of an offset
     // to get the correct number of months
