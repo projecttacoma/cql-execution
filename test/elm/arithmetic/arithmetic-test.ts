@@ -265,8 +265,7 @@ describe('MinValue', () => {
   });
 
   it('of types other than Integer/Decimal/DateTime/Time should throw an error', async function () {
-    //not clear about how to handle this one adding await give an error
-    should(() => this.minWrongType.exec(this.ctx)).throw();
+   return this.minWrongType.exec(this.ctx).should.be.rejected();
   });
 });
 
@@ -319,8 +318,7 @@ describe('MaxValue', () => {
   });
 
   it('of types other than Integer/Decimal/DateTime/Time should throw an error', async function () {
-    //same issue here ask in slack
-    should(() => this.maxWrongType.exec(this.ctx)).throw();
+    return this.maxWrongType.exec(this.ctx).should.be.rejected();
   });
 });
 
