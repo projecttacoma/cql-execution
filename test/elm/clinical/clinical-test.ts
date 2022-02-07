@@ -57,10 +57,11 @@ describe('InValueSet', () => {
   });
 
   it('should throw an error when codes are in several codesystems', async function () {
-    const c = await this.sharedCodesFoo.exec(this.ctx);
-    should(c).throw(
-      'In (valueset) is ambiguous -- multiple codes with multiple code systems exist in value set.'
-    );
+    return this.sharedCodesFoo
+      .exec(this.ctx)
+      .should.be.rejectedWith(
+        'In (valueset) is ambiguous -- multiple codes with multiple code systems exist in value set.'
+      );
   });
 
   it('should return false when there are multiple codesystems in a valueset but the string does not match any codes in valueset', async function () {
@@ -68,10 +69,11 @@ describe('InValueSet', () => {
   });
 
   it('should throw an error if not all codes have the same codesystem', async function () {
-    const c = await this.improperSharedCodesCodeValue.exec(this.ctx);
-    should(c).throw(
-      'In (valueset) is ambiguous -- multiple codes with multiple code systems exist in value set.'
-    );
+    return this.improperSharedCodesCodeValue
+      .exec(this.ctx)
+      .should.be.rejectedWith(
+        'In (valueset) is ambiguous -- multiple codes with multiple code systems exist in value set.'
+      );
   });
 
   it('should find string code in versioned value set', async function () {
