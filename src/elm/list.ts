@@ -17,7 +17,7 @@ export class List extends Expression {
   }
 
   async exec(ctx: Context) {
-    return await Promise.all(this.elements.map(async item => await item.execute(ctx)));
+    return await Promise.all(this.elements.map(item => item.execute(ctx)));
   }
 }
 
