@@ -974,7 +974,7 @@ describe('OutOfBounds', () => {
     });
 
     it('should return null for successor overflow', async function () {
-      should(this.timeSuccessorOverflow.exec(this.ctx)).be.null();
+      should(await this.timeSuccessorOverflow.exec(this.ctx)).be.null();
     });
 
     it('should return null for predecessor underflow', async function () {
