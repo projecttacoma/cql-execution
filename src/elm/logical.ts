@@ -1,4 +1,3 @@
-// TODO (MATT): check this pattern
 import { Expression } from './expression';
 import { ThreeValuedLogic } from '../datatypes/datatypes';
 import { Context } from '../runtime/context';

@@ -64,7 +64,6 @@ export class Executor {
       this.messageListener
     );
     const resultMap: any = {};
-    // TODO (MATT): check this
     for (const key in this.library.expressions) {
       const expr = this.library.expressions[key];
       if (expr.context === 'Unfiltered') {
@@ -87,7 +86,6 @@ export class Executor {
         this.messageListener
       );
       const resultMap: any = {};
-      // TODO (MATT): check this
       for (const key in this.library.expressions) {
         const expr = this.library.expressions[key];
         if (expr.context === 'Patient') {

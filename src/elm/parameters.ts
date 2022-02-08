@@ -24,7 +24,6 @@ export class ParameterDef extends Expression {
       return parentParam.default != null ? parentParam.default.execute(ctx) : parentParam;
       // If default type exists, execute the default type
     } else if (this.default != null) {
-      // TODO (MATT): check this
       await this.default.execute(ctx);
     }
   }

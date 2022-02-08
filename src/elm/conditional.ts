@@ -3,7 +3,6 @@ import { build } from './builder';
 import { equals } from '../util/comparison';
 import { Context } from '../runtime/context';
 
-// TODO (MATT): check this
 // TODO: Spec lists "Conditional", but it's "If" in the XSD
 export class If extends Expression {
   condition: any;

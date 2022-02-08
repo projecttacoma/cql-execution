@@ -56,7 +56,6 @@ export class Without extends With {
     super(json);
   }
   async exec(ctx: Context) {
-    // TODO (MATT): check this
     return !(await super.exec(ctx));
   }
 }
@@ -200,17 +199,11 @@ class AggregateClause extends Expression {
 
   async aggregate(returnedValues: any, ctx: Context) {
     let aggregateValue = this.starting != null ? await this.starting.exec(ctx) : null;
-    // TODO (MATT): check this
-    for await (const contextValues of returnedValues) {
+    for (const contextValues of returnedValues) {
       const childContext = ctx.childContext(contextValues);
       childContext.set(this.identifier, aggregateValue);
       aggregateValue = await this.expression.exec(childContext);
     }
-    /* returnedValues.forEach((contextValues: any) => {
-      const childContext = ctx.childContext(contextValues);
-      childContext.set(this.identifier, aggregateValue);
-      aggregateValue = this.expression.exec(childContext);
-    }); */
     return aggregateValue;
   }
 }
@@ -246,10 +239,8 @@ export class Query extends Expression {
     return true;
   }
 
-  // TODO (MATT) ALERT: might not work yet
   async exec(ctx: Context) {
     let returnedValues: any[] = [];
-    // TODO (MATT): there's no way this works, right?
     await this.sources.forEach(ctx, async (rctx: any) => {
       for (const def of this.letClauses) {
         rctx.set(def.identifier, await def.expression.execute(rctx));
@@ -345,8 +336,6 @@ class MultiSource {
     return this.isList || (this.rest && this.rest.returnsList());
   }
 
-  // TODO (MATT): check this (usage anywhere else in code needs to await)
-  // TODO (MATT) ALERT: might not work
   async forEach(ctx: Context, func: any) {
     let records = await this.expression.execute(ctx);
     this.isList = typeIsArray(records);

@@ -18,7 +18,6 @@ export class Message extends Expression {
     this.message = build(json.message);
   }
 
-  // TODO (MATT): Check this
   async exec(ctx: Context) {
     const source = await this.source.execute(ctx);
     const condition = await this.condition.execute(ctx);

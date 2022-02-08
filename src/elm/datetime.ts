@@ -39,7 +39,6 @@ export class DateTime extends Expression {
         });
       }
     }
-    // TODO (MATT): check this
     const args = await Promise.all(
       // @ts-ignore
       DateTime.PROPERTIES.map(async p => (this[p] != null ? this[p].execute(ctx) : undefined))
@@ -65,7 +64,6 @@ export class Date extends Expression {
         this[property] = build(this.json[property]);
       }
     }
-    // TODO (MATT): check this
     const args = await Promise.all(
       // @ts-ignore
       Date.PROPERTIES.map(async p => (this[p] != null ? this[p].execute(ctx) : undefined))

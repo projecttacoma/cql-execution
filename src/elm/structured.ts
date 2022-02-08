@@ -68,7 +68,6 @@ export class Tuple extends Expression {
 
   async exec(ctx: Context) {
     const val: any = {};
-    // TODO (MATT): check this
     for (const el of this.elements) {
       val[el.name] = el.value != null ? await el.value.execute(ctx) : undefined;
     }

@@ -191,7 +191,6 @@ export class ConceptDef extends Expression {
   }
 
   async exec(ctx: Context) {
-    // TODO (MATT): check this
     const codes = await Promise.all(
       this.codes.map(async (code: any) => {
         const codeDef = ctx.getCode(code.name);
