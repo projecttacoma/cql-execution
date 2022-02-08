@@ -60,7 +60,6 @@ describe('Add', () => {
   });
 
   it('should add Time/Quantity', async function () {
-    //not sure this is correct
     (await this.addTime.exec(this.ctx)).isTime().should.be.true();
   });
 
@@ -626,7 +625,6 @@ describe('Quantity', () => {
   });
 
   it('should be able to perform Quantity Addition', async function () {
-    //this seems like it could be off
     validateQuantity(await this.add_q_q.exec(this.ctx), 20, 'days');
     const adq = await this.add_d_q.exec(this.ctx);
     adq.isDateTime.should.be.true();
