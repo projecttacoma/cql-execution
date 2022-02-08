@@ -74,3 +74,28 @@ export function getTimezoneSeparatorFromString(string: string) {
   }
   return '';
 }
+
+type SortCompareFn = (a: any, b: any) => Promise<number>;
+
+export async function asyncMergeSort(arr: any[], compareFn: SortCompareFn): Promise<any[]> {
+  if (arr.length <= 1) return arr;
+
+  const midpoint = Math.floor(arr.length / 2);
+
+  const left = await asyncMergeSort(arr.slice(0, midpoint), compareFn);
+  const right = await asyncMergeSort(arr.slice(midpoint), compareFn);
+
+  return merge(left, right, compareFn);
+}
+
+async function merge(left: any[], right: any[], compareFn: SortCompareFn) {
+  const sorted: any[] = [];
+  while (left.length > 0 && right.length > 0) {
+    if ((await compareFn(left[0], right[0])) < 0) {
+      sorted.push(left.shift());
+    } else {
+      sorted.push(right.shift());
+    }
+  }
+  return [...sorted, ...left, ...right];
+}

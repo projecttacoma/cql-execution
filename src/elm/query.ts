@@ -1,6 +1,6 @@
 import { Expression, UnimplementedExpression } from './expression';
 import { Context } from '../runtime/context';
-import { typeIsArray, allTrue, Direction } from '../util/util';
+import { typeIsArray, allTrue, Direction, asyncMergeSort } from '../util/util';
 import { equals } from '../util/comparison';
 import { build } from './builder';
 
@@ -156,14 +156,13 @@ export class SortClause {
     this.by = build(json != null ? json.by : undefined);
   }
 
-  sort(ctx: Context, values: any) {
+  async sort(ctx: Context, values: any[]) {
     if (this.by) {
-      return values.sort((a: any, b: any) => {
+      return asyncMergeSort(values, async (a: any, b: any) => {
         let order = 0;
         for (const item of this.by) {
           // Do not use execute here because the value of the sort order is not important.
-          // TODO (MATT) ALERT: doesn't work yet
-          order = item.exec(ctx, a, b);
+          order = await item.exec(ctx, a, b);
           if (order !== 0) {
             break;
           }
@@ -171,6 +170,7 @@ export class SortClause {
         return order;
       });
     }
+    return values;
   }
 }
 
@@ -285,7 +285,7 @@ export class Query extends Expression {
     }
 
     if (this.sortClause != null) {
-      this.sortClause.sort(ctx, returnedValues);
+      returnedValues = await this.sortClause.sort(ctx, returnedValues);
     }
     if (this.sources.returnsList() || this.aggregateClause != null) {
       return returnedValues;
