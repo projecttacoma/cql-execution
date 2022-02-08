@@ -7,7 +7,7 @@ describe('Literal', () => {
     setup(this, data);
   });
 
-  it('should convert true to boolean true', async function () {
+  it('should convert true to boolean true', function () {
     this.boolTrue.value.should.be.true();
   });
 
@@ -15,7 +15,7 @@ describe('Literal', () => {
     (await this.boolTrue.exec(this.ctx)).should.be.true();
   });
 
-  it('should convert false to boolean false', async function () {
+  it('should convert false to boolean false', function () {
     this.boolFalse.value.should.be.false();
   });
 
@@ -23,7 +23,7 @@ describe('Literal', () => {
     (await this.boolFalse.exec(this.ctx)).should.be.false();
   });
 
-  it('should convert 1 to int 1', async function () {
+  it('should convert 1 to int 1', function () {
     this.intOne.value.should.equal(1);
   });
 
@@ -31,7 +31,7 @@ describe('Literal', () => {
     (await this.intOne.exec(this.ctx)).should.equal(1);
   });
 
-  it('should convert .1 to decimal .1', async function () {
+  it('should convert .1 to decimal .1', function () {
     this.decimalTenth.value.should.equal(0.1);
   });
 
@@ -39,7 +39,7 @@ describe('Literal', () => {
     (await this.decimalTenth.exec(this.ctx)).should.equal(0.1);
   });
 
-  it("should convert 'true' to string 'true'", async function () {
+  it("should convert 'true' to string 'true'", function () {
     this.stringTrue.value.should.equal('true');
   });
 
@@ -79,39 +79,39 @@ describe('Escape', () => {
     setup(this, data);
   });
 
-  it('should escape single quote', async function () {
+  it('should escape single quote', function () {
     this.singleQuote.value.should.equal("'");
   });
 
-  it('should escape double quote', async function () {
+  it('should escape double quote', function () {
     this.doubleQuote.value.should.equal('"');
   });
 
-  it('should escape backtick', async function () {
+  it('should escape backtick', function () {
     this.backtick.value.should.equal('`');
   });
 
-  it('should escape carriage return', async function () {
+  it('should escape carriage return', function () {
     this.carriageReturn.value.should.equal('\r');
   });
 
-  it('should escape line feed', async function () {
+  it('should escape line feed', function () {
     this.lineFeed.value.should.equal('\n');
   });
 
-  it('should escape tab', async function () {
+  it('should escape tab', function () {
     this.tab.value.should.equal('\t');
   });
 
-  it('should escape form feed', async function () {
+  it('should escape form feed', function () {
     this.formFeed.value.should.equal('\f');
   });
 
-  it('should escape backslash', async function () {
+  it('should escape backslash', function () {
     this.backslash.value.should.equal('\\');
   });
 
-  it('should escape unicode', async function () {
+  it('should escape unicode', function () {
     this.unicode.value.should.equal('H');
   });
 });
