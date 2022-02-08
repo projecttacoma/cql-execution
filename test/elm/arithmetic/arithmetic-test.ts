@@ -264,7 +264,7 @@ describe('MinValue', () => {
   });
 
   it('of types other than Integer/Decimal/DateTime/Time should throw an error', async function () {
-   return this.minWrongType.exec(this.ctx).should.be.rejected();
+    return this.minWrongType.exec(this.ctx).should.be.rejected();
   });
 });
 
