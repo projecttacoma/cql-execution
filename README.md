@@ -315,15 +315,15 @@ describe('And', () => {
   });
 
   it('should execute allTrue as true', async function () {
-    (await this.allTrue.exec(this.ctx)).should.be.true();
+    should(await this.allTrue.exec(this.ctx)).be.true();
   });
 
   it('should execute someTrue as false', async function () {
-    (await this.someTrue.exec(this.ctx)).should.be.false();
+    should(await this.someTrue.exec(this.ctx)).be.false();
   });
 
   it('should execute allFalse as false', async function () {
-    (await this.allFalse.exec(this.ctx)).should.be.false();
+    should(await this.allFalse.exec(this.ctx)).be.false();
   });
 });
 ```
