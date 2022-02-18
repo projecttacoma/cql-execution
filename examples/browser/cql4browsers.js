@@ -13609,7 +13609,7 @@ function asyncMergeSort(arr, compareFn) {
 exports.asyncMergeSort = asyncMergeSort;
 function merge(left, right, compareFn) {
     return __awaiter(this, void 0, void 0, function () {
-        var sorted;
+        var sorted, sortedElem, sortedElem;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -13620,10 +13620,16 @@ function merge(left, right, compareFn) {
                     return [4 /*yield*/, compareFn(left[0], right[0])];
                 case 2:
                     if ((_a.sent()) < 0) {
-                        sorted.push(left.shift());
+                        sortedElem = left.shift();
+                        if (sortedElem !== undefined) {
+                            sorted.push(sortedElem);
+                        }
                     }
                     else {
-                        sorted.push(right.shift());
+                        sortedElem = right.shift();
+                        if (sortedElem !== undefined) {
+                            sorted.push(sortedElem);
+                        }
                     }
                     return [3 /*break*/, 1];
                 case 3: return [2 /*return*/, __spreadArray(__spreadArray(__spreadArray([], sorted, true), left, true), right, true)];

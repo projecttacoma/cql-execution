@@ -75,9 +75,9 @@ export function getTimezoneSeparatorFromString(string: string) {
   return '';
 }
 
-type SortCompareFn = (a: any, b: any) => Promise<number>;
+type SortCompareFn<T> = (a: T, b: T) => Promise<number>;
 
-export async function asyncMergeSort(arr: any[], compareFn: SortCompareFn): Promise<any[]> {
+export async function asyncMergeSort<T>(arr: T[], compareFn: SortCompareFn<T>): Promise<T[]> {
   if (arr.length <= 1) return arr;
 
   const midpoint = Math.floor(arr.length / 2);
@@ -88,13 +88,19 @@ export async function asyncMergeSort(arr: any[], compareFn: SortCompareFn): Prom
   return merge(left, right, compareFn);
 }
 
-async function merge(left: any[], right: any[], compareFn: SortCompareFn) {
-  const sorted: any[] = [];
+async function merge<T>(left: T[], right: T[], compareFn: SortCompareFn<T>) {
+  const sorted: T[] = [];
   while (left.length > 0 && right.length > 0) {
     if ((await compareFn(left[0], right[0])) < 0) {
-      sorted.push(left.shift());
+      const sortedElem = left.shift();
+      if (sortedElem !== undefined) {
+        sorted.push(sortedElem);
+      }
     } else {
-      sorted.push(right.shift());
+      const sortedElem = right.shift();
+      if (sortedElem !== undefined) {
+        sorted.push(sortedElem);
+      }
     }
   }
   return [...sorted, ...left, ...right];
