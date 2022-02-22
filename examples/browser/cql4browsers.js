@@ -11,7 +11,7 @@
  */
 window.cql = require('../../lib/cql');
 
-window.executeSimpleELM = function (
+window.executeSimpleELM = async function (
   elm,
   patientSource,
   valueSets,
@@ -2850,6 +2850,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnyTrue = exports.AllTrue = exports.PopulationVariance = exports.Variance = exports.PopulationStdDev = exports.GeometricMean = exports.Product = exports.StdDev = exports.Mode = exports.Median = exports.Avg = exports.Max = exports.Min = exports.Sum = exports.Count = void 0;
 var expression_1 = require("./expression");
@@ -2873,11 +2909,20 @@ var Count = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Count.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if ((0, util_1.typeIsArray)(items)) {
-            return (0, util_1.removeNulls)(items).length;
-        }
-        return 0;
+        return __awaiter(this, void 0, void 0, function () {
+            var items;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if ((0, util_1.typeIsArray)(items)) {
+                            return [2 /*return*/, (0, util_1.removeNulls)(items).length];
+                        }
+                        return [2 /*return*/, 0];
+                }
+            });
+        });
     };
     return Count;
 }(AggregateExpression));
@@ -2888,27 +2933,37 @@ var Sum = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Sum.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if (!(0, util_1.typeIsArray)(items)) {
-            return null;
-        }
-        try {
-            items = processQuantities(items);
-        }
-        catch (e) {
-            return null;
-        }
-        if (items.length === 0) {
-            return null;
-        }
-        if (hasOnlyQuantities(items)) {
-            var values = getValuesFromQuantities(items);
-            var sum = values.reduce(function (x, y) { return x + y; });
-            return new datatypes_1.Quantity(sum, items[0].unit);
-        }
-        else {
-            return items.reduce(function (x, y) { return x + y; });
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var items, values, sum;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if (!(0, util_1.typeIsArray)(items)) {
+                            return [2 /*return*/, null];
+                        }
+                        try {
+                            items = processQuantities(items);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (items.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        if (hasOnlyQuantities(items)) {
+                            values = getValuesFromQuantities(items);
+                            sum = values.reduce(function (x, y) { return x + y; });
+                            return [2 /*return*/, new datatypes_1.Quantity(sum, items[0].unit)];
+                        }
+                        else {
+                            return [2 /*return*/, items.reduce(function (x, y) { return x + y; })];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Sum;
 }(AggregateExpression));
@@ -2919,31 +2974,39 @@ var Min = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Min.prototype.exec = function (ctx) {
-        var list = this.source.execute(ctx);
-        if (list == null) {
-            return null;
-        }
-        var listWithoutNulls = (0, util_1.removeNulls)(list);
-        // Check for incompatible units and return null. We don't want to convert
-        // the units for Min/Max, so we throw away the converted array if it succeeds
-        try {
-            processQuantities(list);
-        }
-        catch (e) {
-            return null;
-        }
-        if (listWithoutNulls.length === 0) {
-            return null;
-        }
-        // We assume the list is an array of all the same type.
-        var minimum = listWithoutNulls[0];
-        for (var _i = 0, listWithoutNulls_1 = listWithoutNulls; _i < listWithoutNulls_1.length; _i++) {
-            var element = listWithoutNulls_1[_i];
-            if ((0, comparison_1.lessThan)(element, minimum)) {
-                minimum = element;
-            }
-        }
-        return minimum;
+        return __awaiter(this, void 0, void 0, function () {
+            var list, listWithoutNulls, minimum, _i, listWithoutNulls_1, element;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        list = _a.sent();
+                        if (list == null) {
+                            return [2 /*return*/, null];
+                        }
+                        listWithoutNulls = (0, util_1.removeNulls)(list);
+                        // Check for incompatible units and return null. We don't want to convert
+                        // the units for Min/Max, so we throw away the converted array if it succeeds
+                        try {
+                            processQuantities(list);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (listWithoutNulls.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        minimum = listWithoutNulls[0];
+                        for (_i = 0, listWithoutNulls_1 = listWithoutNulls; _i < listWithoutNulls_1.length; _i++) {
+                            element = listWithoutNulls_1[_i];
+                            if ((0, comparison_1.lessThan)(element, minimum)) {
+                                minimum = element;
+                            }
+                        }
+                        return [2 /*return*/, minimum];
+                }
+            });
+        });
     };
     return Min;
 }(AggregateExpression));
@@ -2954,31 +3017,39 @@ var Max = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Max.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if (items == null) {
-            return null;
-        }
-        var listWithoutNulls = (0, util_1.removeNulls)(items);
-        // Check for incompatible units and return null. We don't want to convert
-        // the units for Min/Max, so we throw away the converted array if it succeeds
-        try {
-            processQuantities(items);
-        }
-        catch (e) {
-            return null;
-        }
-        if (listWithoutNulls.length === 0) {
-            return null;
-        }
-        // We assume the list is an array of all the same type.
-        var maximum = listWithoutNulls[0];
-        for (var _i = 0, listWithoutNulls_2 = listWithoutNulls; _i < listWithoutNulls_2.length; _i++) {
-            var element = listWithoutNulls_2[_i];
-            if ((0, comparison_1.greaterThan)(element, maximum)) {
-                maximum = element;
-            }
-        }
-        return maximum;
+        return __awaiter(this, void 0, void 0, function () {
+            var items, listWithoutNulls, maximum, _i, listWithoutNulls_2, element;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if (items == null) {
+                            return [2 /*return*/, null];
+                        }
+                        listWithoutNulls = (0, util_1.removeNulls)(items);
+                        // Check for incompatible units and return null. We don't want to convert
+                        // the units for Min/Max, so we throw away the converted array if it succeeds
+                        try {
+                            processQuantities(items);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (listWithoutNulls.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        maximum = listWithoutNulls[0];
+                        for (_i = 0, listWithoutNulls_2 = listWithoutNulls; _i < listWithoutNulls_2.length; _i++) {
+                            element = listWithoutNulls_2[_i];
+                            if ((0, comparison_1.greaterThan)(element, maximum)) {
+                                maximum = element;
+                            }
+                        }
+                        return [2 /*return*/, maximum];
+                }
+            });
+        });
     };
     return Max;
 }(AggregateExpression));
@@ -2989,28 +3060,38 @@ var Avg = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Avg.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if (!(0, util_1.typeIsArray)(items)) {
-            return null;
-        }
-        try {
-            items = processQuantities(items);
-        }
-        catch (e) {
-            return null;
-        }
-        if (items.length === 0) {
-            return null;
-        }
-        if (hasOnlyQuantities(items)) {
-            var values = getValuesFromQuantities(items);
-            var sum = values.reduce(function (x, y) { return x + y; });
-            return new datatypes_1.Quantity(sum / values.length, items[0].unit);
-        }
-        else {
-            var sum = items.reduce(function (x, y) { return x + y; });
-            return sum / items.length;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var items, values, sum, sum;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if (!(0, util_1.typeIsArray)(items)) {
+                            return [2 /*return*/, null];
+                        }
+                        try {
+                            items = processQuantities(items);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (items.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        if (hasOnlyQuantities(items)) {
+                            values = getValuesFromQuantities(items);
+                            sum = values.reduce(function (x, y) { return x + y; });
+                            return [2 /*return*/, new datatypes_1.Quantity(sum / values.length, items[0].unit)];
+                        }
+                        else {
+                            sum = items.reduce(function (x, y) { return x + y; });
+                            return [2 /*return*/, sum / items.length];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Avg;
 }(AggregateExpression));
@@ -3021,25 +3102,34 @@ var Median = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Median.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if (!(0, util_1.typeIsArray)(items)) {
-            return null;
-        }
-        if (items.length === 0) {
-            return null;
-        }
-        try {
-            items = processQuantities(items);
-        }
-        catch (e) {
-            return null;
-        }
-        if (!hasOnlyQuantities(items)) {
-            return medianOfNumbers(items);
-        }
-        var values = getValuesFromQuantities(items);
-        var median = medianOfNumbers(values);
-        return new datatypes_1.Quantity(median, items[0].unit);
+        return __awaiter(this, void 0, void 0, function () {
+            var items, values, median;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if (!(0, util_1.typeIsArray)(items)) {
+                            return [2 /*return*/, null];
+                        }
+                        if (items.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        try {
+                            items = processQuantities(items);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (!hasOnlyQuantities(items)) {
+                            return [2 /*return*/, medianOfNumbers(items)];
+                        }
+                        values = getValuesFromQuantities(items);
+                        median = medianOfNumbers(values);
+                        return [2 /*return*/, new datatypes_1.Quantity(median, items[0].unit)];
+                }
+            });
+        });
     };
     return Median;
 }(AggregateExpression));
@@ -3050,37 +3140,46 @@ var Mode = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Mode.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if (!(0, util_1.typeIsArray)(items)) {
-            return null;
-        }
-        if (items.length === 0) {
-            return null;
-        }
-        var filtered;
-        try {
-            filtered = processQuantities(items);
-        }
-        catch (e) {
-            return null;
-        }
-        if (hasOnlyQuantities(filtered)) {
-            var values = getValuesFromQuantities(filtered);
-            var mode = this.mode(values);
-            if (mode.length === 1) {
-                mode = mode[0];
-            }
-            return new datatypes_1.Quantity(mode, items[0].unit);
-        }
-        else {
-            var mode = this.mode(filtered);
-            if (mode.length === 1) {
-                return mode[0];
-            }
-            else {
-                return mode;
-            }
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var items, filtered, values, mode, mode;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if (!(0, util_1.typeIsArray)(items)) {
+                            return [2 /*return*/, null];
+                        }
+                        if (items.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        try {
+                            filtered = processQuantities(items);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (hasOnlyQuantities(filtered)) {
+                            values = getValuesFromQuantities(filtered);
+                            mode = this.mode(values);
+                            if (mode.length === 1) {
+                                mode = mode[0];
+                            }
+                            return [2 /*return*/, new datatypes_1.Quantity(mode, items[0].unit)];
+                        }
+                        else {
+                            mode = this.mode(filtered);
+                            if (mode.length === 1) {
+                                return [2 /*return*/, mode[0]];
+                            }
+                            else {
+                                return [2 /*return*/, mode];
+                            }
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     Mode.prototype.mode = function (arr) {
         var max = 0;
@@ -3110,27 +3209,37 @@ var StdDev = /** @class */ (function (_super) {
         return _this;
     }
     StdDev.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if (!(0, util_1.typeIsArray)(items)) {
-            return null;
-        }
-        try {
-            items = processQuantities(items);
-        }
-        catch (e) {
-            return null;
-        }
-        if (items.length === 0) {
-            return null;
-        }
-        if (hasOnlyQuantities(items)) {
-            var values = getValuesFromQuantities(items);
-            var stdDev = this.standardDeviation(values);
-            return new datatypes_1.Quantity(stdDev, items[0].unit);
-        }
-        else {
-            return this.standardDeviation(items);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var items, values, stdDev;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if (!(0, util_1.typeIsArray)(items)) {
+                            return [2 /*return*/, null];
+                        }
+                        try {
+                            items = processQuantities(items);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (items.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        if (hasOnlyQuantities(items)) {
+                            values = getValuesFromQuantities(items);
+                            stdDev = this.standardDeviation(values);
+                            return [2 /*return*/, new datatypes_1.Quantity(stdDev, items[0].unit)];
+                        }
+                        else {
+                            return [2 /*return*/, this.standardDeviation(items)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     StdDev.prototype.standardDeviation = function (list) {
         var val = this.stats(list);
@@ -3166,28 +3275,38 @@ var Product = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Product.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if (!(0, util_1.typeIsArray)(items)) {
-            return null;
-        }
-        try {
-            items = processQuantities(items);
-        }
-        catch (e) {
-            return null;
-        }
-        if (items.length === 0) {
-            return null;
-        }
-        if (hasOnlyQuantities(items)) {
-            var values = getValuesFromQuantities(items);
-            var product = values.reduce(function (x, y) { return x * y; });
-            // Units are not multiplied for the geometric product
-            return new datatypes_1.Quantity(product, items[0].unit);
-        }
-        else {
-            return items.reduce(function (x, y) { return x * y; });
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var items, values, product;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if (!(0, util_1.typeIsArray)(items)) {
+                            return [2 /*return*/, null];
+                        }
+                        try {
+                            items = processQuantities(items);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (items.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        if (hasOnlyQuantities(items)) {
+                            values = getValuesFromQuantities(items);
+                            product = values.reduce(function (x, y) { return x * y; });
+                            // Units are not multiplied for the geometric product
+                            return [2 /*return*/, new datatypes_1.Quantity(product, items[0].unit)];
+                        }
+                        else {
+                            return [2 /*return*/, items.reduce(function (x, y) { return x * y; })];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Product;
 }(AggregateExpression));
@@ -3198,29 +3317,39 @@ var GeometricMean = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     GeometricMean.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        if (!(0, util_1.typeIsArray)(items)) {
-            return null;
-        }
-        try {
-            items = processQuantities(items);
-        }
-        catch (e) {
-            return null;
-        }
-        if (items.length === 0) {
-            return null;
-        }
-        if (hasOnlyQuantities(items)) {
-            var values = getValuesFromQuantities(items);
-            var product = values.reduce(function (x, y) { return x * y; });
-            var geoMean = Math.pow(product, 1.0 / items.length);
-            return new datatypes_1.Quantity(geoMean, items[0].unit);
-        }
-        else {
-            var product = items.reduce(function (x, y) { return x * y; });
-            return Math.pow(product, 1.0 / items.length);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var items, values, product, geoMean, product;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        if (!(0, util_1.typeIsArray)(items)) {
+                            return [2 /*return*/, null];
+                        }
+                        try {
+                            items = processQuantities(items);
+                        }
+                        catch (e) {
+                            return [2 /*return*/, null];
+                        }
+                        if (items.length === 0) {
+                            return [2 /*return*/, null];
+                        }
+                        if (hasOnlyQuantities(items)) {
+                            values = getValuesFromQuantities(items);
+                            product = values.reduce(function (x, y) { return x * y; });
+                            geoMean = Math.pow(product, 1.0 / items.length);
+                            return [2 /*return*/, new datatypes_1.Quantity(geoMean, items[0].unit)];
+                        }
+                        else {
+                            product = items.reduce(function (x, y) { return x * y; });
+                            return [2 /*return*/, Math.pow(product, 1.0 / items.length)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return GeometricMean;
 }(AggregateExpression));
@@ -3261,8 +3390,17 @@ var AllTrue = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     AllTrue.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        return (0, util_1.allTrue)((0, util_1.removeNulls)(items));
+        return __awaiter(this, void 0, void 0, function () {
+            var items;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        return [2 /*return*/, (0, util_1.allTrue)((0, util_1.removeNulls)(items))];
+                }
+            });
+        });
     };
     return AllTrue;
 }(AggregateExpression));
@@ -3273,8 +3411,17 @@ var AnyTrue = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     AnyTrue.prototype.exec = function (ctx) {
-        var items = this.source.execute(ctx);
-        return (0, util_1.anyTrue)(items);
+        return __awaiter(this, void 0, void 0, function () {
+            var items;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        items = _a.sent();
+                        return [2 /*return*/, (0, util_1.anyTrue)(items)];
+                }
+            });
+        });
     };
     return AnyTrue;
 }(AggregateExpression));
@@ -3352,6 +3499,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Predecessor = exports.Successor = exports.MaxValue = exports.MinValue = exports.Power = exports.Log = exports.Exp = exports.Ln = exports.Round = exports.Negate = exports.Abs = exports.Truncate = exports.Floor = exports.Ceiling = exports.Modulo = exports.TruncatedDivide = exports.Divide = exports.Multiply = exports.Subtract = exports.Add = void 0;
 var expression_1 = require("./expression");
@@ -3365,39 +3548,48 @@ var Add = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Add.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args == null || args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        var sum = args.reduce(function (x, y) {
-            if (x.isUncertainty && !y.isUncertainty) {
-                y = new uncertainty_1.Uncertainty(y, y);
-            }
-            else if (y.isUncertainty && !x.isUncertainty) {
-                x = new uncertainty_1.Uncertainty(x, x);
-            }
-            if (x.isQuantity || x.isDateTime || x.isDate || (x.isTime && x.isTime())) {
-                return (0, quantity_1.doAddition)(x, y);
-            }
-            else if (x.isUncertainty && y.isUncertainty) {
-                if (x.low.isQuantity ||
-                    x.low.isDateTime ||
-                    x.low.isDate ||
-                    (x.low.isTime && x.low.isTime())) {
-                    return new uncertainty_1.Uncertainty((0, quantity_1.doAddition)(x.low, y.low), (0, quantity_1.doAddition)(x.high, y.high));
+        return __awaiter(this, void 0, void 0, function () {
+            var args, sum;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args == null || args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        sum = args.reduce(function (x, y) {
+                            if (x.isUncertainty && !y.isUncertainty) {
+                                y = new uncertainty_1.Uncertainty(y, y);
+                            }
+                            else if (y.isUncertainty && !x.isUncertainty) {
+                                x = new uncertainty_1.Uncertainty(x, x);
+                            }
+                            if (x.isQuantity || x.isDateTime || x.isDate || (x.isTime && x.isTime())) {
+                                return (0, quantity_1.doAddition)(x, y);
+                            }
+                            else if (x.isUncertainty && y.isUncertainty) {
+                                if (x.low.isQuantity ||
+                                    x.low.isDateTime ||
+                                    x.low.isDate ||
+                                    (x.low.isTime && x.low.isTime())) {
+                                    return new uncertainty_1.Uncertainty((0, quantity_1.doAddition)(x.low, y.low), (0, quantity_1.doAddition)(x.high, y.high));
+                                }
+                                else {
+                                    return new uncertainty_1.Uncertainty(x.low + y.low, x.high + y.high);
+                                }
+                            }
+                            else {
+                                return x + y;
+                            }
+                        });
+                        if (MathUtil.overflowsOrUnderflows(sum)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, sum];
                 }
-                else {
-                    return new uncertainty_1.Uncertainty(x.low + y.low, x.high + y.high);
-                }
-            }
-            else {
-                return x + y;
-            }
+            });
         });
-        if (MathUtil.overflowsOrUnderflows(sum)) {
-            return null;
-        }
-        return sum;
     };
     return Add;
 }(expression_1.Expression));
@@ -3408,36 +3600,45 @@ var Subtract = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Subtract.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args == null || args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        var difference = args.reduce(function (x, y) {
-            if (x.isUncertainty && !y.isUncertainty) {
-                y = new uncertainty_1.Uncertainty(y, y);
-            }
-            else if (y.isUncertainty && !x.isUncertainty) {
-                x = new uncertainty_1.Uncertainty(x, x);
-            }
-            if (x.isQuantity || x.isDateTime || x.isDate) {
-                return (0, quantity_1.doSubtraction)(x, y);
-            }
-            else if (x.isUncertainty && y.isUncertainty) {
-                if (x.low.isQuantity || x.low.isDateTime || x.low.isDate) {
-                    return new uncertainty_1.Uncertainty((0, quantity_1.doSubtraction)(x.low, y.high), (0, quantity_1.doSubtraction)(x.high, y.low));
+        return __awaiter(this, void 0, void 0, function () {
+            var args, difference;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args == null || args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        difference = args.reduce(function (x, y) {
+                            if (x.isUncertainty && !y.isUncertainty) {
+                                y = new uncertainty_1.Uncertainty(y, y);
+                            }
+                            else if (y.isUncertainty && !x.isUncertainty) {
+                                x = new uncertainty_1.Uncertainty(x, x);
+                            }
+                            if (x.isQuantity || x.isDateTime || x.isDate) {
+                                return (0, quantity_1.doSubtraction)(x, y);
+                            }
+                            else if (x.isUncertainty && y.isUncertainty) {
+                                if (x.low.isQuantity || x.low.isDateTime || x.low.isDate) {
+                                    return new uncertainty_1.Uncertainty((0, quantity_1.doSubtraction)(x.low, y.high), (0, quantity_1.doSubtraction)(x.high, y.low));
+                                }
+                                else {
+                                    return new uncertainty_1.Uncertainty(x.low - y.high, x.high - y.low);
+                                }
+                            }
+                            else {
+                                return x - y;
+                            }
+                        });
+                        if (MathUtil.overflowsOrUnderflows(difference)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, difference];
                 }
-                else {
-                    return new uncertainty_1.Uncertainty(x.low - y.high, x.high - y.low);
-                }
-            }
-            else {
-                return x - y;
-            }
+            });
         });
-        if (MathUtil.overflowsOrUnderflows(difference)) {
-            return null;
-        }
-        return difference;
     };
     return Subtract;
 }(expression_1.Expression));
@@ -3448,36 +3649,45 @@ var Multiply = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Multiply.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args == null || args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        var product = args.reduce(function (x, y) {
-            if (x.isUncertainty && !y.isUncertainty) {
-                y = new uncertainty_1.Uncertainty(y, y);
-            }
-            else if (y.isUncertainty && !x.isUncertainty) {
-                x = new uncertainty_1.Uncertainty(x, x);
-            }
-            if (x.isQuantity || y.isQuantity) {
-                return (0, quantity_1.doMultiplication)(x, y);
-            }
-            else if (x.isUncertainty && y.isUncertainty) {
-                if (x.low.isQuantity) {
-                    return new uncertainty_1.Uncertainty((0, quantity_1.doMultiplication)(x.low, y.low), (0, quantity_1.doMultiplication)(x.high, y.high));
+        return __awaiter(this, void 0, void 0, function () {
+            var args, product;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args == null || args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        product = args.reduce(function (x, y) {
+                            if (x.isUncertainty && !y.isUncertainty) {
+                                y = new uncertainty_1.Uncertainty(y, y);
+                            }
+                            else if (y.isUncertainty && !x.isUncertainty) {
+                                x = new uncertainty_1.Uncertainty(x, x);
+                            }
+                            if (x.isQuantity || y.isQuantity) {
+                                return (0, quantity_1.doMultiplication)(x, y);
+                            }
+                            else if (x.isUncertainty && y.isUncertainty) {
+                                if (x.low.isQuantity) {
+                                    return new uncertainty_1.Uncertainty((0, quantity_1.doMultiplication)(x.low, y.low), (0, quantity_1.doMultiplication)(x.high, y.high));
+                                }
+                                else {
+                                    return new uncertainty_1.Uncertainty(x.low * y.low, x.high * y.high);
+                                }
+                            }
+                            else {
+                                return x * y;
+                            }
+                        });
+                        if (MathUtil.overflowsOrUnderflows(product)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, product];
                 }
-                else {
-                    return new uncertainty_1.Uncertainty(x.low * y.low, x.high * y.high);
-                }
-            }
-            else {
-                return x * y;
-            }
+            });
         });
-        if (MathUtil.overflowsOrUnderflows(product)) {
-            return null;
-        }
-        return product;
     };
     return Multiply;
 }(expression_1.Expression));
@@ -3488,38 +3698,47 @@ var Divide = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Divide.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args == null || args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        var quotient = args.reduce(function (x, y) {
-            if (x.isUncertainty && !y.isUncertainty) {
-                y = new uncertainty_1.Uncertainty(y, y);
-            }
-            else if (y.isUncertainty && !x.isUncertainty) {
-                x = new uncertainty_1.Uncertainty(x, x);
-            }
-            if (x.isQuantity) {
-                return (0, quantity_1.doDivision)(x, y);
-            }
-            else if (x.isUncertainty && y.isUncertainty) {
-                if (x.low.isQuantity) {
-                    return new uncertainty_1.Uncertainty((0, quantity_1.doDivision)(x.low, y.high), (0, quantity_1.doDivision)(x.high, y.low));
+        return __awaiter(this, void 0, void 0, function () {
+            var args, quotient;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args == null || args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        quotient = args.reduce(function (x, y) {
+                            if (x.isUncertainty && !y.isUncertainty) {
+                                y = new uncertainty_1.Uncertainty(y, y);
+                            }
+                            else if (y.isUncertainty && !x.isUncertainty) {
+                                x = new uncertainty_1.Uncertainty(x, x);
+                            }
+                            if (x.isQuantity) {
+                                return (0, quantity_1.doDivision)(x, y);
+                            }
+                            else if (x.isUncertainty && y.isUncertainty) {
+                                if (x.low.isQuantity) {
+                                    return new uncertainty_1.Uncertainty((0, quantity_1.doDivision)(x.low, y.high), (0, quantity_1.doDivision)(x.high, y.low));
+                                }
+                                else {
+                                    return new uncertainty_1.Uncertainty(x.low / y.high, x.high / y.low);
+                                }
+                            }
+                            else {
+                                return x / y;
+                            }
+                        });
+                        // Note, anything divided by 0 is Infinity in Javascript, which will be
+                        // considered as overflow by this check.
+                        if (MathUtil.overflowsOrUnderflows(quotient)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, quotient];
                 }
-                else {
-                    return new uncertainty_1.Uncertainty(x.low / y.high, x.high / y.low);
-                }
-            }
-            else {
-                return x / y;
-            }
+            });
         });
-        // Note, anything divided by 0 is Infinity in Javascript, which will be
-        // considered as overflow by this check.
-        if (MathUtil.overflowsOrUnderflows(quotient)) {
-            return null;
-        }
-        return quotient;
     };
     return Divide;
 }(expression_1.Expression));
@@ -3530,16 +3749,25 @@ var TruncatedDivide = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     TruncatedDivide.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args == null || args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        var quotient = args.reduce(function (x, y) { return x / y; });
-        var truncatedQuotient = quotient >= 0 ? Math.floor(quotient) : Math.ceil(quotient);
-        if (MathUtil.overflowsOrUnderflows(truncatedQuotient)) {
-            return null;
-        }
-        return truncatedQuotient;
+        return __awaiter(this, void 0, void 0, function () {
+            var args, quotient, truncatedQuotient;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args == null || args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        quotient = args.reduce(function (x, y) { return x / y; });
+                        truncatedQuotient = quotient >= 0 ? Math.floor(quotient) : Math.ceil(quotient);
+                        if (MathUtil.overflowsOrUnderflows(truncatedQuotient)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, truncatedQuotient];
+                }
+            });
+        });
     };
     return TruncatedDivide;
 }(expression_1.Expression));
@@ -3550,12 +3778,21 @@ var Modulo = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Modulo.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args == null || args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        var modulo = args.reduce(function (x, y) { return x % y; });
-        return MathUtil.decimalOrNull(modulo);
+        return __awaiter(this, void 0, void 0, function () {
+            var args, modulo;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args == null || args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        modulo = args.reduce(function (x, y) { return x % y; });
+                        return [2 /*return*/, MathUtil.decimalOrNull(modulo)];
+                }
+            });
+        });
     };
     return Modulo;
 }(expression_1.Expression));
@@ -3566,11 +3803,20 @@ var Ceiling = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Ceiling.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        return Math.ceil(arg);
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, Math.ceil(arg)];
+                }
+            });
+        });
     };
     return Ceiling;
 }(expression_1.Expression));
@@ -3581,11 +3827,20 @@ var Floor = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Floor.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        return Math.floor(arg);
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, Math.floor(arg)];
+                }
+            });
+        });
     };
     return Floor;
 }(expression_1.Expression));
@@ -3596,11 +3851,20 @@ var Truncate = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Truncate.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        return arg >= 0 ? Math.floor(arg) : Math.ceil(arg);
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, arg >= 0 ? Math.floor(arg) : Math.ceil(arg)];
+                }
+            });
+        });
     };
     return Truncate;
 }(expression_1.Expression));
@@ -3611,16 +3875,26 @@ var Abs = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Abs.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        else if (arg.isQuantity) {
-            return new quantity_1.Quantity(Math.abs(arg.value), arg.unit);
-        }
-        else {
-            return Math.abs(arg);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        else if (arg.isQuantity) {
+                            return [2 /*return*/, new quantity_1.Quantity(Math.abs(arg.value), arg.unit)];
+                        }
+                        else {
+                            return [2 /*return*/, Math.abs(arg)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Abs;
 }(expression_1.Expression));
@@ -3631,16 +3905,26 @@ var Negate = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Negate.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        else if (arg.isQuantity) {
-            return new quantity_1.Quantity(arg.value * -1, arg.unit);
-        }
-        else {
-            return arg * -1;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        else if (arg.isQuantity) {
+                            return [2 /*return*/, new quantity_1.Quantity(arg.value * -1, arg.unit)];
+                        }
+                        else {
+                            return [2 /*return*/, arg * -1];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Negate;
 }(expression_1.Expression));
@@ -3653,12 +3937,30 @@ var Round = /** @class */ (function (_super) {
         return _this;
     }
     Round.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        var dec = this.precision != null ? this.precision.execute(ctx) : 0;
-        return Math.round(arg * Math.pow(10, dec)) / Math.pow(10, dec);
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, dec, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _b.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        if (!(this.precision != null)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.precision.execute(ctx)];
+                    case 2:
+                        _a = _b.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        _a = 0;
+                        _b.label = 4;
+                    case 4:
+                        dec = _a;
+                        return [2 /*return*/, Math.round(arg * Math.pow(10, dec)) / Math.pow(10, dec)];
+                }
+            });
+        });
     };
     return Round;
 }(expression_1.Expression));
@@ -3669,12 +3971,21 @@ var Ln = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Ln.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        var ln = Math.log(arg);
-        return MathUtil.decimalOrNull(ln);
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, ln;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        ln = Math.log(arg);
+                        return [2 /*return*/, MathUtil.decimalOrNull(ln)];
+                }
+            });
+        });
     };
     return Ln;
 }(expression_1.Expression));
@@ -3685,15 +3996,24 @@ var Exp = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Exp.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        var power = Math.exp(arg);
-        if (MathUtil.overflowsOrUnderflows(power)) {
-            return null;
-        }
-        return power;
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, power;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        power = Math.exp(arg);
+                        if (MathUtil.overflowsOrUnderflows(power)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, power];
+                }
+            });
+        });
     };
     return Exp;
 }(expression_1.Expression));
@@ -3704,12 +4024,21 @@ var Log = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Log.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args == null || args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        var log = args.reduce(function (x, y) { return Math.log(x) / Math.log(y); });
-        return MathUtil.decimalOrNull(log);
+        return __awaiter(this, void 0, void 0, function () {
+            var args, log;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args == null || args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        log = args.reduce(function (x, y) { return Math.log(x) / Math.log(y); });
+                        return [2 /*return*/, MathUtil.decimalOrNull(log)];
+                }
+            });
+        });
     };
     return Log;
 }(expression_1.Expression));
@@ -3720,15 +4049,24 @@ var Power = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Power.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args == null || args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        var power = args.reduce(function (x, y) { return Math.pow(x, y); });
-        if (MathUtil.overflowsOrUnderflows(power)) {
-            return null;
-        }
-        return power;
+        return __awaiter(this, void 0, void 0, function () {
+            var args, power;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args == null || args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        power = args.reduce(function (x, y) { return Math.pow(x, y); });
+                        if (MathUtil.overflowsOrUnderflows(power)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, power];
+                }
+            });
+        });
     };
     return Power;
 }(expression_1.Expression));
@@ -3741,19 +4079,25 @@ var MinValue = /** @class */ (function (_super) {
         return _this;
     }
     MinValue.prototype.exec = function (ctx) {
-        if (MinValue.MIN_VALUES[this.valueType]) {
-            if (this.valueType === '{urn:hl7-org:elm-types:r1}DateTime') {
-                var minDateTime = MinValue.MIN_VALUES[this.valueType].copy();
-                minDateTime.timezoneOffset = ctx.getTimezoneOffset();
-                return minDateTime;
-            }
-            else {
-                return MinValue.MIN_VALUES[this.valueType];
-            }
-        }
-        else {
-            throw new Error("Minimum not supported for ".concat(this.valueType));
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var minDateTime;
+            return __generator(this, function (_a) {
+                if (MinValue.MIN_VALUES[this.valueType]) {
+                    if (this.valueType === '{urn:hl7-org:elm-types:r1}DateTime') {
+                        minDateTime = MinValue.MIN_VALUES[this.valueType].copy();
+                        minDateTime.timezoneOffset = ctx.getTimezoneOffset();
+                        return [2 /*return*/, minDateTime];
+                    }
+                    else {
+                        return [2 /*return*/, MinValue.MIN_VALUES[this.valueType]];
+                    }
+                }
+                else {
+                    throw new Error("Minimum not supported for ".concat(this.valueType));
+                }
+                return [2 /*return*/];
+            });
+        });
     };
     MinValue.MIN_VALUES = {
         '{urn:hl7-org:elm-types:r1}Integer': MathUtil.MIN_INT_VALUE,
@@ -3773,19 +4117,25 @@ var MaxValue = /** @class */ (function (_super) {
         return _this;
     }
     MaxValue.prototype.exec = function (ctx) {
-        if (MaxValue.MAX_VALUES[this.valueType] != null) {
-            if (this.valueType === '{urn:hl7-org:elm-types:r1}DateTime') {
-                var maxDateTime = MaxValue.MAX_VALUES[this.valueType].copy();
-                maxDateTime.timezoneOffset = ctx.getTimezoneOffset();
-                return maxDateTime;
-            }
-            else {
-                return MaxValue.MAX_VALUES[this.valueType];
-            }
-        }
-        else {
-            throw new Error("Maximum not supported for ".concat(this.valueType));
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var maxDateTime;
+            return __generator(this, function (_a) {
+                if (MaxValue.MAX_VALUES[this.valueType] != null) {
+                    if (this.valueType === '{urn:hl7-org:elm-types:r1}DateTime') {
+                        maxDateTime = MaxValue.MAX_VALUES[this.valueType].copy();
+                        maxDateTime.timezoneOffset = ctx.getTimezoneOffset();
+                        return [2 /*return*/, maxDateTime];
+                    }
+                    else {
+                        return [2 /*return*/, MaxValue.MAX_VALUES[this.valueType]];
+                    }
+                }
+                else {
+                    throw new Error("Maximum not supported for ".concat(this.valueType));
+                }
+                return [2 /*return*/];
+            });
+        });
     };
     MaxValue.MAX_VALUES = {
         '{urn:hl7-org:elm-types:r1}Integer': MathUtil.MAX_INT_VALUE,
@@ -3803,25 +4153,34 @@ var Successor = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Successor.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        var successor = null;
-        try {
-            // MathUtil.successor throws on overflow, and the exception is used in
-            // the logic for evaluating `meets`, so it can't be changed to just return null
-            successor = MathUtil.successor(arg);
-        }
-        catch (e) {
-            if (e instanceof MathUtil.OverFlowException) {
-                return null;
-            }
-        }
-        if (MathUtil.overflowsOrUnderflows(successor)) {
-            return null;
-        }
-        return successor;
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, successor;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        successor = null;
+                        try {
+                            // MathUtil.successor throws on overflow, and the exception is used in
+                            // the logic for evaluating `meets`, so it can't be changed to just return null
+                            successor = MathUtil.successor(arg);
+                        }
+                        catch (e) {
+                            if (e instanceof MathUtil.OverFlowException) {
+                                return [2 /*return*/, null];
+                            }
+                        }
+                        if (MathUtil.overflowsOrUnderflows(successor)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, successor];
+                }
+            });
+        });
     };
     return Successor;
 }(expression_1.Expression));
@@ -3832,25 +4191,34 @@ var Predecessor = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Predecessor.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        var predecessor = null;
-        try {
-            // MathUtil.predecessor throws on underflow, and the exception is used in
-            // the logic for evaluating `meets`, so it can't be changed to just return null
-            predecessor = MathUtil.predecessor(arg);
-        }
-        catch (e) {
-            if (e instanceof MathUtil.OverFlowException) {
-                return null;
-            }
-        }
-        if (MathUtil.overflowsOrUnderflows(predecessor)) {
-            return null;
-        }
-        return predecessor;
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, predecessor;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        predecessor = null;
+                        try {
+                            // MathUtil.predecessor throws on underflow, and the exception is used in
+                            // the logic for evaluating `meets`, so it can't be changed to just return null
+                            predecessor = MathUtil.predecessor(arg);
+                        }
+                        catch (e) {
+                            if (e instanceof MathUtil.OverFlowException) {
+                                return [2 /*return*/, null];
+                            }
+                        }
+                        if (MathUtil.overflowsOrUnderflows(predecessor)) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, predecessor];
+                }
+            });
+        });
     };
     return Predecessor;
 }(expression_1.Expression));
@@ -3948,6 +4316,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CalculateAgeAt = exports.CalculateAge = exports.Concept = exports.ConceptRef = exports.ConceptDef = exports.Code = exports.CodeRef = exports.CodeDef = exports.CodeSystemDef = exports.InValueSet = exports.AnyInValueSet = exports.ValueSetRef = exports.ValueSetDef = void 0;
 var expression_1 = require("./expression");
@@ -3964,9 +4368,14 @@ var ValueSetDef = /** @class */ (function (_super) {
     }
     //todo: code systems and versions
     ValueSetDef.prototype.exec = function (ctx) {
-        var valueset = ctx.codeService.findValueSet(this.id, this.version) || new dt.ValueSet(this.id, this.version);
-        ctx.rootContext().set(this.name, valueset);
-        return valueset;
+        return __awaiter(this, void 0, void 0, function () {
+            var valueset;
+            return __generator(this, function (_a) {
+                valueset = ctx.codeService.findValueSet(this.id, this.version) || new dt.ValueSet(this.id, this.version);
+                ctx.rootContext().set(this.name, valueset);
+                return [2 /*return*/, valueset];
+            });
+        });
     };
     return ValueSetDef;
 }(expression_1.Expression));
@@ -3980,12 +4389,21 @@ var ValueSetRef = /** @class */ (function (_super) {
         return _this;
     }
     ValueSetRef.prototype.exec = function (ctx) {
-        // TODO: This calls the code service every time-- should be optimized
-        var valueset = ctx.getValueSet(this.name, this.libraryName);
-        if (valueset instanceof expression_1.Expression) {
-            valueset = valueset.execute(ctx);
-        }
-        return valueset;
+        return __awaiter(this, void 0, void 0, function () {
+            var valueset;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        valueset = ctx.getValueSet(this.name, this.libraryName);
+                        if (!(valueset instanceof expression_1.Expression)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, valueset.execute(ctx)];
+                    case 1:
+                        valueset = _a.sent();
+                        _a.label = 2;
+                    case 2: return [2 /*return*/, valueset];
+                }
+            });
+        });
     };
     return ValueSetRef;
 }(expression_1.Expression));
@@ -3999,13 +4417,24 @@ var AnyInValueSet = /** @class */ (function (_super) {
         return _this;
     }
     AnyInValueSet.prototype.exec = function (ctx) {
-        var valueset = this.valueset.execute(ctx);
-        // If the value set reference cannot be resolved, a run-time error is thrown.
-        if (valueset == null || !valueset.isValueSet) {
-            throw new Error('ValueSet must be provided to InValueSet function');
-        }
-        var codes = this.codes.exec(ctx);
-        return codes != null && codes.some(function (code) { return valueset.hasMatch(code); });
+        return __awaiter(this, void 0, void 0, function () {
+            var valueset, codes;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.valueset.execute(ctx)];
+                    case 1:
+                        valueset = _a.sent();
+                        // If the value set reference cannot be resolved, a run-time error is thrown.
+                        if (valueset == null || !valueset.isValueSet) {
+                            throw new Error('ValueSet must be provided to InValueSet function');
+                        }
+                        return [4 /*yield*/, this.codes.exec(ctx)];
+                    case 2:
+                        codes = _a.sent();
+                        return [2 /*return*/, codes != null && codes.some(function (code) { return valueset.hasMatch(code); })];
+                }
+            });
+        });
     };
     return AnyInValueSet;
 }(expression_1.Expression));
@@ -4019,24 +4448,36 @@ var InValueSet = /** @class */ (function (_super) {
         return _this;
     }
     InValueSet.prototype.exec = function (ctx) {
-        // If the code argument is null, the result is false
-        if (this.code == null) {
-            return false;
-        }
-        if (this.valueset == null) {
-            throw new Error('ValueSet must be provided to InValueSet function');
-        }
-        var code = this.code.execute(ctx);
-        // spec indicates to return false if code is null, throw error if value set cannot be resolved
-        if (code == null) {
-            return false;
-        }
-        var valueset = this.valueset.execute(ctx);
-        if (valueset == null || !valueset.isValueSet) {
-            throw new Error('ValueSet must be provided to InValueSet function');
-        }
-        // If there is a code and valueset return whether or not the valueset has the code
-        return valueset.hasMatch(code);
+        return __awaiter(this, void 0, void 0, function () {
+            var code, valueset;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // If the code argument is null, the result is false
+                        if (this.code == null) {
+                            return [2 /*return*/, false];
+                        }
+                        if (this.valueset == null) {
+                            throw new Error('ValueSet must be provided to InValueSet function');
+                        }
+                        return [4 /*yield*/, this.code.execute(ctx)];
+                    case 1:
+                        code = _a.sent();
+                        // spec indicates to return false if code is null, throw error if value set cannot be resolved
+                        if (code == null) {
+                            return [2 /*return*/, false];
+                        }
+                        return [4 /*yield*/, this.valueset.execute(ctx)];
+                    case 2:
+                        valueset = _a.sent();
+                        if (valueset == null || !valueset.isValueSet) {
+                            throw new Error('ValueSet must be provided to InValueSet function');
+                        }
+                        // If there is a code and valueset return whether or not the valueset has the code
+                        return [2 /*return*/, valueset.hasMatch(code)];
+                }
+            });
+        });
     };
     return InValueSet;
 }(expression_1.Expression));
@@ -4051,7 +4492,11 @@ var CodeSystemDef = /** @class */ (function (_super) {
         return _this;
     }
     CodeSystemDef.prototype.exec = function (_ctx) {
-        return new dt.CodeSystem(this.id, this.version);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new dt.CodeSystem(this.id, this.version)];
+            });
+        });
     };
     return CodeSystemDef;
 }(expression_1.Expression));
@@ -4067,8 +4512,17 @@ var CodeDef = /** @class */ (function (_super) {
         return _this;
     }
     CodeDef.prototype.exec = function (ctx) {
-        var system = ctx.getCodeSystem(this.systemName).execute(ctx);
-        return new dt.Code(this.id, system.id, system.version, this.display);
+        return __awaiter(this, void 0, void 0, function () {
+            var system;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, ctx.getCodeSystem(this.systemName).execute(ctx)];
+                    case 1:
+                        system = _a.sent();
+                        return [2 /*return*/, new dt.Code(this.id, system.id, system.version, this.display)];
+                }
+            });
+        });
     };
     return CodeDef;
 }(expression_1.Expression));
@@ -4082,9 +4536,14 @@ var CodeRef = /** @class */ (function (_super) {
         return _this;
     }
     CodeRef.prototype.exec = function (ctx) {
-        ctx = this.library ? ctx.getLibraryContext(this.library) : ctx;
-        var codeDef = ctx.getCode(this.name);
-        return codeDef ? codeDef.execute(ctx) : undefined;
+        return __awaiter(this, void 0, void 0, function () {
+            var codeDef;
+            return __generator(this, function (_a) {
+                ctx = this.library ? ctx.getLibraryContext(this.library) : ctx;
+                codeDef = ctx.getCode(this.name);
+                return [2 /*return*/, codeDef ? codeDef.execute(ctx) : undefined];
+            });
+        });
     };
     return CodeRef;
 }(expression_1.Expression));
@@ -4109,8 +4568,13 @@ var Code = /** @class */ (function (_super) {
         configurable: true
     });
     Code.prototype.exec = function (ctx) {
-        var system = ctx.getCodeSystem(this.systemName) || {};
-        return new dt.Code(this.code, system.id, this.version, this.display);
+        return __awaiter(this, void 0, void 0, function () {
+            var system;
+            return __generator(this, function (_a) {
+                system = ctx.getCodeSystem(this.systemName) || {};
+                return [2 /*return*/, new dt.Code(this.code, system.id, this.version, this.display)];
+            });
+        });
     };
     return Code;
 }(expression_1.Expression));
@@ -4125,11 +4589,24 @@ var ConceptDef = /** @class */ (function (_super) {
         return _this;
     }
     ConceptDef.prototype.exec = function (ctx) {
-        var codes = this.codes.map(function (code) {
-            var codeDef = ctx.getCode(code.name);
-            return codeDef ? codeDef.execute(ctx) : undefined;
+        return __awaiter(this, void 0, void 0, function () {
+            var codes;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, Promise.all(this.codes.map(function (code) { return __awaiter(_this, void 0, void 0, function () {
+                            var codeDef;
+                            return __generator(this, function (_a) {
+                                codeDef = ctx.getCode(code.name);
+                                return [2 /*return*/, codeDef ? codeDef.execute(ctx) : undefined];
+                            });
+                        }); }))];
+                    case 1:
+                        codes = _a.sent();
+                        return [2 /*return*/, new dt.Concept(codes, this.display)];
+                }
+            });
         });
-        return new dt.Concept(codes, this.display);
     };
     return ConceptDef;
 }(expression_1.Expression));
@@ -4142,8 +4619,13 @@ var ConceptRef = /** @class */ (function (_super) {
         return _this;
     }
     ConceptRef.prototype.exec = function (ctx) {
-        var conceptDef = ctx.getConcept(this.name);
-        return conceptDef ? conceptDef.execute(ctx) : undefined;
+        return __awaiter(this, void 0, void 0, function () {
+            var conceptDef;
+            return __generator(this, function (_a) {
+                conceptDef = ctx.getConcept(this.name);
+                return [2 /*return*/, conceptDef ? conceptDef.execute(ctx) : undefined];
+            });
+        });
     };
     return ConceptRef;
 }(expression_1.Expression));
@@ -4170,9 +4652,14 @@ var Concept = /** @class */ (function (_super) {
         return new dt.Code(code.code, system.id, code.version, code.display);
     };
     Concept.prototype.exec = function (ctx) {
-        var _this = this;
-        var codes = this.codes.map(function (code) { return _this.toCode(ctx, code); });
-        return new dt.Concept(codes, this.display);
+        return __awaiter(this, void 0, void 0, function () {
+            var codes;
+            var _this = this;
+            return __generator(this, function (_a) {
+                codes = this.codes.map(function (code) { return _this.toCode(ctx, code); });
+                return [2 /*return*/, new dt.Concept(codes, this.display)];
+            });
+        });
     };
     return Concept;
 }(expression_1.Expression));
@@ -4185,15 +4672,25 @@ var CalculateAge = /** @class */ (function (_super) {
         return _this;
     }
     CalculateAge.prototype.exec = function (ctx) {
-        var date1 = this.execArgs(ctx);
-        var date2 = dt.DateTime.fromJSDate(ctx.getExecutionDateTime());
-        var result = date1 != null ? date1.durationBetween(date2, this.precision.toLowerCase()) : undefined;
-        if (result != null && result.isPoint()) {
-            return result.low;
-        }
-        else {
-            return result;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var date1, date2, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        date1 = _a.sent();
+                        date2 = dt.DateTime.fromJSDate(ctx.getExecutionDateTime());
+                        result = date1 != null ? date1.durationBetween(date2, this.precision.toLowerCase()) : undefined;
+                        if (result != null && result.isPoint()) {
+                            return [2 /*return*/, result.low];
+                        }
+                        else {
+                            return [2 /*return*/, result];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return CalculateAge;
 }(expression_1.Expression));
@@ -4206,22 +4703,30 @@ var CalculateAgeAt = /** @class */ (function (_super) {
         return _this;
     }
     CalculateAgeAt.prototype.exec = function (ctx) {
-        // eslint-disable-next-line prefer-const
-        var _a = this.execArgs(ctx), date1 = _a[0], date2 = _a[1];
-        if (date1 != null && date2 != null) {
-            // date1 is the birthdate, convert it to date if date2 is a date (to support ignoring time)
-            if (date2.isDate && date1.isDateTime) {
-                date1 = date1.getDate();
-            }
-            var result = date1.durationBetween(date2, this.precision.toLowerCase());
-            if (result != null && result.isPoint()) {
-                return result.low;
-            }
-            else {
-                return result;
-            }
-        }
-        return null;
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, date1, date2, result;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), date1 = _a[0], date2 = _a[1];
+                        if (date1 != null && date2 != null) {
+                            // date1 is the birthdate, convert it to date if date2 is a date (to support ignoring time)
+                            if (date2.isDate && date1.isDateTime) {
+                                date1 = date1.getDate();
+                            }
+                            result = date1.durationBetween(date2, this.precision.toLowerCase());
+                            if (result != null && result.isPoint()) {
+                                return [2 /*return*/, result.low];
+                            }
+                            else {
+                                return [2 /*return*/, result];
+                            }
+                        }
+                        return [2 /*return*/, null];
+                }
+            });
+        });
     };
     return CalculateAgeAt;
 }(expression_1.Expression));
@@ -4244,6 +4749,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GreaterOrEqual = exports.Greater = exports.LessOrEqual = exports.Less = void 0;
 var expression_1 = require("./expression");
@@ -4256,11 +4797,20 @@ var Less = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Less.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx).map(function (x) { return datatypes_1.Uncertainty.from(x); });
-        if (args[0] == null || args[1] == null) {
-            return null;
-        }
-        return args[0].lessThan(args[1]);
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = (_a.sent()).map(function (x) { return datatypes_1.Uncertainty.from(x); });
+                        if (args[0] == null || args[1] == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, args[0].lessThan(args[1])];
+                }
+            });
+        });
     };
     return Less;
 }(expression_1.Expression));
@@ -4271,11 +4821,20 @@ var LessOrEqual = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     LessOrEqual.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx).map(function (x) { return datatypes_1.Uncertainty.from(x); });
-        if (args[0] == null || args[1] == null) {
-            return null;
-        }
-        return args[0].lessThanOrEquals(args[1]);
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = (_a.sent()).map(function (x) { return datatypes_1.Uncertainty.from(x); });
+                        if (args[0] == null || args[1] == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, args[0].lessThanOrEquals(args[1])];
+                }
+            });
+        });
     };
     return LessOrEqual;
 }(expression_1.Expression));
@@ -4286,11 +4845,20 @@ var Greater = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Greater.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx).map(function (x) { return datatypes_1.Uncertainty.from(x); });
-        if (args[0] == null || args[1] == null) {
-            return null;
-        }
-        return args[0].greaterThan(args[1]);
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = (_a.sent()).map(function (x) { return datatypes_1.Uncertainty.from(x); });
+                        if (args[0] == null || args[1] == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, args[0].greaterThan(args[1])];
+                }
+            });
+        });
     };
     return Greater;
 }(expression_1.Expression));
@@ -4301,11 +4869,20 @@ var GreaterOrEqual = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     GreaterOrEqual.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx).map(function (x) { return datatypes_1.Uncertainty.from(x); });
-        if (args[0] == null || args[1] == null) {
-            return null;
-        }
-        return args[0].greaterThanOrEquals(args[1]);
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = (_a.sent()).map(function (x) { return datatypes_1.Uncertainty.from(x); });
+                        if (args[0] == null || args[1] == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, args[0].greaterThanOrEquals(args[1])];
+                }
+            });
+        });
     };
     return GreaterOrEqual;
 }(expression_1.Expression));
@@ -4328,6 +4905,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Case = exports.CaseItem = exports.If = void 0;
 var expression_1 = require("./expression");
@@ -4344,12 +4957,21 @@ var If = /** @class */ (function (_super) {
         return _this;
     }
     If.prototype.exec = function (ctx) {
-        if (this.condition.execute(ctx)) {
-            return this.th.execute(ctx);
-        }
-        else {
-            return this.els.execute(ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.condition.execute(ctx)];
+                    case 1:
+                        if (_a.sent()) {
+                            return [2 /*return*/, this.th.execute(ctx)];
+                        }
+                        else {
+                            return [2 /*return*/, this.els.execute(ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return If;
 }(expression_1.Expression));
@@ -4372,31 +4994,70 @@ var Case = /** @class */ (function (_super) {
         return _this;
     }
     Case.prototype.exec = function (ctx) {
-        if (this.comparand) {
-            return this.exec_selected(ctx);
-        }
-        else {
-            return this.exec_standard(ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (this.comparand) {
+                    return [2 /*return*/, this.exec_selected(ctx)];
+                }
+                else {
+                    return [2 /*return*/, this.exec_standard(ctx)];
+                }
+                return [2 /*return*/];
+            });
+        });
     };
     Case.prototype.exec_selected = function (ctx) {
-        var val = this.comparand.execute(ctx);
-        for (var _i = 0, _a = this.caseItems; _i < _a.length; _i++) {
-            var ci = _a[_i];
-            if ((0, comparison_1.equals)(ci.when.execute(ctx), val)) {
-                return ci.then.execute(ctx);
-            }
-        }
-        return this.els.execute(ctx);
+        return __awaiter(this, void 0, void 0, function () {
+            var val, _i, _a, ci, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, this.comparand.execute(ctx)];
+                    case 1:
+                        val = _c.sent();
+                        _i = 0, _a = this.caseItems;
+                        _c.label = 2;
+                    case 2:
+                        if (!(_i < _a.length)) return [3 /*break*/, 5];
+                        ci = _a[_i];
+                        _b = comparison_1.equals;
+                        return [4 /*yield*/, ci.when.execute(ctx)];
+                    case 3:
+                        if (_b.apply(void 0, [_c.sent(), val])) {
+                            return [2 /*return*/, ci.then.execute(ctx)];
+                        }
+                        _c.label = 4;
+                    case 4:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 5: return [2 /*return*/, this.els.execute(ctx)];
+                }
+            });
+        });
     };
     Case.prototype.exec_standard = function (ctx) {
-        for (var _i = 0, _a = this.caseItems; _i < _a.length; _i++) {
-            var ci = _a[_i];
-            if (ci.when.execute(ctx)) {
-                return ci.then.execute(ctx);
-            }
-        }
-        return this.els.execute(ctx);
+        return __awaiter(this, void 0, void 0, function () {
+            var _i, _a, ci;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _i = 0, _a = this.caseItems;
+                        _b.label = 1;
+                    case 1:
+                        if (!(_i < _a.length)) return [3 /*break*/, 4];
+                        ci = _a[_i];
+                        return [4 /*yield*/, ci.when.execute(ctx)];
+                    case 2:
+                        if (_b.sent()) {
+                            return [2 /*return*/, ci.then.execute(ctx)];
+                        }
+                        _b.label = 3;
+                    case 3:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 4: return [2 /*return*/, this.els.execute(ctx)];
+                }
+            });
+        });
     };
     return Case;
 }(expression_1.Expression));
@@ -4438,6 +5099,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -4462,27 +5159,40 @@ var DateTime = /** @class */ (function (_super) {
         return _this;
     }
     DateTime.prototype.exec = function (ctx) {
-        var _a;
-        var _this = this;
-        for (var _i = 0, _b = DateTime.PROPERTIES; _i < _b.length; _i++) {
-            var property = _b[_i];
-            // if json does not contain 'timezoneOffset' set it to the executionDateTime from the context
-            if (this.json[property] != null) {
-                // @ts-ignore
-                this[property] = (0, builder_1.build)(this.json[property]);
-            }
-            else if (property === 'timezoneOffset' && ctx.getTimezoneOffset() != null) {
-                // @ts-ignore
-                this[property] = literal_1.Literal.from({
-                    type: 'Literal',
-                    value: ctx.getTimezoneOffset(),
-                    valueType: '{urn:hl7-org:elm-types:r1}Integer'
-                });
-            }
-        }
-        // @ts-ignore
-        var args = DateTime.PROPERTIES.map(function (p) { return (_this[p] != null ? _this[p].execute(ctx) : undefined); });
-        return new ((_a = DT.DateTime).bind.apply(_a, __spreadArray([void 0], args, false)))();
+        return __awaiter(this, void 0, void 0, function () {
+            var _i, _a, property, args;
+            var _b;
+            var _this = this;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        for (_i = 0, _a = DateTime.PROPERTIES; _i < _a.length; _i++) {
+                            property = _a[_i];
+                            // if json does not contain 'timezoneOffset' set it to the executionDateTime from the context
+                            if (this.json[property] != null) {
+                                // @ts-ignore
+                                this[property] = (0, builder_1.build)(this.json[property]);
+                            }
+                            else if (property === 'timezoneOffset' && ctx.getTimezoneOffset() != null) {
+                                // @ts-ignore
+                                this[property] = literal_1.Literal.from({
+                                    type: 'Literal',
+                                    value: ctx.getTimezoneOffset(),
+                                    valueType: '{urn:hl7-org:elm-types:r1}Integer'
+                                });
+                            }
+                        }
+                        return [4 /*yield*/, Promise.all(
+                            // @ts-ignore
+                            DateTime.PROPERTIES.map(function (p) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                return [2 /*return*/, (this[p] != null ? this[p].execute(ctx) : undefined)];
+                            }); }); }))];
+                    case 1:
+                        args = _c.sent();
+                        return [2 /*return*/, new ((_b = DT.DateTime).bind.apply(_b, __spreadArray([void 0], args, false)))()];
+                }
+            });
+        });
     };
     DateTime.PROPERTIES = [
         'year',
@@ -4505,18 +5215,31 @@ var Date = /** @class */ (function (_super) {
         return _this;
     }
     Date.prototype.exec = function (ctx) {
-        var _a;
-        var _this = this;
-        for (var _i = 0, _b = Date.PROPERTIES; _i < _b.length; _i++) {
-            var property = _b[_i];
-            if (this.json[property] != null) {
-                // @ts-ignore
-                this[property] = (0, builder_1.build)(this.json[property]);
-            }
-        }
-        // @ts-ignore
-        var args = Date.PROPERTIES.map(function (p) { return (_this[p] != null ? _this[p].execute(ctx) : undefined); });
-        return new ((_a = DT.Date).bind.apply(_a, __spreadArray([void 0], args, false)))();
+        return __awaiter(this, void 0, void 0, function () {
+            var _i, _a, property, args;
+            var _b;
+            var _this = this;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        for (_i = 0, _a = Date.PROPERTIES; _i < _a.length; _i++) {
+                            property = _a[_i];
+                            if (this.json[property] != null) {
+                                // @ts-ignore
+                                this[property] = (0, builder_1.build)(this.json[property]);
+                            }
+                        }
+                        return [4 /*yield*/, Promise.all(
+                            // @ts-ignore
+                            Date.PROPERTIES.map(function (p) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                return [2 /*return*/, (this[p] != null ? this[p].execute(ctx) : undefined)];
+                            }); }); }))];
+                    case 1:
+                        args = _c.sent();
+                        return [2 /*return*/, new ((_b = DT.Date).bind.apply(_b, __spreadArray([void 0], args, false)))()];
+                }
+            });
+        });
     };
     Date.PROPERTIES = ['year', 'month', 'day'];
     return Date;
@@ -4536,11 +5259,23 @@ var Time = /** @class */ (function (_super) {
         return _this;
     }
     Time.prototype.exec = function (ctx) {
-        var _a;
-        var _this = this;
-        // @ts-ignore
-        var args = Time.PROPERTIES.map(function (p) { return (_this[p] != null ? _this[p].execute(ctx) : undefined); });
-        return new ((_a = DT.DateTime).bind.apply(_a, __spreadArray([void 0, 0, 1, 1], args, false)))().getTime();
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            var _a;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, Promise.all(
+                        // @ts-ignore
+                        Time.PROPERTIES.map(function (p) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            return [2 /*return*/, (this[p] != null ? this[p].execute(ctx) : undefined)];
+                        }); }); }))];
+                    case 1:
+                        args = _b.sent();
+                        return [2 /*return*/, new ((_a = DT.DateTime).bind.apply(_a, __spreadArray([void 0, 0, 1, 1], args, false)))().getTime()];
+                }
+            });
+        });
     };
     Time.PROPERTIES = ['hour', 'minute', 'second', 'millisecond'];
     return Time;
@@ -4552,7 +5287,11 @@ var Today = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Today.prototype.exec = function (ctx) {
-        return ctx.getExecutionDateTime().getDate();
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, ctx.getExecutionDateTime().getDate()];
+            });
+        });
     };
     return Today;
 }(expression_1.Expression));
@@ -4563,7 +5302,11 @@ var Now = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Now.prototype.exec = function (ctx) {
-        return ctx.getExecutionDateTime();
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, ctx.getExecutionDateTime()];
+            });
+        });
     };
     return Now;
 }(expression_1.Expression));
@@ -4574,7 +5317,11 @@ var TimeOfDay = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     TimeOfDay.prototype.exec = function (ctx) {
-        return ctx.getExecutionDateTime().getTime();
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, ctx.getExecutionDateTime().getTime()];
+            });
+        });
     };
     return TimeOfDay;
 }(expression_1.Expression));
@@ -4587,13 +5334,23 @@ var DateTimeComponentFrom = /** @class */ (function (_super) {
         return _this;
     }
     DateTimeComponentFrom.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            return arg[this.precision.toLowerCase()];
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            return [2 /*return*/, arg[this.precision.toLowerCase()]];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return DateTimeComponentFrom;
 }(expression_1.Expression));
@@ -4604,13 +5361,23 @@ var DateFrom = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     DateFrom.prototype.exec = function (ctx) {
-        var date = this.execArgs(ctx);
-        if (date != null) {
-            return date.getDate();
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var date;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        date = _a.sent();
+                        if (date != null) {
+                            return [2 /*return*/, date.getDate()];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return DateFrom;
 }(expression_1.Expression));
@@ -4621,13 +5388,23 @@ var TimeFrom = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     TimeFrom.prototype.exec = function (ctx) {
-        var date = this.execArgs(ctx);
-        if (date != null) {
-            return date.getTime();
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var date;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        date = _a.sent();
+                        if (date != null) {
+                            return [2 /*return*/, date.getTime()];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return TimeFrom;
 }(expression_1.Expression));
@@ -4638,13 +5415,23 @@ var TimezoneOffsetFrom = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     TimezoneOffsetFrom.prototype.exec = function (ctx) {
-        var date = this.execArgs(ctx);
-        if (date != null) {
-            return date.timezoneOffset;
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var date;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        date = _a.sent();
+                        if (date != null) {
+                            return [2 /*return*/, date.timezoneOffset];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return TimezoneOffsetFrom;
 }(expression_1.Expression));
@@ -4667,21 +5454,31 @@ var DifferenceBetween = /** @class */ (function (_super) {
         return _this;
     }
     DifferenceBetween.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        // Check to make sure args exist and that they have differenceBetween functions so that they can be compared to one another
-        if (args[0] == null ||
-            args[1] == null ||
-            typeof args[0].differenceBetween !== 'function' ||
-            typeof args[1].differenceBetween !== 'function') {
-            return null;
-        }
-        var result = args[0].differenceBetween(args[1], this.precision != null ? this.precision.toLowerCase() : undefined);
-        if (result != null && result.isPoint()) {
-            return result.low;
-        }
-        else {
-            return result;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var args, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        // Check to make sure args exist and that they have differenceBetween functions so that they can be compared to one another
+                        if (args[0] == null ||
+                            args[1] == null ||
+                            typeof args[0].differenceBetween !== 'function' ||
+                            typeof args[1].differenceBetween !== 'function') {
+                            return [2 /*return*/, null];
+                        }
+                        result = args[0].differenceBetween(args[1], this.precision != null ? this.precision.toLowerCase() : undefined);
+                        if (result != null && result.isPoint()) {
+                            return [2 /*return*/, result.low];
+                        }
+                        else {
+                            return [2 /*return*/, result];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return DifferenceBetween;
 }(expression_1.Expression));
@@ -4694,21 +5491,31 @@ var DurationBetween = /** @class */ (function (_super) {
         return _this;
     }
     DurationBetween.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        // Check to make sure args exist and that they have durationBetween functions so that they can be compared to one another
-        if (args[0] == null ||
-            args[1] == null ||
-            typeof args[0].durationBetween !== 'function' ||
-            typeof args[1].durationBetween !== 'function') {
-            return null;
-        }
-        var result = args[0].durationBetween(args[1], this.precision != null ? this.precision.toLowerCase() : undefined);
-        if (result != null && result.isPoint()) {
-            return result.low;
-        }
-        else {
-            return result;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var args, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        // Check to make sure args exist and that they have durationBetween functions so that they can be compared to one another
+                        if (args[0] == null ||
+                            args[1] == null ||
+                            typeof args[0].durationBetween !== 'function' ||
+                            typeof args[1].durationBetween !== 'function') {
+                            return [2 /*return*/, null];
+                        }
+                        result = args[0].durationBetween(args[1], this.precision != null ? this.precision.toLowerCase() : undefined);
+                        if (result != null && result.isPoint()) {
+                            return [2 /*return*/, result.low];
+                        }
+                        else {
+                            return [2 /*return*/, result];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return DurationBetween;
 }(expression_1.Expression));
@@ -4776,6 +5583,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnimplementedExpression = exports.Expression = void 0;
 var util_1 = require("../util/util");
@@ -4796,29 +5639,47 @@ var Expression = /** @class */ (function () {
         }
     }
     Expression.prototype.execute = function (ctx) {
-        if (this.localId != null) {
-            // Store the localId and result on the root context of this library
-            var execValue = this.exec(ctx);
-            ctx.rootContext().setLocalIdWithResult(this.localId, execValue);
-            return execValue;
-        }
-        else {
-            return this.exec(ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var execValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.localId != null)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.exec(ctx)];
+                    case 1:
+                        execValue = _a.sent();
+                        ctx.rootContext().setLocalIdWithResult(this.localId, execValue);
+                        return [2 /*return*/, execValue];
+                    case 2: return [2 /*return*/, this.exec(ctx)];
+                }
+            });
+        });
     };
     Expression.prototype.exec = function (_ctx) {
-        return this;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this];
+            });
+        });
     };
     Expression.prototype.execArgs = function (ctx) {
-        if (this.args != null) {
-            return this.args.map(function (arg) { return arg.execute(ctx); });
-        }
-        else if (this.arg != null) {
-            return this.arg.execute(ctx);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                if (this.args != null) {
+                    return [2 /*return*/, Promise.all(this.args.map(function (arg) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            return [2 /*return*/, arg.execute(ctx)];
+                        }); }); }))];
+                }
+                else if (this.arg != null) {
+                    return [2 /*return*/, this.arg.execute(ctx)];
+                }
+                else {
+                    return [2 /*return*/, null];
+                }
+                return [2 /*return*/];
+            });
+        });
     };
     return Expression;
 }());
@@ -4831,7 +5692,11 @@ var UnimplementedExpression = /** @class */ (function (_super) {
         return _this;
     }
     UnimplementedExpression.prototype.exec = function (_ctx) {
-        throw new Error("Unimplemented Expression: ".concat(this.json.type));
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                throw new Error("Unimplemented Expression: ".concat(this.json.type));
+            });
+        });
     };
     return UnimplementedExpression;
 }(Expression));
@@ -4907,6 +5772,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Retrieve = void 0;
 var expression_1 = require("./expression");
@@ -4925,31 +5826,45 @@ var Retrieve = /** @class */ (function (_super) {
         return _this;
     }
     Retrieve.prototype.exec = function (ctx) {
-        var _a;
-        var _this = this;
-        var records = ctx.findRecords(this.templateId != null ? this.templateId : this.datatype);
-        var codes = this.codes;
-        if (this.codes && typeof this.codes.exec === 'function') {
-            codes = this.codes.execute(ctx);
-            if (codes == null) {
-                return [];
-            }
-        }
-        if (codes) {
-            records = records.filter(function (r) { return _this.recordMatchesCodesOrVS(r, codes); });
-        }
-        // TODO: Added @dateProperty check due to previous fix in cql4browsers in cql_qdm_patient_api hash: ddbc57
-        if (this.dateRange && this.dateProperty) {
-            var range_1 = this.dateRange.execute(ctx);
-            records = records.filter(function (r) { return range_1.includes(r.getDateOrInterval(_this.dateProperty)); });
-        }
-        if (Array.isArray(records)) {
-            (_a = ctx.evaluatedRecords).push.apply(_a, records);
-        }
-        else {
-            ctx.evaluatedRecords.push(records);
-        }
-        return records;
+        return __awaiter(this, void 0, void 0, function () {
+            var records, codes, range_1;
+            var _a;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, ctx.findRecords(this.templateId != null ? this.templateId : this.datatype)];
+                    case 1:
+                        records = _b.sent();
+                        codes = this.codes;
+                        if (!(this.codes && typeof this.codes.exec === 'function')) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.codes.execute(ctx)];
+                    case 2:
+                        codes = _b.sent();
+                        if (codes == null) {
+                            return [2 /*return*/, []];
+                        }
+                        _b.label = 3;
+                    case 3:
+                        if (codes) {
+                            records = records.filter(function (r) { return _this.recordMatchesCodesOrVS(r, codes); });
+                        }
+                        if (!(this.dateRange && this.dateProperty)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.dateRange.execute(ctx)];
+                    case 4:
+                        range_1 = _b.sent();
+                        records = records.filter(function (r) { return range_1.includes(r.getDateOrInterval(_this.dateProperty)); });
+                        _b.label = 5;
+                    case 5:
+                        if (Array.isArray(records)) {
+                            (_a = ctx.evaluatedRecords).push.apply(_a, records);
+                        }
+                        else {
+                            ctx.evaluatedRecords.push(records);
+                        }
+                        return [2 /*return*/, records];
+                }
+            });
+        });
     };
     Retrieve.prototype.recordMatchesCodesOrVS = function (record, codes) {
         var _this = this;
@@ -4981,6 +5896,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Instance = void 0;
 var expression_1 = require("./expression");
@@ -4993,7 +5944,11 @@ var Element = /** @class */ (function () {
         this.value = (0, builder_1.build)(json.value);
     }
     Element.prototype.exec = function (ctx) {
-        return this.value != null ? this.value.execute(ctx) : undefined;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.value != null ? this.value.execute(ctx) : undefined];
+            });
+        });
     };
     return Element;
 }());
@@ -5006,21 +5961,41 @@ var Instance = /** @class */ (function (_super) {
         return _this;
     }
     Instance.prototype.exec = function (ctx) {
-        var obj = {};
-        for (var _i = 0, _a = this.element; _i < _a.length; _i++) {
-            var el = _a[_i];
-            obj[el.name] = el.exec(ctx);
-        }
-        switch (this.classType) {
-            case '{urn:hl7-org:elm-types:r1}Quantity':
-                return new quantity_1.Quantity(obj.value, obj.unit);
-            case '{urn:hl7-org:elm-types:r1}Code':
-                return new datatypes_1.Code(obj.code, obj.system, obj.version, obj.display);
-            case '{urn:hl7-org:elm-types:r1}Concept':
-                return new datatypes_1.Concept(obj.codes, obj.display);
-            default:
-                return obj;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var obj, _i, _a, el, _b, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        obj = {};
+                        _i = 0, _a = this.element;
+                        _d.label = 1;
+                    case 1:
+                        if (!(_i < _a.length)) return [3 /*break*/, 4];
+                        el = _a[_i];
+                        _b = obj;
+                        _c = el.name;
+                        return [4 /*yield*/, el.exec(ctx)];
+                    case 2:
+                        _b[_c] = _d.sent();
+                        _d.label = 3;
+                    case 3:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 4:
+                        switch (this.classType) {
+                            case '{urn:hl7-org:elm-types:r1}Quantity':
+                                return [2 /*return*/, new quantity_1.Quantity(obj.value, obj.unit)];
+                            case '{urn:hl7-org:elm-types:r1}Code':
+                                return [2 /*return*/, new datatypes_1.Code(obj.code, obj.system, obj.version, obj.display)];
+                            case '{urn:hl7-org:elm-types:r1}Concept':
+                                return [2 /*return*/, new datatypes_1.Concept(obj.codes, obj.display)];
+                            default:
+                                return [2 /*return*/, obj];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Instance;
 }(expression_1.Expression));
@@ -5062,6 +6037,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Collapse = exports.Expand = exports.Ends = exports.Starts = exports.End = exports.Start = exports.Size = exports.Width = exports.doIntersect = exports.doExcept = exports.doUnion = exports.OverlapsBefore = exports.OverlapsAfter = exports.Overlaps = exports.MeetsBefore = exports.MeetsAfter = exports.Meets = exports.doBefore = exports.doAfter = exports.doProperIncludes = exports.doIncludes = exports.doContains = exports.Interval = void 0;
 var expression_1 = require("./expression");
@@ -5092,26 +6103,60 @@ var Interval = /** @class */ (function (_super) {
         configurable: true
     });
     Interval.prototype.exec = function (ctx) {
-        var lowValue = this.low.execute(ctx);
-        var highValue = this.high.execute(ctx);
-        var lowClosed = this.lowClosed != null
-            ? this.lowClosed
-            : this.lowClosedExpression && this.lowClosedExpression.execute(ctx);
-        var highClosed = this.highClosed != null
-            ? this.highClosed
-            : this.highClosedExpression && this.highClosedExpression.execute(ctx);
-        var defaultPointType;
-        if (lowValue == null && highValue == null) {
-            // try to get the default point type from a cast
-            if (this.low.asTypeSpecifier && this.low.asTypeSpecifier.type === 'NamedTypeSpecifier') {
-                defaultPointType = this.low.asTypeSpecifier.name;
-            }
-            else if (this.high.asTypeSpecifier &&
-                this.high.asTypeSpecifier.type === 'NamedTypeSpecifier') {
-                defaultPointType = this.high.asTypeSpecifier.name;
-            }
-        }
-        return new dtivl.Interval(lowValue, highValue, lowClosed, highClosed, defaultPointType);
+        return __awaiter(this, void 0, void 0, function () {
+            var lowValue, highValue, lowClosed, _a, _b, highClosed, _c, _d, defaultPointType;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0: return [4 /*yield*/, this.low.execute(ctx)];
+                    case 1:
+                        lowValue = _e.sent();
+                        return [4 /*yield*/, this.high.execute(ctx)];
+                    case 2:
+                        highValue = _e.sent();
+                        if (!(this.lowClosed != null)) return [3 /*break*/, 3];
+                        _a = this.lowClosed;
+                        return [3 /*break*/, 6];
+                    case 3:
+                        _b = this.lowClosedExpression;
+                        if (!_b) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.lowClosedExpression.execute(ctx)];
+                    case 4:
+                        _b = (_e.sent());
+                        _e.label = 5;
+                    case 5:
+                        _a = _b;
+                        _e.label = 6;
+                    case 6:
+                        lowClosed = _a;
+                        if (!(this.highClosed != null)) return [3 /*break*/, 7];
+                        _c = this.highClosed;
+                        return [3 /*break*/, 10];
+                    case 7:
+                        _d = this.highClosedExpression;
+                        if (!_d) return [3 /*break*/, 9];
+                        return [4 /*yield*/, this.highClosedExpression.execute(ctx)];
+                    case 8:
+                        _d = (_e.sent());
+                        _e.label = 9;
+                    case 9:
+                        _c = _d;
+                        _e.label = 10;
+                    case 10:
+                        highClosed = _c;
+                        if (lowValue == null && highValue == null) {
+                            // try to get the default point type from a cast
+                            if (this.low.asTypeSpecifier && this.low.asTypeSpecifier.type === 'NamedTypeSpecifier') {
+                                defaultPointType = this.low.asTypeSpecifier.name;
+                            }
+                            else if (this.high.asTypeSpecifier &&
+                                this.high.asTypeSpecifier.type === 'NamedTypeSpecifier') {
+                                defaultPointType = this.high.asTypeSpecifier.name;
+                            }
+                        }
+                        return [2 /*return*/, new dtivl.Interval(lowValue, highValue, lowClosed, highClosed, defaultPointType)];
+                }
+            });
+        });
     };
     return Interval;
 }(expression_1.Expression));
@@ -5151,13 +6196,23 @@ var Meets = /** @class */ (function (_super) {
         return _this;
     }
     Meets.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.meets(b, this.precision);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.meets(b, this.precision)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Meets;
 }(expression_1.Expression));
@@ -5170,13 +6225,23 @@ var MeetsAfter = /** @class */ (function (_super) {
         return _this;
     }
     MeetsAfter.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.meetsAfter(b, this.precision);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.meetsAfter(b, this.precision)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return MeetsAfter;
 }(expression_1.Expression));
@@ -5189,13 +6254,23 @@ var MeetsBefore = /** @class */ (function (_super) {
         return _this;
     }
     MeetsBefore.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.meetsBefore(b, this.precision);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.meetsBefore(b, this.precision)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return MeetsBefore;
 }(expression_1.Expression));
@@ -5208,13 +6283,23 @@ var Overlaps = /** @class */ (function (_super) {
         return _this;
     }
     Overlaps.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.overlaps(b, this.precision);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.overlaps(b, this.precision)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Overlaps;
 }(expression_1.Expression));
@@ -5227,13 +6312,23 @@ var OverlapsAfter = /** @class */ (function (_super) {
         return _this;
     }
     OverlapsAfter.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.overlapsAfter(b, this.precision);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.overlapsAfter(b, this.precision)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return OverlapsAfter;
 }(expression_1.Expression));
@@ -5246,13 +6341,23 @@ var OverlapsBefore = /** @class */ (function (_super) {
         return _this;
     }
     OverlapsBefore.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.overlapsBefore(b, this.precision);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.overlapsBefore(b, this.precision)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return OverlapsBefore;
 }(expression_1.Expression));
@@ -5288,11 +6393,21 @@ var Width = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Width.prototype.exec = function (ctx) {
-        var interval = this.arg.execute(ctx);
-        if (interval == null) {
-            return null;
-        }
-        return interval.width();
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var interval;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, ((_a = this.arg) === null || _a === void 0 ? void 0 : _a.execute(ctx))];
+                    case 1:
+                        interval = _b.sent();
+                        if (interval == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, interval.width()];
+                }
+            });
+        });
     };
     return Width;
 }(expression_1.Expression));
@@ -5303,11 +6418,21 @@ var Size = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Size.prototype.exec = function (ctx) {
-        var interval = this.arg.execute(ctx);
-        if (interval == null) {
-            return null;
-        }
-        return interval.size();
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var interval;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, ((_a = this.arg) === null || _a === void 0 ? void 0 : _a.execute(ctx))];
+                    case 1:
+                        interval = _b.sent();
+                        if (interval == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, interval.size()];
+                }
+            });
+        });
     };
     return Size;
 }(expression_1.Expression));
@@ -5318,16 +6443,26 @@ var Start = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Start.prototype.exec = function (ctx) {
-        var interval = this.arg.execute(ctx);
-        if (interval == null) {
-            return null;
-        }
-        var start = interval.start();
-        // fix the timezoneOffset of minimum Datetime to match context offset
-        if (start && start.isDateTime && start.equals(math_1.MIN_DATETIME_VALUE)) {
-            start.timezoneOffset = ctx.getTimezoneOffset();
-        }
-        return start;
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var interval, start;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, ((_a = this.arg) === null || _a === void 0 ? void 0 : _a.execute(ctx))];
+                    case 1:
+                        interval = _b.sent();
+                        if (interval == null) {
+                            return [2 /*return*/, null];
+                        }
+                        start = interval.start();
+                        // fix the timezoneOffset of minimum Datetime to match context offset
+                        if (start && start.isDateTime && start.equals(math_1.MIN_DATETIME_VALUE)) {
+                            start.timezoneOffset = ctx.getTimezoneOffset();
+                        }
+                        return [2 /*return*/, start];
+                }
+            });
+        });
     };
     return Start;
 }(expression_1.Expression));
@@ -5338,16 +6473,26 @@ var End = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     End.prototype.exec = function (ctx) {
-        var interval = this.arg.execute(ctx);
-        if (interval == null) {
-            return null;
-        }
-        var end = interval.end();
-        // fix the timezoneOffset of maximum Datetime to match context offset
-        if (end && end.isDateTime && end.equals(math_1.MAX_DATETIME_VALUE)) {
-            end.timezoneOffset = ctx.getTimezoneOffset();
-        }
-        return end;
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var interval, end;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, ((_a = this.arg) === null || _a === void 0 ? void 0 : _a.execute(ctx))];
+                    case 1:
+                        interval = _b.sent();
+                        if (interval == null) {
+                            return [2 /*return*/, null];
+                        }
+                        end = interval.end();
+                        // fix the timezoneOffset of maximum Datetime to match context offset
+                        if (end && end.isDateTime && end.equals(math_1.MAX_DATETIME_VALUE)) {
+                            end.timezoneOffset = ctx.getTimezoneOffset();
+                        }
+                        return [2 /*return*/, end];
+                }
+            });
+        });
     };
     return End;
 }(expression_1.Expression));
@@ -5360,13 +6505,23 @@ var Starts = /** @class */ (function (_super) {
         return _this;
     }
     Starts.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.starts(b, this.precision);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.starts(b, this.precision)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Starts;
 }(expression_1.Expression));
@@ -5379,13 +6534,23 @@ var Ends = /** @class */ (function (_super) {
         return _this;
     }
     Ends.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.ends(b, this.precision);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.ends(b, this.precision)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Ends;
 }(expression_1.Expression));
@@ -5487,63 +6652,70 @@ var Expand = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Expand.prototype.exec = function (ctx) {
-        // expand(argument List<Interval<T>>, per Quantity) List<Interval<T>>
-        var defaultPer, expandFunction;
-        var _a = this.execArgs(ctx), intervals = _a[0], per = _a[1];
-        // CQL 1.5 introduced an overload to allow singular intervals; make it a list so we can use the same logic for either overload
-        if (!Array.isArray(intervals)) {
-            intervals = [intervals];
-        }
-        var type = intervalListType(intervals);
-        if (type === 'mismatch') {
-            throw new Error('List of intervals contains mismatched types.');
-        }
-        if (type == null) {
-            return null;
-        }
-        // this step collapses overlaps, and also returns a clone of intervals so we can feel free to mutate
-        intervals = collapseIntervals(intervals, per);
-        if (intervals.length === 0) {
-            return [];
-        }
-        if (['time', 'date', 'datetime'].includes(type)) {
-            expandFunction = this.expandDTishInterval;
-            defaultPer = function (interval) { return new quantity_1.Quantity(1, interval.low.getPrecision()); };
-        }
-        else if (['quantity'].includes(type)) {
-            expandFunction = this.expandQuantityInterval;
-            defaultPer = function (interval) { return new quantity_1.Quantity(1, interval.low.unit); };
-        }
-        else if (['integer', 'decimal'].includes(type)) {
-            expandFunction = this.expandNumericInterval;
-            defaultPer = function (_interval) { return new quantity_1.Quantity(1, '1'); };
-        }
-        else {
-            throw new Error('Interval list type not yet supported.');
-        }
-        var results = [];
-        for (var _i = 0, intervals_2 = intervals; _i < intervals_2.length; _i++) {
-            var interval = intervals_2[_i];
-            if (interval == null) {
-                continue;
-            }
-            // We do not support open ended intervals since result would likely be too long
-            if (interval.low == null || interval.high == null) {
-                return null;
-            }
-            if (type === 'datetime') {
-                //support for implicitly converting dates to datetime
-                interval.low = interval.low.getDateTime();
-                interval.high = interval.high.getDateTime();
-            }
-            per = per != null ? per : defaultPer(interval);
-            var items = expandFunction.call(this, interval, per);
-            if (items === null) {
-                return null;
-            }
-            results.push.apply(results, (items || []));
-        }
-        return results;
+        return __awaiter(this, void 0, void 0, function () {
+            var defaultPer, expandFunction, _a, intervals, per, type, results, _i, intervals_2, interval, items;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), intervals = _a[0], per = _a[1];
+                        // CQL 1.5 introduced an overload to allow singular intervals; make it a list so we can use the same logic for either overload
+                        if (!Array.isArray(intervals)) {
+                            intervals = [intervals];
+                        }
+                        type = intervalListType(intervals);
+                        if (type === 'mismatch') {
+                            throw new Error('List of intervals contains mismatched types.');
+                        }
+                        if (type == null) {
+                            return [2 /*return*/, null];
+                        }
+                        // this step collapses overlaps, and also returns a clone of intervals so we can feel free to mutate
+                        intervals = collapseIntervals(intervals, per);
+                        if (intervals.length === 0) {
+                            return [2 /*return*/, []];
+                        }
+                        if (['time', 'date', 'datetime'].includes(type)) {
+                            expandFunction = this.expandDTishInterval;
+                            defaultPer = function (interval) { return new quantity_1.Quantity(1, interval.low.getPrecision()); };
+                        }
+                        else if (['quantity'].includes(type)) {
+                            expandFunction = this.expandQuantityInterval;
+                            defaultPer = function (interval) { return new quantity_1.Quantity(1, interval.low.unit); };
+                        }
+                        else if (['integer', 'decimal'].includes(type)) {
+                            expandFunction = this.expandNumericInterval;
+                            defaultPer = function (_interval) { return new quantity_1.Quantity(1, '1'); };
+                        }
+                        else {
+                            throw new Error('Interval list type not yet supported.');
+                        }
+                        results = [];
+                        for (_i = 0, intervals_2 = intervals; _i < intervals_2.length; _i++) {
+                            interval = intervals_2[_i];
+                            if (interval == null) {
+                                continue;
+                            }
+                            // We do not support open ended intervals since result would likely be too long
+                            if (interval.low == null || interval.high == null) {
+                                return [2 /*return*/, null];
+                            }
+                            if (type === 'datetime') {
+                                //support for implicitly converting dates to datetime
+                                interval.low = interval.low.getDateTime();
+                                interval.high = interval.high.getDateTime();
+                            }
+                            per = per != null ? per : defaultPer(interval);
+                            items = expandFunction.call(this, interval, per);
+                            if (items === null) {
+                                return [2 /*return*/, null];
+                            }
+                            results.push.apply(results, (items || []));
+                        }
+                        return [2 /*return*/, results];
+                }
+            });
+        });
     };
     Expand.prototype.expandDTishInterval = function (interval, per) {
         per.unit = (0, units_1.convertToCQLDateUnit)(per.unit);
@@ -5680,9 +6852,17 @@ var Collapse = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Collapse.prototype.exec = function (ctx) {
-        // collapse(argument List<Interval<T>>, per Quantity) List<Interval<T>>
-        var _a = this.execArgs(ctx), intervals = _a[0], perWidth = _a[1];
-        return collapseIntervals(intervals, perWidth);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, intervals, perWidth;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), intervals = _a[0], perWidth = _a[1];
+                        return [2 /*return*/, collapseIntervals(intervals, perWidth)];
+                }
+            });
+        });
     };
     return Collapse;
 }(expression_1.Expression));
@@ -5948,6 +7128,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Slice = exports.Last = exports.First = exports.Current = exports.Distinct = exports.Flatten = exports.ForEach = exports.doProperIncludes = exports.doIncludes = exports.doContains = exports.IndexOf = exports.ToList = exports.SingletonFrom = exports.Filter = exports.Times = exports.doIntersect = exports.doExcept = exports.doUnion = exports.Exists = exports.List = void 0;
 var expression_1 = require("./expression");
@@ -5969,7 +7185,14 @@ var List = /** @class */ (function (_super) {
         configurable: true
     });
     List.prototype.exec = function (ctx) {
-        return this.elements.map(function (item) { return item.execute(ctx); });
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, Promise.all(this.elements.map(function (item) { return item.execute(ctx); }))];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
     };
     return List;
 }(expression_1.Expression));
@@ -5980,12 +7203,21 @@ var Exists = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Exists.prototype.exec = function (ctx) {
-        var list = this.execArgs(ctx);
-        // if list exists and has non empty length we need to make sure it isnt just full of nulls
-        if (list) {
-            return list.some(function (item) { return item != null; });
-        }
-        return false;
+        return __awaiter(this, void 0, void 0, function () {
+            var list;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        list = _a.sent();
+                        // if list exists and has non empty length we need to make sure it isnt just full of nulls
+                        if (list) {
+                            return [2 /*return*/, list.some(function (item) { return item != null; })];
+                        }
+                        return [2 /*return*/, false];
+                }
+            });
+        });
     };
     return Exists;
 }(expression_1.Expression));
@@ -6036,16 +7268,26 @@ var SingletonFrom = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     SingletonFrom.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null && arg.length > 1) {
-            throw new Error("IllegalArgument: 'SingletonFrom' requires a 0 or 1 arg array");
-        }
-        else if (arg != null && arg.length === 1) {
-            return arg[0];
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null && arg.length > 1) {
+                            throw new Error("IllegalArgument: 'SingletonFrom' requires a 0 or 1 arg array");
+                        }
+                        else if (arg != null && arg.length === 1) {
+                            return [2 /*return*/, arg[0]];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return SingletonFrom;
 }(expression_1.Expression));
@@ -6056,13 +7298,23 @@ var ToList = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToList.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            return [arg];
-        }
-        else {
-            return [];
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            return [2 /*return*/, [arg]];
+                        }
+                        else {
+                            return [2 /*return*/, []];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ToList;
 }(expression_1.Expression));
@@ -6076,25 +7328,36 @@ var IndexOf = /** @class */ (function (_super) {
         return _this;
     }
     IndexOf.prototype.exec = function (ctx) {
-        var index;
-        var src = this.source.execute(ctx);
-        var el = this.element.execute(ctx);
-        if (src == null || el == null) {
-            return null;
-        }
-        for (var i = 0; i < src.length; i++) {
-            var itm = src[i];
-            if ((0, comparison_1.equals)(itm, el)) {
-                index = i;
-                break;
-            }
-        }
-        if (index != null) {
-            return index;
-        }
-        else {
-            return -1;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var index, src, el, i, itm;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        src = _a.sent();
+                        return [4 /*yield*/, this.element.execute(ctx)];
+                    case 2:
+                        el = _a.sent();
+                        if (src == null || el == null) {
+                            return [2 /*return*/, null];
+                        }
+                        for (i = 0; i < src.length; i++) {
+                            itm = src[i];
+                            if ((0, comparison_1.equals)(itm, el)) {
+                                index = i;
+                                break;
+                            }
+                        }
+                        if (index != null) {
+                            return [2 /*return*/, index];
+                        }
+                        else {
+                            return [2 /*return*/, -1];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return IndexOf;
 }(expression_1.Expression));
@@ -6131,13 +7394,23 @@ var Flatten = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Flatten.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if ((0, util_1.typeIsArray)(arg) && arg.every(function (x) { return (0, util_1.typeIsArray)(x); })) {
-            return arg.reduce(function (x, y) { return x.concat(y); }, []);
-        }
-        else {
-            return arg;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if ((0, util_1.typeIsArray)(arg) && arg.every(function (x) { return (0, util_1.typeIsArray)(x); })) {
+                            return [2 /*return*/, arg.reduce(function (x, y) { return x.concat(y); }, [])];
+                        }
+                        else {
+                            return [2 /*return*/, arg];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Flatten;
 }(expression_1.Expression));
@@ -6148,11 +7421,20 @@ var Distinct = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Distinct.prototype.exec = function (ctx) {
-        var result = this.execArgs(ctx);
-        if (result == null) {
-            return null;
-        }
-        return doDistinct(result);
+        return __awaiter(this, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        result = _a.sent();
+                        if (result == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, doDistinct(result)];
+                }
+            });
+        });
     };
     return Distinct;
 }(expression_1.Expression));
@@ -6200,13 +7482,23 @@ var First = /** @class */ (function (_super) {
         return _this;
     }
     First.prototype.exec = function (ctx) {
-        var src = this.source.exec(ctx);
-        if (src != null && (0, util_1.typeIsArray)(src) && src.length > 0) {
-            return src[0];
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var src;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.exec(ctx)];
+                    case 1:
+                        src = _a.sent();
+                        if (src != null && (0, util_1.typeIsArray)(src) && src.length > 0) {
+                            return [2 /*return*/, src[0]];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return First;
 }(expression_1.Expression));
@@ -6219,13 +7511,23 @@ var Last = /** @class */ (function (_super) {
         return _this;
     }
     Last.prototype.exec = function (ctx) {
-        var src = this.source.exec(ctx);
-        if (src != null && (0, util_1.typeIsArray)(src) && src.length > 0) {
-            return src[src.length - 1];
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var src;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.exec(ctx)];
+                    case 1:
+                        src = _a.sent();
+                        if (src != null && (0, util_1.typeIsArray)(src) && src.length > 0) {
+                            return [2 /*return*/, src[src.length - 1]];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Last;
 }(expression_1.Expression));
@@ -6240,18 +7542,30 @@ var Slice = /** @class */ (function (_super) {
         return _this;
     }
     Slice.prototype.exec = function (ctx) {
-        var src = this.source.exec(ctx);
-        if (src != null && (0, util_1.typeIsArray)(src)) {
-            var startIndex = this.startIndex.exec(ctx);
-            var endIndex = this.endIndex.exec(ctx);
-            var start = startIndex != null ? startIndex : 0;
-            var end = endIndex != null ? endIndex : src.length;
-            if (src.length === 0 || start < 0 || end < 0 || end < start) {
-                return [];
-            }
-            return src.slice(start, end);
-        }
-        return null;
+        return __awaiter(this, void 0, void 0, function () {
+            var src, startIndex, endIndex, start, end;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.exec(ctx)];
+                    case 1:
+                        src = _a.sent();
+                        if (!(src != null && (0, util_1.typeIsArray)(src))) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.startIndex.exec(ctx)];
+                    case 2:
+                        startIndex = _a.sent();
+                        return [4 /*yield*/, this.endIndex.exec(ctx)];
+                    case 3:
+                        endIndex = _a.sent();
+                        start = startIndex != null ? startIndex : 0;
+                        end = endIndex != null ? endIndex : src.length;
+                        if (src.length === 0 || start < 0 || end < 0 || end < start) {
+                            return [2 /*return*/, []];
+                        }
+                        return [2 /*return*/, src.slice(start, end)];
+                    case 4: return [2 /*return*/, null];
+                }
+            });
+        });
     };
     return Slice;
 }(expression_1.Expression));
@@ -6275,6 +7589,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StringLiteral = exports.DecimalLiteral = exports.IntegerLiteral = exports.BooleanLiteral = exports.Literal = void 0;
 var expression_1 = require("./expression");
@@ -6301,7 +7651,11 @@ var Literal = /** @class */ (function (_super) {
         }
     };
     Literal.prototype.exec = function (_ctx) {
-        return this.value;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.value];
+            });
+        });
     };
     return Literal;
 }(expression_1.Expression));
@@ -6324,7 +7678,11 @@ var BooleanLiteral = /** @class */ (function (_super) {
         configurable: true
     });
     BooleanLiteral.prototype.exec = function (_ctx) {
-        return this.value;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.value];
+            });
+        });
     };
     return BooleanLiteral;
 }(Literal));
@@ -6346,7 +7704,11 @@ var IntegerLiteral = /** @class */ (function (_super) {
         configurable: true
     });
     IntegerLiteral.prototype.exec = function (_ctx) {
-        return this.value;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.value];
+            });
+        });
     };
     return IntegerLiteral;
 }(Literal));
@@ -6368,7 +7730,11 @@ var DecimalLiteral = /** @class */ (function (_super) {
         configurable: true
     });
     DecimalLiteral.prototype.exec = function (_ctx) {
-        return this.value;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.value];
+            });
+        });
     };
     return DecimalLiteral;
 }(Literal));
@@ -6388,8 +7754,12 @@ var StringLiteral = /** @class */ (function (_super) {
         configurable: true
     });
     StringLiteral.prototype.exec = function (_ctx) {
-        // TODO: Remove these replacements when CQL-to-ELM fixes bug: https://github.com/cqframework/clinical_quality_language/issues/82
-        return this.value.replace(/\\'/g, "'").replace(/\\"/g, '"');
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                // TODO: Remove these replacements when CQL-to-ELM fixes bug: https://github.com/cqframework/clinical_quality_language/issues/82
+                return [2 /*return*/, this.value.replace(/\\'/g, "'").replace(/\\"/g, '"')];
+            });
+        });
     };
     return StringLiteral;
 }(Literal));
@@ -6412,6 +7782,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IsFalse = exports.IsTrue = exports.Xor = exports.Not = exports.Or = exports.And = void 0;
 var expression_1 = require("./expression");
@@ -6422,7 +7828,18 @@ var And = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     And.prototype.exec = function (ctx) {
-        return datatypes_1.ThreeValuedLogic.and.apply(datatypes_1.ThreeValuedLogic, this.execArgs(ctx));
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        _b = (_a = datatypes_1.ThreeValuedLogic.and).apply;
+                        _c = [datatypes_1.ThreeValuedLogic];
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1: return [2 /*return*/, _b.apply(_a, _c.concat([(_d.sent())]))];
+                }
+            });
+        });
     };
     return And;
 }(expression_1.Expression));
@@ -6433,7 +7850,18 @@ var Or = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Or.prototype.exec = function (ctx) {
-        return datatypes_1.ThreeValuedLogic.or.apply(datatypes_1.ThreeValuedLogic, this.execArgs(ctx));
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        _b = (_a = datatypes_1.ThreeValuedLogic.or).apply;
+                        _c = [datatypes_1.ThreeValuedLogic];
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1: return [2 /*return*/, _b.apply(_a, _c.concat([(_d.sent())]))];
+                }
+            });
+        });
     };
     return Or;
 }(expression_1.Expression));
@@ -6444,7 +7872,17 @@ var Not = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Not.prototype.exec = function (ctx) {
-        return datatypes_1.ThreeValuedLogic.not(this.execArgs(ctx));
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _b = (_a = datatypes_1.ThreeValuedLogic).not;
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1: return [2 /*return*/, _b.apply(_a, [_c.sent()])];
+                }
+            });
+        });
     };
     return Not;
 }(expression_1.Expression));
@@ -6455,7 +7893,18 @@ var Xor = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Xor.prototype.exec = function (ctx) {
-        return datatypes_1.ThreeValuedLogic.xor.apply(datatypes_1.ThreeValuedLogic, this.execArgs(ctx));
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _b, _c;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        _b = (_a = datatypes_1.ThreeValuedLogic.xor).apply;
+                        _c = [datatypes_1.ThreeValuedLogic];
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1: return [2 /*return*/, _b.apply(_a, _c.concat([(_d.sent())]))];
+                }
+            });
+        });
     };
     return Xor;
 }(expression_1.Expression));
@@ -6466,7 +7915,17 @@ var IsTrue = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     IsTrue.prototype.exec = function (ctx) {
-        return true === this.execArgs(ctx);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = true;
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1: return [2 /*return*/, _a === (_b.sent())];
+                }
+            });
+        });
     };
     return IsTrue;
 }(expression_1.Expression));
@@ -6477,7 +7936,17 @@ var IsFalse = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     IsFalse.prototype.exec = function (ctx) {
-        return false === this.execArgs(ctx);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = false;
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1: return [2 /*return*/, _a === (_b.sent())];
+                }
+            });
+        });
     };
     return IsFalse;
 }(expression_1.Expression));
@@ -6500,6 +7969,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Message = void 0;
 var expression_1 = require("./expression");
@@ -6516,18 +8021,35 @@ var Message = /** @class */ (function (_super) {
         return _this;
     }
     Message.prototype.exec = function (ctx) {
-        var source = this.source.execute(ctx);
-        var condition = this.condition.execute(ctx);
-        if (condition) {
-            var code = this.code.execute(ctx);
-            var severity = this.severity.execute(ctx);
-            var message = this.message.execute(ctx);
-            var listener = ctx.getMessageListener();
-            if (listener && typeof listener.onMessage === 'function') {
-                listener.onMessage(source, code, severity, message);
-            }
-        }
-        return source;
+        return __awaiter(this, void 0, void 0, function () {
+            var source, condition, code, severity, message, listener;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        source = _a.sent();
+                        return [4 /*yield*/, this.condition.execute(ctx)];
+                    case 2:
+                        condition = _a.sent();
+                        if (!condition) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this.code.execute(ctx)];
+                    case 3:
+                        code = _a.sent();
+                        return [4 /*yield*/, this.severity.execute(ctx)];
+                    case 4:
+                        severity = _a.sent();
+                        return [4 /*yield*/, this.message.execute(ctx)];
+                    case 5:
+                        message = _a.sent();
+                        listener = ctx.getMessageListener();
+                        if (listener && typeof listener.onMessage === 'function') {
+                            listener.onMessage(source, code, severity, message);
+                        }
+                        _a.label = 6;
+                    case 6: return [2 /*return*/, source];
+                }
+            });
+        });
     };
     return Message;
 }(expression_1.Expression));
@@ -6550,6 +8072,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Coalesce = exports.IsNull = exports.Null = void 0;
 var expression_1 = require("./expression");
@@ -6559,7 +8117,11 @@ var Null = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Null.prototype.exec = function (_ctx) {
-        return null;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, null];
+            });
+        });
     };
     return Null;
 }(expression_1.Expression));
@@ -6570,7 +8132,14 @@ var IsNull = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     IsNull.prototype.exec = function (ctx) {
-        return this.execArgs(ctx) == null;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1: return [2 /*return*/, (_a.sent()) == null];
+                }
+            });
+        });
     };
     return IsNull;
 }(expression_1.Expression));
@@ -6581,25 +8150,40 @@ var Coalesce = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Coalesce.prototype.exec = function (ctx) {
-        if (this.args) {
-            for (var _i = 0, _a = this.args; _i < _a.length; _i++) {
-                var arg = _a[_i];
-                var result = arg.execute(ctx);
-                // if a single arg that's a list, coalesce over the list
-                if (this.args.length === 1 && Array.isArray(result)) {
-                    var item = result.find(function (item) { return item != null; });
-                    if (item != null) {
-                        return item;
-                    }
+        return __awaiter(this, void 0, void 0, function () {
+            var _i, _a, arg, result, item;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!this.args) return [3 /*break*/, 4];
+                        _i = 0, _a = this.args;
+                        _b.label = 1;
+                    case 1:
+                        if (!(_i < _a.length)) return [3 /*break*/, 4];
+                        arg = _a[_i];
+                        return [4 /*yield*/, arg.execute(ctx)];
+                    case 2:
+                        result = _b.sent();
+                        // if a single arg that's a list, coalesce over the list
+                        if (this.args.length === 1 && Array.isArray(result)) {
+                            item = result.find(function (item) { return item != null; });
+                            if (item != null) {
+                                return [2 /*return*/, item];
+                            }
+                        }
+                        else {
+                            if (result != null) {
+                                return [2 /*return*/, result];
+                            }
+                        }
+                        _b.label = 3;
+                    case 3:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 4: return [2 /*return*/, null];
                 }
-                else {
-                    if (result != null) {
-                        return result;
-                    }
-                }
-            }
-        }
-        return null;
+            });
+        });
     };
     return Coalesce;
 }(expression_1.Expression));
@@ -6641,6 +8225,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Precision = exports.SameOrBefore = exports.SameOrAfter = exports.SameAs = exports.Before = exports.After = exports.Length = exports.ProperIncludedIn = exports.ProperIncludes = exports.IncludedIn = exports.Includes = exports.Contains = exports.In = exports.Indexer = exports.Intersect = exports.Except = exports.Union = exports.NotEqual = exports.Equivalent = exports.Equal = void 0;
 /* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -6658,12 +8278,21 @@ var Equal = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Equal.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args[0] == null || args[1] == null) {
-            return null;
-        }
-        // @ts-ignore
-        return comparison_1.equals.apply(void 0, args);
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args[0] == null || args[1] == null) {
+                            return [2 /*return*/, null];
+                        }
+                        // @ts-ignore
+                        return [2 /*return*/, comparison_1.equals.apply(void 0, args)];
+                }
+            });
+        });
     };
     return Equal;
 }(expression_1.Expression));
@@ -6674,16 +8303,26 @@ var Equivalent = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Equivalent.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a == null && b == null) {
-            return true;
-        }
-        else if (a == null || b == null) {
-            return false;
-        }
-        else {
-            return (0, comparison_1.equivalent)(a, b);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a == null && b == null) {
+                            return [2 /*return*/, true];
+                        }
+                        else if (a == null || b == null) {
+                            return [2 /*return*/, false];
+                        }
+                        else {
+                            return [2 /*return*/, (0, comparison_1.equivalent)(a, b)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Equivalent;
 }(expression_1.Expression));
@@ -6694,12 +8333,26 @@ var NotEqual = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     NotEqual.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args[0] == null || args[1] == null) {
-            return null;
-        }
-        // @ts-ignore
-        return logic_1.ThreeValuedLogic.not(comparison_1.equals.apply(void 0, this.execArgs(ctx)));
+        return __awaiter(this, void 0, void 0, function () {
+            var args, _a, _b, _c, _d, _e;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _f.sent();
+                        if (args[0] == null || args[1] == null) {
+                            return [2 /*return*/, null];
+                        }
+                        _b = (_a = logic_1.ThreeValuedLogic).not;
+                        _d = (_c = comparison_1.equals).apply;
+                        _e = [void 0];
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 2: 
+                    // @ts-ignore
+                    return [2 /*return*/, _b.apply(_a, [_d.apply(_c, _e.concat([(_f.sent())]))])];
+                }
+            });
+        });
     };
     return NotEqual;
 }(expression_1.Expression));
@@ -6710,21 +8363,30 @@ var Union = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Union.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a == null && b == null) {
-            return this.listTypeArgs() ? [] : null;
-        }
-        if (a == null || b == null) {
-            var notNull = a || b;
-            if ((0, util_1.typeIsArray)(notNull)) {
-                return notNull;
-            }
-            else {
-                return null;
-            }
-        }
-        var lib = (0, util_1.typeIsArray)(a) ? LIST : IVL;
-        return lib.doUnion(a, b);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b, notNull, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a == null && b == null) {
+                            return [2 /*return*/, this.listTypeArgs() ? [] : null];
+                        }
+                        if (a == null || b == null) {
+                            notNull = a || b;
+                            if ((0, util_1.typeIsArray)(notNull)) {
+                                return [2 /*return*/, notNull];
+                            }
+                            else {
+                                return [2 /*return*/, null];
+                            }
+                        }
+                        lib = (0, util_1.typeIsArray)(a) ? LIST : IVL;
+                        return [2 /*return*/, lib.doUnion(a, b)];
+                }
+            });
+        });
     };
     Union.prototype.listTypeArgs = function () {
         var _a;
@@ -6741,15 +8403,24 @@ var Except = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Except.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a == null) {
-            return null;
-        }
-        if (b == null) {
-            return (0, util_1.typeIsArray)(a) ? a : null;
-        }
-        var lib = (0, util_1.typeIsArray)(a) ? LIST : IVL;
-        return lib.doExcept(a, b);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a == null) {
+                            return [2 /*return*/, null];
+                        }
+                        if (b == null) {
+                            return [2 /*return*/, (0, util_1.typeIsArray)(a) ? a : null];
+                        }
+                        lib = (0, util_1.typeIsArray)(a) ? LIST : IVL;
+                        return [2 /*return*/, lib.doExcept(a, b)];
+                }
+            });
+        });
     };
     return Except;
 }(expression_1.Expression));
@@ -6760,12 +8431,21 @@ var Intersect = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Intersect.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a == null || b == null) {
-            return null;
-        }
-        var lib = (0, util_1.typeIsArray)(a) ? LIST : IVL;
-        return lib.doIntersect(a, b);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a == null || b == null) {
+                            return [2 /*return*/, null];
+                        }
+                        lib = (0, util_1.typeIsArray)(a) ? LIST : IVL;
+                        return [2 /*return*/, lib.doIntersect(a, b)];
+                }
+            });
+        });
     };
     return Intersect;
 }(expression_1.Expression));
@@ -6776,14 +8456,23 @@ var Indexer = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Indexer.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), operand = _a[0], index = _a[1];
-        if (operand == null || index == null) {
-            return null;
-        }
-        if (index < 0 || index >= operand.length) {
-            return null;
-        }
-        return operand[index];
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, operand, index;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), operand = _a[0], index = _a[1];
+                        if (operand == null || index == null) {
+                            return [2 /*return*/, null];
+                        }
+                        if (index < 0 || index >= operand.length) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, operand[index]];
+                }
+            });
+        });
     };
     return Indexer;
 }(expression_1.Expression));
@@ -6796,15 +8485,24 @@ var In = /** @class */ (function (_super) {
         return _this;
     }
     In.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), item = _a[0], container = _a[1];
-        if (item == null) {
-            return null;
-        }
-        if (container == null) {
-            return false;
-        }
-        var lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
-        return lib.doContains(container, item, this.precision);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, item, container, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), item = _a[0], container = _a[1];
+                        if (item == null) {
+                            return [2 /*return*/, null];
+                        }
+                        if (container == null) {
+                            return [2 /*return*/, false];
+                        }
+                        lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
+                        return [2 /*return*/, lib.doContains(container, item, this.precision)];
+                }
+            });
+        });
     };
     return In;
 }(expression_1.Expression));
@@ -6817,15 +8515,24 @@ var Contains = /** @class */ (function (_super) {
         return _this;
     }
     Contains.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), container = _a[0], item = _a[1];
-        if (container == null) {
-            return false;
-        }
-        if (item == null) {
-            return null;
-        }
-        var lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
-        return lib.doContains(container, item, this.precision);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, container, item, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), container = _a[0], item = _a[1];
+                        if (container == null) {
+                            return [2 /*return*/, false];
+                        }
+                        if (item == null) {
+                            return [2 /*return*/, null];
+                        }
+                        lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
+                        return [2 /*return*/, lib.doContains(container, item, this.precision)];
+                }
+            });
+        });
     };
     return Contains;
 }(expression_1.Expression));
@@ -6838,12 +8545,21 @@ var Includes = /** @class */ (function (_super) {
         return _this;
     }
     Includes.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), container = _a[0], contained = _a[1];
-        if (container == null || contained == null) {
-            return null;
-        }
-        var lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
-        return lib.doIncludes(container, contained, this.precision);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, container, contained, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), container = _a[0], contained = _a[1];
+                        if (container == null || contained == null) {
+                            return [2 /*return*/, null];
+                        }
+                        lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
+                        return [2 /*return*/, lib.doIncludes(container, contained, this.precision)];
+                }
+            });
+        });
     };
     return Includes;
 }(expression_1.Expression));
@@ -6856,12 +8572,21 @@ var IncludedIn = /** @class */ (function (_super) {
         return _this;
     }
     IncludedIn.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), contained = _a[0], container = _a[1];
-        if (container == null || contained == null) {
-            return null;
-        }
-        var lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
-        return lib.doIncludes(container, contained, this.precision);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, contained, container, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), contained = _a[0], container = _a[1];
+                        if (container == null || contained == null) {
+                            return [2 /*return*/, null];
+                        }
+                        lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
+                        return [2 /*return*/, lib.doIncludes(container, contained, this.precision)];
+                }
+            });
+        });
     };
     return IncludedIn;
 }(expression_1.Expression));
@@ -6874,12 +8599,21 @@ var ProperIncludes = /** @class */ (function (_super) {
         return _this;
     }
     ProperIncludes.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), container = _a[0], contained = _a[1];
-        if (container == null || contained == null) {
-            return null;
-        }
-        var lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
-        return lib.doProperIncludes(container, contained, this.precision);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, container, contained, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), container = _a[0], contained = _a[1];
+                        if (container == null || contained == null) {
+                            return [2 /*return*/, null];
+                        }
+                        lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
+                        return [2 /*return*/, lib.doProperIncludes(container, contained, this.precision)];
+                }
+            });
+        });
     };
     return ProperIncludes;
 }(expression_1.Expression));
@@ -6892,12 +8626,21 @@ var ProperIncludedIn = /** @class */ (function (_super) {
         return _this;
     }
     ProperIncludedIn.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), contained = _a[0], container = _a[1];
-        if (container == null || contained == null) {
-            return null;
-        }
-        var lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
-        return lib.doProperIncludes(container, contained, this.precision);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, contained, container, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), contained = _a[0], container = _a[1];
+                        if (container == null || contained == null) {
+                            return [2 /*return*/, null];
+                        }
+                        lib = (0, util_1.typeIsArray)(container) ? LIST : IVL;
+                        return [2 /*return*/, lib.doProperIncludes(container, contained, this.precision)];
+                }
+            });
+        });
     };
     return ProperIncludedIn;
 }(expression_1.Expression));
@@ -6908,16 +8651,26 @@ var Length = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Length.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            return arg.length;
-        }
-        else if (this.arg.asTypeSpecifier.type === 'ListTypeSpecifier') {
-            return 0;
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            return [2 /*return*/, arg.length];
+                        }
+                        else if (this.arg.asTypeSpecifier.type === 'ListTypeSpecifier') {
+                            return [2 /*return*/, 0];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Length;
 }(expression_1.Expression));
@@ -6930,12 +8683,21 @@ var After = /** @class */ (function (_super) {
         return _this;
     }
     After.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a == null || b == null) {
-            return null;
-        }
-        var lib = a instanceof datetime_1.DateTime ? DT : IVL;
-        return lib.doAfter(a, b, this.precision);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a == null || b == null) {
+                            return [2 /*return*/, null];
+                        }
+                        lib = a instanceof datetime_1.DateTime ? DT : IVL;
+                        return [2 /*return*/, lib.doAfter(a, b, this.precision)];
+                }
+            });
+        });
     };
     return After;
 }(expression_1.Expression));
@@ -6948,12 +8710,21 @@ var Before = /** @class */ (function (_super) {
         return _this;
     }
     Before.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a == null || b == null) {
-            return null;
-        }
-        var lib = a instanceof datetime_1.DateTime ? DT : IVL;
-        return lib.doBefore(a, b, this.precision);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b, lib;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a == null || b == null) {
+                            return [2 /*return*/, null];
+                        }
+                        lib = a instanceof datetime_1.DateTime ? DT : IVL;
+                        return [2 /*return*/, lib.doBefore(a, b, this.precision)];
+                }
+            });
+        });
     };
     return Before;
 }(expression_1.Expression));
@@ -6966,13 +8737,23 @@ var SameAs = /** @class */ (function (_super) {
         return _this;
     }
     SameAs.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), a = _a[0], b = _a[1];
-        if (a != null && b != null) {
-            return a.sameAs(b, this.precision != null ? this.precision.toLowerCase() : undefined);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, a, b;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), a = _a[0], b = _a[1];
+                        if (a != null && b != null) {
+                            return [2 /*return*/, a.sameAs(b, this.precision != null ? this.precision.toLowerCase() : undefined)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return SameAs;
 }(expression_1.Expression));
@@ -6985,13 +8766,23 @@ var SameOrAfter = /** @class */ (function (_super) {
         return _this;
     }
     SameOrAfter.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), d1 = _a[0], d2 = _a[1];
-        if (d1 != null && d2 != null) {
-            return d1.sameOrAfter(d2, this.precision != null ? this.precision.toLowerCase() : undefined);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, d1, d2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), d1 = _a[0], d2 = _a[1];
+                        if (d1 != null && d2 != null) {
+                            return [2 /*return*/, d1.sameOrAfter(d2, this.precision != null ? this.precision.toLowerCase() : undefined)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return SameOrAfter;
 }(expression_1.Expression));
@@ -7004,13 +8795,23 @@ var SameOrBefore = /** @class */ (function (_super) {
         return _this;
     }
     SameOrBefore.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), d1 = _a[0], d2 = _a[1];
-        if (d1 != null && d2 != null) {
-            return d1.sameOrBefore(d2, this.precision != null ? this.precision.toLowerCase() : undefined);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, d1, d2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), d1 = _a[0], d2 = _a[1];
+                        if (d1 != null && d2 != null) {
+                            return [2 /*return*/, d1.sameOrBefore(d2, this.precision != null ? this.precision.toLowerCase() : undefined)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return SameOrBefore;
 }(expression_1.Expression));
@@ -7022,16 +8823,25 @@ var Precision = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Precision.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        // Since we can't extend UnimplementedExpression directly for this overloaded function,
-        // we have to copy the error to throw here if we are not using the correct type
-        if (!arg.getPrecisionValue) {
-            throw new Error("Unimplemented Expression: Precision");
-        }
-        return arg.getPrecisionValue();
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        // Since we can't extend UnimplementedExpression directly for this overloaded function,
+                        // we have to copy the error to throw here if we are not using the correct type
+                        if (!arg.getPrecisionValue) {
+                            throw new Error("Unimplemented Expression: Precision");
+                        }
+                        return [2 /*return*/, arg.getPrecisionValue()];
+                }
+            });
+        });
     };
     return Precision;
 }(expression_1.Expression));
@@ -7054,6 +8864,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParameterRef = exports.ParameterDef = void 0;
 var expression_1 = require("./expression");
@@ -7068,19 +8914,27 @@ var ParameterDef = /** @class */ (function (_super) {
         return _this;
     }
     ParameterDef.prototype.exec = function (ctx) {
-        // If context parameters contains the name, return value.
-        if (ctx && ctx.parameters[this.name] !== undefined) {
-            return ctx.parameters[this.name];
-            // If the parent context contains the name, return that
-        }
-        else if (ctx.getParentParameter(this.name) !== undefined) {
-            var parentParam = ctx.getParentParameter(this.name);
-            return parentParam.default != null ? parentParam.default.execute(ctx) : parentParam;
-            // If default type exists, execute the default type
-        }
-        else if (this.default != null) {
-            this.default.execute(ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var parentParam;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(ctx && ctx.parameters[this.name] !== undefined)) return [3 /*break*/, 1];
+                        return [2 /*return*/, ctx.parameters[this.name]];
+                    case 1:
+                        if (!(ctx.getParentParameter(this.name) !== undefined)) return [3 /*break*/, 2];
+                        parentParam = ctx.getParentParameter(this.name);
+                        return [2 /*return*/, parentParam.default != null ? parentParam.default.execute(ctx) : parentParam];
+                    case 2:
+                        if (!(this.default != null)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.default.execute(ctx)];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
     };
     return ParameterDef;
 }(expression_1.Expression));
@@ -7094,9 +8948,14 @@ var ParameterRef = /** @class */ (function (_super) {
         return _this;
     }
     ParameterRef.prototype.exec = function (ctx) {
-        ctx = this.library ? ctx.getLibraryContext(this.library) : ctx;
-        var param = ctx.getParameter(this.name);
-        return param != null ? param.execute(ctx) : undefined;
+        return __awaiter(this, void 0, void 0, function () {
+            var param;
+            return __generator(this, function (_a) {
+                ctx = this.library ? ctx.getLibraryContext(this.library) : ctx;
+                param = ctx.getParameter(this.name);
+                return [2 /*return*/, param != null ? param.execute(ctx) : undefined];
+            });
+        });
     };
     return ParameterRef;
 }(expression_1.Expression));
@@ -7138,6 +8997,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Quantity = void 0;
 var expression_1 = require("./expression");
@@ -7153,7 +9048,11 @@ var Quantity = /** @class */ (function (_super) {
         return _this;
     }
     Quantity.prototype.exec = function (_ctx) {
-        return new DT.Quantity(this.value, this.unit);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new DT.Quantity(this.value, this.unit)];
+            });
+        });
     };
     return Quantity;
 }(expression_1.Expression));
@@ -7176,6 +9075,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QueryLetRef = exports.AliasRef = exports.Query = exports.SortClause = exports.ReturnClause = exports.ByColumn = exports.ByExpression = exports.ByDirection = exports.Sort = exports.Without = exports.With = exports.LetClause = exports.AliasedQuerySource = void 0;
 var expression_1 = require("./expression");
@@ -7209,17 +9144,28 @@ var With = /** @class */ (function (_super) {
         return _this;
     }
     With.prototype.exec = function (ctx) {
-        var _this = this;
-        var records = this.expression.execute(ctx);
-        if (!(0, util_1.typeIsArray)(records)) {
-            records = [records];
-        }
-        var returns = records.map(function (rec) {
-            var childCtx = ctx.childContext();
-            childCtx.set(_this.alias, rec);
-            return _this.suchThat.execute(childCtx);
+        return __awaiter(this, void 0, void 0, function () {
+            var records, returns;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.expression.execute(ctx)];
+                    case 1:
+                        records = _a.sent();
+                        if (!(0, util_1.typeIsArray)(records)) {
+                            records = [records];
+                        }
+                        return [4 /*yield*/, Promise.all(records.map(function (rec) {
+                                var childCtx = ctx.childContext();
+                                childCtx.set(_this.alias, rec);
+                                return _this.suchThat.execute(childCtx);
+                            }))];
+                    case 2:
+                        returns = _a.sent();
+                        return [2 /*return*/, returns.some(function (x) { return x; })];
+                }
+            });
         });
-        return returns.some(function (x) { return x; });
     };
     return With;
 }(expression_1.Expression));
@@ -7230,7 +9176,14 @@ var Without = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Without.prototype.exec = function (ctx) {
-        return !_super.prototype.exec.call(this, ctx);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, _super.prototype.exec.call(this, ctx)];
+                    case 1: return [2 /*return*/, !(_a.sent())];
+                }
+            });
+        });
     };
     return Without;
 }(With));
@@ -7256,23 +9209,28 @@ var ByDirection = /** @class */ (function (_super) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ByDirection.prototype.exec = function (ctx, a, b) {
-        if (a === b) {
-            return 0;
-        }
-        else if (a.isQuantity && b.isQuantity) {
-            if (a.before(b)) {
-                return this.low_order;
-            }
-            else {
-                return this.high_order;
-            }
-        }
-        else if (a < b) {
-            return this.low_order;
-        }
-        else {
-            return this.high_order;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (a === b) {
+                    return [2 /*return*/, 0];
+                }
+                else if (a.isQuantity && b.isQuantity) {
+                    if (a.before(b)) {
+                        return [2 /*return*/, this.low_order];
+                    }
+                    else {
+                        return [2 /*return*/, this.high_order];
+                    }
+                }
+                else if (a < b) {
+                    return [2 /*return*/, this.low_order];
+                }
+                else {
+                    return [2 /*return*/, this.high_order];
+                }
+                return [2 /*return*/];
+            });
+        });
     };
     return ByDirection;
 }(expression_1.Expression));
@@ -7290,22 +9248,35 @@ var ByExpression = /** @class */ (function (_super) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     ByExpression.prototype.exec = function (ctx, a, b) {
-        var sctx = ctx.childContext(a);
-        var a_val = this.expression.execute(sctx);
-        sctx = ctx.childContext(b);
-        var b_val = this.expression.execute(sctx);
-        if (a_val === b_val || (a_val == null && b_val == null)) {
-            return 0;
-        }
-        else if (a_val == null || b_val == null) {
-            return a_val == null ? this.low_order : this.high_order;
-        }
-        else if (a_val.isQuantity && b_val.isQuantity) {
-            return a_val.before(b_val) ? this.low_order : this.high_order;
-        }
-        else {
-            return a_val < b_val ? this.low_order : this.high_order;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var sctx, a_val, b_val;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sctx = ctx.childContext(a);
+                        return [4 /*yield*/, this.expression.execute(sctx)];
+                    case 1:
+                        a_val = _a.sent();
+                        sctx = ctx.childContext(b);
+                        return [4 /*yield*/, this.expression.execute(sctx)];
+                    case 2:
+                        b_val = _a.sent();
+                        if (a_val === b_val || (a_val == null && b_val == null)) {
+                            return [2 /*return*/, 0];
+                        }
+                        else if (a_val == null || b_val == null) {
+                            return [2 /*return*/, a_val == null ? this.low_order : this.high_order];
+                        }
+                        else if (a_val.isQuantity && b_val.isQuantity) {
+                            return [2 /*return*/, a_val.before(b_val) ? this.low_order : this.high_order];
+                        }
+                        else {
+                            return [2 /*return*/, a_val < b_val ? this.low_order : this.high_order];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ByExpression;
 }(expression_1.Expression));
@@ -7336,21 +9307,40 @@ var SortClause = /** @class */ (function () {
         this.by = (0, builder_1.build)(json != null ? json.by : undefined);
     }
     SortClause.prototype.sort = function (ctx, values) {
-        var _this = this;
-        if (this.by) {
-            return values.sort(function (a, b) {
-                var order = 0;
-                for (var _i = 0, _a = _this.by; _i < _a.length; _i++) {
-                    var item = _a[_i];
-                    // Do not use execute here because the value of the sort order is not important.
-                    order = item.exec(ctx, a, b);
-                    if (order !== 0) {
-                        break;
-                    }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                if (this.by) {
+                    return [2 /*return*/, (0, util_1.asyncMergeSort)(values, function (a, b) { return __awaiter(_this, void 0, void 0, function () {
+                            var order, _i, _a, item;
+                            return __generator(this, function (_b) {
+                                switch (_b.label) {
+                                    case 0:
+                                        order = 0;
+                                        _i = 0, _a = this.by;
+                                        _b.label = 1;
+                                    case 1:
+                                        if (!(_i < _a.length)) return [3 /*break*/, 4];
+                                        item = _a[_i];
+                                        return [4 /*yield*/, item.exec(ctx, a, b)];
+                                    case 2:
+                                        // Do not use execute here because the value of the sort order is not important.
+                                        order = _b.sent();
+                                        if (order !== 0) {
+                                            return [3 /*break*/, 4];
+                                        }
+                                        _b.label = 3;
+                                    case 3:
+                                        _i++;
+                                        return [3 /*break*/, 1];
+                                    case 4: return [2 /*return*/, order];
+                                }
+                            });
+                        }); })];
                 }
-                return order;
+                return [2 /*return*/, values];
             });
-        }
+        });
     };
     return SortClause;
 }());
@@ -7375,14 +9365,39 @@ var AggregateClause = /** @class */ (function (_super) {
         return _this;
     }
     AggregateClause.prototype.aggregate = function (returnedValues, ctx) {
-        var _this = this;
-        var aggregateValue = this.starting != null ? this.starting.exec(ctx) : null;
-        returnedValues.forEach(function (contextValues) {
-            var childContext = ctx.childContext(contextValues);
-            childContext.set(_this.identifier, aggregateValue);
-            aggregateValue = _this.expression.exec(childContext);
+        return __awaiter(this, void 0, void 0, function () {
+            var aggregateValue, _a, _i, returnedValues_1, contextValues, childContext;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!(this.starting != null)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.starting.exec(ctx)];
+                    case 1:
+                        _a = _b.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        _a = null;
+                        _b.label = 3;
+                    case 3:
+                        aggregateValue = _a;
+                        _i = 0, returnedValues_1 = returnedValues;
+                        _b.label = 4;
+                    case 4:
+                        if (!(_i < returnedValues_1.length)) return [3 /*break*/, 7];
+                        contextValues = returnedValues_1[_i];
+                        childContext = ctx.childContext(contextValues);
+                        childContext.set(this.identifier, aggregateValue);
+                        return [4 /*yield*/, this.expression.exec(childContext)];
+                    case 5:
+                        aggregateValue = _b.sent();
+                        _b.label = 6;
+                    case 6:
+                        _i++;
+                        return [3 /*break*/, 4];
+                    case 7: return [2 /*return*/, aggregateValue];
+                }
+            });
         });
-        return aggregateValue;
     };
     return AggregateClause;
 }(expression_1.Expression));
@@ -7410,48 +9425,99 @@ var Query = /** @class */ (function (_super) {
         return true;
     };
     Query.prototype.exec = function (ctx) {
-        var _this = this;
-        var returnedValues = [];
-        this.sources.forEach(ctx, function (rctx) {
-            for (var _i = 0, _a = _this.letClauses; _i < _a.length; _i++) {
-                var def = _a[_i];
-                rctx.set(def.identifier, def.expression.execute(rctx));
-            }
-            var relations = _this.relationship.map(function (rel) {
-                var child_ctx = rctx.childContext();
-                return rel.execute(child_ctx);
+        return __awaiter(this, void 0, void 0, function () {
+            var returnedValues;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        returnedValues = [];
+                        return [4 /*yield*/, this.sources.forEach(ctx, function (rctx) { return __awaiter(_this, void 0, void 0, function () {
+                                var _i, _a, def, _b, _c, _d, relations, passed, _e, _f, val;
+                                return __generator(this, function (_g) {
+                                    switch (_g.label) {
+                                        case 0:
+                                            _i = 0, _a = this.letClauses;
+                                            _g.label = 1;
+                                        case 1:
+                                            if (!(_i < _a.length)) return [3 /*break*/, 4];
+                                            def = _a[_i];
+                                            _c = (_b = rctx).set;
+                                            _d = [def.identifier];
+                                            return [4 /*yield*/, def.expression.execute(rctx)];
+                                        case 2:
+                                            _c.apply(_b, _d.concat([_g.sent()]));
+                                            _g.label = 3;
+                                        case 3:
+                                            _i++;
+                                            return [3 /*break*/, 1];
+                                        case 4: return [4 /*yield*/, Promise.all(this.relationship.map(function (rel) {
+                                                var child_ctx = rctx.childContext();
+                                                return rel.execute(child_ctx);
+                                            }))];
+                                        case 5:
+                                            relations = _g.sent();
+                                            _e = (0, util_1.allTrue)(relations);
+                                            if (!_e) return [3 /*break*/, 9];
+                                            if (!this.where) return [3 /*break*/, 7];
+                                            return [4 /*yield*/, this.where.execute(rctx)];
+                                        case 6:
+                                            _f = _g.sent();
+                                            return [3 /*break*/, 8];
+                                        case 7:
+                                            _f = true;
+                                            _g.label = 8;
+                                        case 8:
+                                            _e = (_f);
+                                            _g.label = 9;
+                                        case 9:
+                                            passed = _e;
+                                            if (!passed) return [3 /*break*/, 12];
+                                            if (!(this.returnClause != null)) return [3 /*break*/, 11];
+                                            return [4 /*yield*/, this.returnClause.expression.execute(rctx)];
+                                        case 10:
+                                            val = _g.sent();
+                                            returnedValues.push(val);
+                                            return [3 /*break*/, 12];
+                                        case 11:
+                                            if (this.aliases.length === 1 && this.aggregateClause == null) {
+                                                returnedValues.push(rctx.get(this.aliases[0]));
+                                            }
+                                            else {
+                                                returnedValues.push(rctx.context_values);
+                                            }
+                                            _g.label = 12;
+                                        case 12: return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
+                    case 1:
+                        _a.sent();
+                        if (this.isDistinct()) {
+                            returnedValues = toDistinctList(returnedValues);
+                        }
+                        if (!(this.aggregateClause != null)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.aggregateClause.aggregate(returnedValues, ctx)];
+                    case 2:
+                        returnedValues = _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        if (!(this.sortClause != null)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.sortClause.sort(ctx, returnedValues)];
+                    case 4:
+                        returnedValues = _a.sent();
+                        _a.label = 5;
+                    case 5:
+                        if (this.sources.returnsList() || this.aggregateClause != null) {
+                            return [2 /*return*/, returnedValues];
+                        }
+                        else {
+                            return [2 /*return*/, returnedValues[0]];
+                        }
+                        return [2 /*return*/];
+                }
             });
-            var passed = (0, util_1.allTrue)(relations) && (_this.where ? _this.where.execute(rctx) : true);
-            if (passed) {
-                if (_this.returnClause != null) {
-                    var val = _this.returnClause.expression.execute(rctx);
-                    returnedValues.push(val);
-                }
-                else {
-                    if (_this.aliases.length === 1 && _this.aggregateClause == null) {
-                        returnedValues.push(rctx.get(_this.aliases[0]));
-                    }
-                    else {
-                        returnedValues.push(rctx.context_values);
-                    }
-                }
-            }
         });
-        if (this.isDistinct()) {
-            returnedValues = toDistinctList(returnedValues);
-        }
-        if (this.aggregateClause != null) {
-            returnedValues = this.aggregateClause.aggregate(returnedValues, ctx);
-        }
-        if (this.sortClause != null) {
-            this.sortClause.sort(ctx, returnedValues);
-        }
-        if (this.sources.returnsList() || this.aggregateClause != null) {
-            return returnedValues;
-        }
-        else {
-            return returnedValues[0];
-        }
     };
     return Query;
 }(expression_1.Expression));
@@ -7464,7 +9530,11 @@ var AliasRef = /** @class */ (function (_super) {
         return _this;
     }
     AliasRef.prototype.exec = function (ctx) {
-        return ctx != null ? ctx.get(this.name) : undefined;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, ctx != null ? ctx.get(this.name) : undefined];
+            });
+        });
     };
     return AliasRef;
 }(expression_1.Expression));
@@ -7499,19 +9569,32 @@ var MultiSource = /** @class */ (function () {
         return this.isList || (this.rest && this.rest.returnsList());
     };
     MultiSource.prototype.forEach = function (ctx, func) {
-        var _this = this;
-        var records = this.expression.execute(ctx);
-        this.isList = (0, util_1.typeIsArray)(records);
-        records = this.isList ? records : [records];
-        return records.map(function (rec) {
-            var rctx = new context_1.Context(ctx);
-            rctx.set(_this.alias, rec);
-            if (_this.rest) {
-                return _this.rest.forEach(rctx, func);
-            }
-            else {
-                return func(rctx);
-            }
+        return __awaiter(this, void 0, void 0, function () {
+            var records;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.expression.execute(ctx)];
+                    case 1:
+                        records = _a.sent();
+                        this.isList = (0, util_1.typeIsArray)(records);
+                        records = this.isList ? records : [records];
+                        return [2 /*return*/, Promise.all(records.map(function (rec) { return __awaiter(_this, void 0, void 0, function () {
+                                var rctx;
+                                return __generator(this, function (_a) {
+                                    rctx = new context_1.Context(ctx);
+                                    rctx.set(this.alias, rec);
+                                    if (this.rest) {
+                                        return [2 /*return*/, this.rest.forEach(rctx, func)];
+                                    }
+                                    else {
+                                        return [2 /*return*/, func(rctx)];
+                                    }
+                                    return [2 /*return*/];
+                                });
+                            }); }))];
+                }
+            });
         });
     };
     return MultiSource;
@@ -7553,6 +9636,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ratio = void 0;
 var expression_1 = require("./expression");
@@ -7577,7 +9696,11 @@ var Ratio = /** @class */ (function (_super) {
         return _this;
     }
     Ratio.prototype.exec = function (_ctx) {
-        return new DT.Ratio(this.numerator, this.denominator);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new DT.Ratio(this.numerator, this.denominator)];
+            });
+        });
     };
     return Ratio;
 }(expression_1.Expression));
@@ -7600,6 +9723,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierRef = exports.OperandRef = exports.FunctionRef = exports.FunctionDef = exports.ExpressionRef = exports.ExpressionDef = void 0;
 var expression_1 = require("./expression");
@@ -7614,9 +9773,26 @@ var ExpressionDef = /** @class */ (function (_super) {
         return _this;
     }
     ExpressionDef.prototype.exec = function (ctx) {
-        var value = this.expression != null ? this.expression.execute(ctx) : undefined;
-        ctx.rootContext().set(this.name, value);
-        return value;
+        return __awaiter(this, void 0, void 0, function () {
+            var value, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!(this.expression != null)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.expression.execute(ctx)];
+                    case 1:
+                        _a = _b.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        _a = undefined;
+                        _b.label = 3;
+                    case 3:
+                        value = _a;
+                        ctx.rootContext().set(this.name, value);
+                        return [2 /*return*/, value];
+                }
+            });
+        });
     };
     return ExpressionDef;
 }(expression_1.Expression));
@@ -7630,12 +9806,22 @@ var ExpressionRef = /** @class */ (function (_super) {
         return _this;
     }
     ExpressionRef.prototype.exec = function (ctx) {
-        ctx = this.library ? ctx.getLibraryContext(this.library) : ctx;
-        var value = ctx.get(this.name);
-        if (value instanceof expression_1.Expression) {
-            value = value.execute(ctx);
-        }
-        return value;
+        return __awaiter(this, void 0, void 0, function () {
+            var value;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        ctx = this.library ? ctx.getLibraryContext(this.library) : ctx;
+                        value = ctx.get(this.name);
+                        if (!(value instanceof expression_1.Expression)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, value.execute(ctx)];
+                    case 1:
+                        value = _a.sent();
+                        _a.label = 2;
+                    case 2: return [2 /*return*/, value];
+                }
+            });
+        });
     };
     return ExpressionRef;
 }(expression_1.Expression));
@@ -7650,7 +9836,11 @@ var FunctionDef = /** @class */ (function (_super) {
         return _this;
     }
     FunctionDef.prototype.exec = function (_ctx) {
-        return this;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this];
+            });
+        });
     };
     return FunctionDef;
 }(expression_1.Expression));
@@ -7664,54 +9854,61 @@ var FunctionRef = /** @class */ (function (_super) {
         return _this;
     }
     FunctionRef.prototype.exec = function (ctx) {
-        var functionDefs, child_ctx;
-        if (this.library) {
-            var lib = ctx.get(this.library);
-            functionDefs = lib ? lib.getFunction(this.name) : undefined;
-            var libCtx = ctx.getLibraryContext(this.library);
-            child_ctx = libCtx ? libCtx.childContext() : undefined;
-        }
-        else {
-            functionDefs = ctx.get(this.name);
-            child_ctx = ctx.childContext();
-        }
-        var args = this.execArgs(ctx);
-        // Filter out functions w/ wrong number of arguments.
-        functionDefs = functionDefs.filter(function (f) { return f.parameters.length === args.length; });
-        // If there is still > 1 matching function, filter by argument types
-        if (functionDefs.length > 1) {
-            functionDefs = functionDefs.filter(function (f) {
-                var match = true;
-                for (var i = 0; i < args.length && match; i++) {
-                    if (args[i] !== null) {
-                        var operandTypeSpecifier = f.parameters[i].operandTypeSpecifier;
-                        if (operandTypeSpecifier == null && f.parameters[i].operandType != null) {
-                            // convert it to a NamedTypedSpecifier
-                            operandTypeSpecifier = {
-                                name: f.parameters[i].operandType,
-                                type: 'NamedTypeSpecifier'
-                            };
+        return __awaiter(this, void 0, void 0, function () {
+            var functionDefs, child_ctx, lib, libCtx, args, functionDef, i;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (this.library) {
+                            lib = ctx.get(this.library);
+                            functionDefs = lib ? lib.getFunction(this.name) : undefined;
+                            libCtx = ctx.getLibraryContext(this.library);
+                            child_ctx = libCtx ? libCtx.childContext() : undefined;
                         }
-                        match = ctx.matchesTypeSpecifier(args[i], operandTypeSpecifier);
-                    }
+                        else {
+                            functionDefs = ctx.get(this.name);
+                            child_ctx = ctx.childContext();
+                        }
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        // Filter out functions w/ wrong number of arguments.
+                        functionDefs = functionDefs.filter(function (f) { return f.parameters.length === args.length; });
+                        // If there is still > 1 matching function, filter by argument types
+                        if (functionDefs.length > 1) {
+                            functionDefs = functionDefs.filter(function (f) {
+                                var match = true;
+                                for (var i = 0; i < args.length && match; i++) {
+                                    if (args[i] !== null) {
+                                        var operandTypeSpecifier = f.parameters[i].operandTypeSpecifier;
+                                        if (operandTypeSpecifier == null && f.parameters[i].operandType != null) {
+                                            // convert it to a NamedTypedSpecifier
+                                            operandTypeSpecifier = {
+                                                name: f.parameters[i].operandType,
+                                                type: 'NamedTypeSpecifier'
+                                            };
+                                        }
+                                        match = ctx.matchesTypeSpecifier(args[i], operandTypeSpecifier);
+                                    }
+                                }
+                                return match;
+                            });
+                        }
+                        // If there is still > 1 matching function, calculate a score based on quality of matches
+                        if (functionDefs.length > 1) {
+                            // TODO
+                        }
+                        if (functionDefs.length === 0) {
+                            throw new Error('no function with matching signature could be found');
+                        }
+                        functionDef = functionDefs[functionDefs.length - 1];
+                        for (i = 0; i < functionDef.parameters.length; i++) {
+                            child_ctx.set(functionDef.parameters[i].name, args[i]);
+                        }
+                        return [2 /*return*/, functionDef.expression.execute(child_ctx)];
                 }
-                return match;
             });
-        }
-        // If there is still > 1 matching function, calculate a score based on quality of matches
-        if (functionDefs.length > 1) {
-            // TODO
-        }
-        if (functionDefs.length === 0) {
-            throw new Error('no function with matching signature could be found');
-        }
-        // By this point, we should have only one function, but until implementation is completed,
-        // use the last one (no matter how many still remain)
-        var functionDef = functionDefs[functionDefs.length - 1];
-        for (var i = 0; i < functionDef.parameters.length; i++) {
-            child_ctx.set(functionDef.parameters[i].name, args[i]);
-        }
-        return functionDef.expression.execute(child_ctx);
+        });
     };
     return FunctionRef;
 }(expression_1.Expression));
@@ -7724,7 +9921,11 @@ var OperandRef = /** @class */ (function (_super) {
         return _this;
     }
     OperandRef.prototype.exec = function (ctx) {
-        return ctx.get(this.name);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, ctx.get(this.name)];
+            });
+        });
     };
     return OperandRef;
 }(expression_1.Expression));
@@ -7738,38 +9939,39 @@ var IdentifierRef = /** @class */ (function (_super) {
         return _this;
     }
     IdentifierRef.prototype.exec = function (ctx) {
-        // TODO: Technically, the ELM Translator should never output one of these
-        // but this code is needed since it does, as a work-around to get queries
-        // to work properly when sorting by a field in a tuple
-        var lib = this.library ? ctx.get(this.library) : undefined;
-        var val = lib ? lib.get(this.name) : ctx.get(this.name);
-        if (val == null) {
-            var parts = this.name.split('.');
-            val = ctx.get(parts[0]);
-            if (val != null && parts.length > 1) {
-                var curr_obj = val;
-                for (var _i = 0, _a = parts.slice(1); _i < _a.length; _i++) {
-                    var part = _a[_i];
-                    // _obj = curr_obj?[part] ? curr_obj?.get?(part)
-                    // curr_obj = if _obj instanceof Function then _obj.call(curr_obj) else _obj
-                    var _obj = void 0;
-                    if (curr_obj != null) {
-                        _obj = curr_obj[part];
-                        if (_obj === undefined && typeof curr_obj.get === 'function') {
-                            _obj = curr_obj.get(part);
+        return __awaiter(this, void 0, void 0, function () {
+            var lib, val, parts, curr_obj, _i, _a, part, _obj;
+            return __generator(this, function (_b) {
+                lib = this.library ? ctx.get(this.library) : undefined;
+                val = lib ? lib.get(this.name) : ctx.get(this.name);
+                if (val == null) {
+                    parts = this.name.split('.');
+                    val = ctx.get(parts[0]);
+                    if (val != null && parts.length > 1) {
+                        curr_obj = val;
+                        for (_i = 0, _a = parts.slice(1); _i < _a.length; _i++) {
+                            part = _a[_i];
+                            _obj = void 0;
+                            if (curr_obj != null) {
+                                _obj = curr_obj[part];
+                                if (_obj === undefined && typeof curr_obj.get === 'function') {
+                                    _obj = curr_obj.get(part);
+                                }
+                            }
+                            curr_obj = _obj instanceof Function ? _obj.call(curr_obj) : _obj;
                         }
+                        val = curr_obj;
                     }
-                    curr_obj = _obj instanceof Function ? _obj.call(curr_obj) : _obj;
                 }
-                val = curr_obj;
-            }
-        }
-        if (val instanceof Function) {
-            return val.call(ctx.context_values);
-        }
-        else {
-            return val;
-        }
+                if (val instanceof Function) {
+                    return [2 /*return*/, val.call(ctx.context_values)];
+                }
+                else {
+                    return [2 /*return*/, val];
+                }
+                return [2 /*return*/];
+            });
+        });
     };
     return IdentifierRef;
 }(expression_1.Expression));
@@ -7792,6 +9994,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReplaceMatches = exports.EndsWith = exports.StartsWith = exports.Substring = exports.Matches = exports.LastPositionOf = exports.PositionOf = exports.Lower = exports.Upper = exports.SplitOnMatches = exports.Split = exports.Combine = exports.Concatenate = void 0;
 var expression_1 = require("./expression");
@@ -7802,13 +10040,23 @@ var Concatenate = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Concatenate.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        else {
-            return args.reduce(function (x, y) { return x + y; });
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, args.reduce(function (x, y) { return x + y; })];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Concatenate;
 }(expression_1.Expression));
@@ -7822,20 +10070,39 @@ var Combine = /** @class */ (function (_super) {
         return _this;
     }
     Combine.prototype.exec = function (ctx) {
-        var source = this.source.execute(ctx);
-        var separator = this.separator != null ? this.separator.execute(ctx) : '';
-        if (source == null) {
-            return null;
-        }
-        else {
-            var filteredArray = source.filter(function (x) { return x != null; });
-            if (filteredArray.length === 0) {
-                return null;
-            }
-            else {
-                return filteredArray.join(separator);
-            }
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var source, separator, _a, filteredArray;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.source.execute(ctx)];
+                    case 1:
+                        source = _b.sent();
+                        if (!(this.separator != null)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.separator.execute(ctx)];
+                    case 2:
+                        _a = _b.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        _a = '';
+                        _b.label = 4;
+                    case 4:
+                        separator = _a;
+                        if (source == null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            filteredArray = source.filter(function (x) { return x != null; });
+                            if (filteredArray.length === 0) {
+                                return [2 /*return*/, null];
+                            }
+                            else {
+                                return [2 /*return*/, filteredArray.join(separator)];
+                            }
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Combine;
 }(expression_1.Expression));
@@ -7849,12 +10116,23 @@ var Split = /** @class */ (function (_super) {
         return _this;
     }
     Split.prototype.exec = function (ctx) {
-        var stringToSplit = this.stringToSplit.execute(ctx);
-        var separator = this.separator.execute(ctx);
-        if (stringToSplit && separator) {
-            return stringToSplit.split(separator);
-        }
-        return stringToSplit ? [stringToSplit] : null;
+        return __awaiter(this, void 0, void 0, function () {
+            var stringToSplit, separator;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.stringToSplit.execute(ctx)];
+                    case 1:
+                        stringToSplit = _a.sent();
+                        return [4 /*yield*/, this.separator.execute(ctx)];
+                    case 2:
+                        separator = _a.sent();
+                        if (stringToSplit && separator) {
+                            return [2 /*return*/, stringToSplit.split(separator)];
+                        }
+                        return [2 /*return*/, stringToSplit ? [stringToSplit] : null];
+                }
+            });
+        });
     };
     return Split;
 }(expression_1.Expression));
@@ -7868,12 +10146,23 @@ var SplitOnMatches = /** @class */ (function (_super) {
         return _this;
     }
     SplitOnMatches.prototype.exec = function (ctx) {
-        var stringToSplit = this.stringToSplit.execute(ctx);
-        var separatorPattern = this.separatorPattern.execute(ctx);
-        if (stringToSplit && separatorPattern) {
-            return stringToSplit.split(new RegExp(separatorPattern));
-        }
-        return stringToSplit ? [stringToSplit] : null;
+        return __awaiter(this, void 0, void 0, function () {
+            var stringToSplit, separatorPattern;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.stringToSplit.execute(ctx)];
+                    case 1:
+                        stringToSplit = _a.sent();
+                        return [4 /*yield*/, this.separatorPattern.execute(ctx)];
+                    case 2:
+                        separatorPattern = _a.sent();
+                        if (stringToSplit && separatorPattern) {
+                            return [2 /*return*/, stringToSplit.split(new RegExp(separatorPattern))];
+                        }
+                        return [2 /*return*/, stringToSplit ? [stringToSplit] : null];
+                }
+            });
+        });
     };
     return SplitOnMatches;
 }(expression_1.Expression));
@@ -7885,13 +10174,23 @@ var Upper = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Upper.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            return arg.toUpperCase();
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            return [2 /*return*/, arg.toUpperCase()];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Upper;
 }(expression_1.Expression));
@@ -7902,13 +10201,23 @@ var Lower = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Lower.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            return arg.toLowerCase();
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            return [2 /*return*/, arg.toLowerCase()];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Lower;
 }(expression_1.Expression));
@@ -7923,14 +10232,26 @@ var PositionOf = /** @class */ (function (_super) {
         return _this;
     }
     PositionOf.prototype.exec = function (ctx) {
-        var pattern = this.pattern.execute(ctx);
-        var string = this.string.execute(ctx);
-        if (pattern == null || string == null) {
-            return null;
-        }
-        else {
-            return string.indexOf(pattern);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var pattern, string;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.pattern.execute(ctx)];
+                    case 1:
+                        pattern = _a.sent();
+                        return [4 /*yield*/, this.string.execute(ctx)];
+                    case 2:
+                        string = _a.sent();
+                        if (pattern == null || string == null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, string.indexOf(pattern)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return PositionOf;
 }(expression_1.Expression));
@@ -7944,14 +10265,26 @@ var LastPositionOf = /** @class */ (function (_super) {
         return _this;
     }
     LastPositionOf.prototype.exec = function (ctx) {
-        var pattern = this.pattern.execute(ctx);
-        var string = this.string.execute(ctx);
-        if (pattern == null || string == null) {
-            return null;
-        }
-        else {
-            return string.lastIndexOf(pattern);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var pattern, string;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.pattern.execute(ctx)];
+                    case 1:
+                        pattern = _a.sent();
+                        return [4 /*yield*/, this.string.execute(ctx)];
+                    case 2:
+                        string = _a.sent();
+                        if (pattern == null || string == null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, string.lastIndexOf(pattern)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return LastPositionOf;
 }(expression_1.Expression));
@@ -7962,11 +10295,20 @@ var Matches = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     Matches.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), string = _a[0], pattern = _a[1];
-        if (string == null || pattern == null) {
-            return null;
-        }
-        return new RegExp('^' + pattern + '$').test(string);
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, string, pattern;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), string = _a[0], pattern = _a[1];
+                        if (string == null || pattern == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, new RegExp('^' + pattern + '$').test(string)];
+                }
+            });
+        });
     };
     return Matches;
 }(expression_1.Expression));
@@ -7981,22 +10323,43 @@ var Substring = /** @class */ (function (_super) {
         return _this;
     }
     Substring.prototype.exec = function (ctx) {
-        var stringToSub = this.stringToSub.execute(ctx);
-        var startIndex = this.startIndex.execute(ctx);
-        var length = this.length != null ? this.length.execute(ctx) : null;
-        // According to spec: If stringToSub or startIndex is null, or startIndex is out of range, the result is null.
-        if (stringToSub == null ||
-            startIndex == null ||
-            startIndex < 0 ||
-            startIndex >= stringToSub.length) {
-            return null;
-        }
-        else if (length != null) {
-            return stringToSub.substr(startIndex, length);
-        }
-        else {
-            return stringToSub.substr(startIndex);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var stringToSub, startIndex, length, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.stringToSub.execute(ctx)];
+                    case 1:
+                        stringToSub = _b.sent();
+                        return [4 /*yield*/, this.startIndex.execute(ctx)];
+                    case 2:
+                        startIndex = _b.sent();
+                        if (!(this.length != null)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.length.execute(ctx)];
+                    case 3:
+                        _a = _b.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        _a = null;
+                        _b.label = 5;
+                    case 5:
+                        length = _a;
+                        // According to spec: If stringToSub or startIndex is null, or startIndex is out of range, the result is null.
+                        if (stringToSub == null ||
+                            startIndex == null ||
+                            startIndex < 0 ||
+                            startIndex >= stringToSub.length) {
+                            return [2 /*return*/, null];
+                        }
+                        else if (length != null) {
+                            return [2 /*return*/, stringToSub.substr(startIndex, length)];
+                        }
+                        else {
+                            return [2 /*return*/, stringToSub.substr(startIndex)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Substring;
 }(expression_1.Expression));
@@ -8007,13 +10370,23 @@ var StartsWith = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     StartsWith.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        else {
-            return args[0].slice(0, args[1].length) === args[1];
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, args[0].slice(0, args[1].length) === args[1]];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return StartsWith;
 }(expression_1.Expression));
@@ -8024,13 +10397,23 @@ var EndsWith = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     EndsWith.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        else {
-            return args[1] === '' || args[0].slice(-args[1].length) === args[1];
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, args[1] === '' || args[0].slice(-args[1].length) === args[1]];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return EndsWith;
 }(expression_1.Expression));
@@ -8041,13 +10424,23 @@ var ReplaceMatches = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ReplaceMatches.prototype.exec = function (ctx) {
-        var args = this.execArgs(ctx);
-        if (args.some(function (x) { return x == null; })) {
-            return null;
-        }
-        else {
-            return args[0].replace(new RegExp(args[1], 'g'), args[2]);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var args;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        args = _a.sent();
+                        if (args.some(function (x) { return x == null; })) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, args[0].replace(new RegExp(args[1], 'g'), args[2])];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ReplaceMatches;
 }(expression_1.Expression));
@@ -8070,6 +10463,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TupleElementDefinition = exports.TupleElement = exports.Tuple = exports.Property = void 0;
 var expression_1 = require("./expression");
@@ -8084,27 +10513,39 @@ var Property = /** @class */ (function (_super) {
         return _this;
     }
     Property.prototype.exec = function (ctx) {
-        var obj = this.scope != null ? ctx.get(this.scope) : this.source;
-        if (obj instanceof expression_1.Expression) {
-            obj = obj.execute(ctx);
-        }
-        var val = getPropertyFromObject(obj, this.path);
-        if (val == null) {
-            var parts = this.path.split('.');
-            var curr_obj = obj;
-            for (var _i = 0, parts_1 = parts; _i < parts_1.length; _i++) {
-                var part = parts_1[_i];
-                var _obj = getPropertyFromObject(curr_obj, part);
-                curr_obj = _obj instanceof Function ? _obj.call(curr_obj) : _obj;
-            }
-            val = curr_obj != null ? curr_obj : null; // convert undefined to null
-        }
-        if (val instanceof Function) {
-            return val.call(obj);
-        }
-        else {
-            return val;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var obj, val, parts, curr_obj, _i, parts_1, part, _obj;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        obj = this.scope != null ? ctx.get(this.scope) : this.source;
+                        if (!(obj instanceof expression_1.Expression)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, obj.execute(ctx)];
+                    case 1:
+                        obj = _a.sent();
+                        _a.label = 2;
+                    case 2:
+                        val = getPropertyFromObject(obj, this.path);
+                        if (val == null) {
+                            parts = this.path.split('.');
+                            curr_obj = obj;
+                            for (_i = 0, parts_1 = parts; _i < parts_1.length; _i++) {
+                                part = parts_1[_i];
+                                _obj = getPropertyFromObject(curr_obj, part);
+                                curr_obj = _obj instanceof Function ? _obj.call(curr_obj) : _obj;
+                            }
+                            val = curr_obj != null ? curr_obj : null; // convert undefined to null
+                        }
+                        if (val instanceof Function) {
+                            return [2 /*return*/, val.call(obj)];
+                        }
+                        else {
+                            return [2 /*return*/, val];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return Property;
 }(expression_1.Expression));
@@ -8140,12 +10581,37 @@ var Tuple = /** @class */ (function (_super) {
         configurable: true
     });
     Tuple.prototype.exec = function (ctx) {
-        var val = {};
-        for (var _i = 0, _a = this.elements; _i < _a.length; _i++) {
-            var el = _a[_i];
-            val[el.name] = el.value != null ? el.value.execute(ctx) : undefined;
-        }
-        return val;
+        return __awaiter(this, void 0, void 0, function () {
+            var val, _i, _a, el, _b, _c, _d;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0:
+                        val = {};
+                        _i = 0, _a = this.elements;
+                        _e.label = 1;
+                    case 1:
+                        if (!(_i < _a.length)) return [3 /*break*/, 6];
+                        el = _a[_i];
+                        _b = val;
+                        _c = el.name;
+                        if (!(el.value != null)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, el.value.execute(ctx)];
+                    case 2:
+                        _d = _e.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        _d = undefined;
+                        _e.label = 4;
+                    case 4:
+                        _b[_c] = _d;
+                        _e.label = 5;
+                    case 5:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 6: return [2 /*return*/, val];
+                }
+            });
+        });
     };
     return Tuple;
 }(expression_1.Expression));
@@ -8184,6 +10650,42 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TupleTypeSpecifier = exports.NamedTypeSpecifier = exports.ListTypeSpecifier = exports.IntervalTypeSpecifier = exports.Is = exports.CanConvertQuantity = exports.ConvertQuantity = exports.ConvertsToTime = exports.ConvertsToString = exports.ConvertsToRatio = exports.ConvertsToQuantity = exports.ConvertsToInteger = exports.ConvertsToDecimal = exports.ConvertsToDateTime = exports.ConvertsToDate = exports.ConvertsToBoolean = exports.Convert = exports.ToTime = exports.ToString = exports.ToRatio = exports.ToQuantity = exports.ToInteger = exports.ToDecimal = exports.ToDateTime = exports.ToDate = exports.ToConcept = exports.ToBoolean = exports.As = void 0;
 var expression_1 = require("./expression");
@@ -8213,23 +10715,33 @@ var As = /** @class */ (function (_super) {
         return _this;
     }
     As.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        // If it is null, return null
-        if (arg == null) {
-            return null;
-        }
-        if (ctx.matchesTypeSpecifier(arg, this.asTypeSpecifier)) {
-            // TODO: request patient source to change type identification
-            return arg;
-        }
-        else if (this.strict) {
-            var argTypeString = specifierToString(guessSpecifierType(arg));
-            var asTypeString = specifierToString(this.asTypeSpecifier);
-            throw new Error("Cannot cast ".concat(argTypeString, " as ").concat(asTypeString));
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, argTypeString, asTypeString;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        // If it is null, return null
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        if (ctx.matchesTypeSpecifier(arg, this.asTypeSpecifier)) {
+                            // TODO: request patient source to change type identification
+                            return [2 /*return*/, arg];
+                        }
+                        else if (this.strict) {
+                            argTypeString = specifierToString(guessSpecifierType(arg));
+                            asTypeString = specifierToString(this.asTypeSpecifier);
+                            throw new Error("Cannot cast ".concat(argTypeString, " as ").concat(asTypeString));
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return As;
 }(expression_1.Expression));
@@ -8240,17 +10752,26 @@ var ToBoolean = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToBoolean.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            var strArg = arg.toString().toLowerCase();
-            if (['true', 't', 'yes', 'y', '1'].includes(strArg)) {
-                return true;
-            }
-            else if (['false', 'f', 'no', 'n', '0'].includes(strArg)) {
-                return false;
-            }
-        }
-        return null;
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, strArg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            strArg = arg.toString().toLowerCase();
+                            if (['true', 't', 'yes', 'y', '1'].includes(strArg)) {
+                                return [2 /*return*/, true];
+                            }
+                            else if (['false', 'f', 'no', 'n', '0'].includes(strArg)) {
+                                return [2 /*return*/, false];
+                            }
+                        }
+                        return [2 /*return*/, null];
+                }
+            });
+        });
     };
     return ToBoolean;
 }(expression_1.Expression));
@@ -8261,13 +10782,23 @@ var ToConcept = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToConcept.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            return new clinical_1.Concept([arg], arg.display);
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            return [2 /*return*/, new clinical_1.Concept([arg], arg.display)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ToConcept;
 }(expression_1.Expression));
@@ -8278,16 +10809,26 @@ var ToDate = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToDate.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        else if (arg.isDateTime) {
-            return arg.getDate();
-        }
-        else {
-            return datetime_1.Date.parse(arg.toString());
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        else if (arg.isDateTime) {
+                            return [2 /*return*/, arg.getDate()];
+                        }
+                        else {
+                            return [2 /*return*/, datetime_1.Date.parse(arg.toString())];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ToDate;
 }(expression_1.Expression));
@@ -8298,16 +10839,26 @@ var ToDateTime = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToDateTime.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg == null) {
-            return null;
-        }
-        else if (arg.isDate) {
-            return arg.getDateTime();
-        }
-        else {
-            return datetime_1.DateTime.parse(arg.toString());
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg == null) {
+                            return [2 /*return*/, null];
+                        }
+                        else if (arg.isDate) {
+                            return [2 /*return*/, arg.getDateTime()];
+                        }
+                        else {
+                            return [2 /*return*/, datetime_1.DateTime.parse(arg.toString())];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ToDateTime;
 }(expression_1.Expression));
@@ -8318,21 +10869,30 @@ var ToDecimal = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToDecimal.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            if (arg.isUncertainty) {
-                var low = (0, math_1.limitDecimalPrecision)(parseFloat(arg.low.toString()));
-                var high = (0, math_1.limitDecimalPrecision)(parseFloat(arg.high.toString()));
-                return new uncertainty_1.Uncertainty(low, high);
-            }
-            else {
-                var decimal = (0, math_1.limitDecimalPrecision)(parseFloat(arg.toString()));
-                if ((0, math_1.isValidDecimal)(decimal)) {
-                    return decimal;
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, low, high, decimal;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            if (arg.isUncertainty) {
+                                low = (0, math_1.limitDecimalPrecision)(parseFloat(arg.low.toString()));
+                                high = (0, math_1.limitDecimalPrecision)(parseFloat(arg.high.toString()));
+                                return [2 /*return*/, new uncertainty_1.Uncertainty(low, high)];
+                            }
+                            else {
+                                decimal = (0, math_1.limitDecimalPrecision)(parseFloat(arg.toString()));
+                                if ((0, math_1.isValidDecimal)(decimal)) {
+                                    return [2 /*return*/, decimal];
+                                }
+                            }
+                        }
+                        return [2 /*return*/, null];
                 }
-            }
-        }
-        return null;
+            });
+        });
     };
     return ToDecimal;
 }(expression_1.Expression));
@@ -8343,17 +10903,26 @@ var ToInteger = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToInteger.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (typeof arg === 'string') {
-            var integer = parseInt(arg);
-            if ((0, math_1.isValidInteger)(integer)) {
-                return integer;
-            }
-        }
-        else if (typeof arg === 'boolean') {
-            return arg ? 1 : 0;
-        }
-        return null;
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, integer;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (typeof arg === 'string') {
+                            integer = parseInt(arg);
+                            if ((0, math_1.isValidInteger)(integer)) {
+                                return [2 /*return*/, integer];
+                            }
+                        }
+                        else if (typeof arg === 'boolean') {
+                            return [2 /*return*/, arg ? 1 : 0];
+                        }
+                        return [2 /*return*/, null];
+                }
+            });
+        });
     };
     return ToInteger;
 }(expression_1.Expression));
@@ -8364,7 +10933,17 @@ var ToQuantity = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToQuantity.prototype.exec = function (ctx) {
-        return this.convertValue(this.execArgs(ctx));
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this.convertValue;
+                        return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
+                }
+            });
+        });
     };
     ToQuantity.prototype.convertValue = function (val) {
         if (val == null) {
@@ -8394,35 +10973,43 @@ var ToRatio = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToRatio.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            // Argument will be of form '<quantity>:<quantity>'
-            var denominator = void 0, numerator = void 0;
-            try {
-                // String will be split into an array. Numerator will be at index 1, Denominator will be at index 4
-                var splitRatioString = arg
-                    .toString()
-                    .match(/^(\d+(\.\d+)?\s*('.+')?)\s*:\s*(\d+(\.\d+)?\s*('.+')?)$/);
-                if (splitRatioString == null) {
-                    return null;
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, denominator, numerator, splitRatioString;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            denominator = void 0, numerator = void 0;
+                            try {
+                                splitRatioString = arg
+                                    .toString()
+                                    .match(/^(\d+(\.\d+)?\s*('.+')?)\s*:\s*(\d+(\.\d+)?\s*('.+')?)$/);
+                                if (splitRatioString == null) {
+                                    return [2 /*return*/, null];
+                                }
+                                numerator = (0, quantity_1.parseQuantity)(splitRatioString[1]);
+                                denominator = (0, quantity_1.parseQuantity)(splitRatioString[4]);
+                            }
+                            catch (error) {
+                                // If the input string is not formatted correctly, or cannot be
+                                // interpreted as a valid Quantity value, the result is null.
+                                return [2 /*return*/, null];
+                            }
+                            // The value element of a Quantity must be present.
+                            if (numerator == null || denominator == null) {
+                                return [2 /*return*/, null];
+                            }
+                            return [2 /*return*/, new ratio_1.Ratio(numerator, denominator)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
                 }
-                numerator = (0, quantity_1.parseQuantity)(splitRatioString[1]);
-                denominator = (0, quantity_1.parseQuantity)(splitRatioString[4]);
-            }
-            catch (error) {
-                // If the input string is not formatted correctly, or cannot be
-                // interpreted as a valid Quantity value, the result is null.
-                return null;
-            }
-            // The value element of a Quantity must be present.
-            if (numerator == null || denominator == null) {
-                return null;
-            }
-            return new ratio_1.Ratio(numerator, denominator);
-        }
-        else {
-            return null;
-        }
+            });
+        });
     };
     return ToRatio;
 }(expression_1.Expression));
@@ -8433,13 +11020,23 @@ var ToString = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToString.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            return arg.toString();
-        }
-        else {
-            return null;
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            return [2 /*return*/, arg.toString()];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ToString;
 }(expression_1.Expression));
@@ -8450,47 +11047,55 @@ var ToTime = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ToTime.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg != null) {
-            var timeString = arg.toString();
-            // Return null if string doesn't represent a valid ISO-8601 Time
-            // hh:mm:ss.fff or hh:mm:ss.fff
-            var matches = /^T?((\d{2})(:(\d{2})(:(\d{2})(\.(\d+))?)?)?)?(Z|(([+-])(\d{2})(:?(\d{2}))?))?$/.exec(timeString);
-            if (matches == null) {
-                return null;
-            }
-            var hours = matches[2];
-            var minutes = matches[4];
-            var seconds = matches[6];
-            // Validate h/m/s if they exist, but allow null
-            if (hours != null) {
-                if (hours < 0 || hours > 23) {
-                    return null;
+        return __awaiter(this, void 0, void 0, function () {
+            var arg, timeString, matches, hours, minutes, seconds, milliseconds;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg != null) {
+                            timeString = arg.toString();
+                            matches = /^T?((\d{2})(:(\d{2})(:(\d{2})(\.(\d+))?)?)?)?(Z|(([+-])(\d{2})(:?(\d{2}))?))?$/.exec(timeString);
+                            if (matches == null) {
+                                return [2 /*return*/, null];
+                            }
+                            hours = matches[2];
+                            minutes = matches[4];
+                            seconds = matches[6];
+                            // Validate h/m/s if they exist, but allow null
+                            if (hours != null) {
+                                if (hours < 0 || hours > 23) {
+                                    return [2 /*return*/, null];
+                                }
+                                hours = parseInt(hours, 10);
+                            }
+                            if (minutes != null) {
+                                if (minutes < 0 || minutes > 59) {
+                                    return [2 /*return*/, null];
+                                }
+                                minutes = parseInt(minutes, 10);
+                            }
+                            if (seconds != null) {
+                                if (seconds < 0 || seconds > 59) {
+                                    return [2 /*return*/, null];
+                                }
+                                seconds = parseInt(seconds, 10);
+                            }
+                            milliseconds = matches[8];
+                            if (milliseconds != null) {
+                                milliseconds = parseInt((0, util_1.normalizeMillisecondsField)(milliseconds));
+                            }
+                            // Time is implemented as Datetime with year 0, month 1, day 1 and null timezoneOffset
+                            return [2 /*return*/, new datetime_1.DateTime(0, 1, 1, hours, minutes, seconds, milliseconds, null)];
+                        }
+                        else {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/];
                 }
-                hours = parseInt(hours, 10);
-            }
-            if (minutes != null) {
-                if (minutes < 0 || minutes > 59) {
-                    return null;
-                }
-                minutes = parseInt(minutes, 10);
-            }
-            if (seconds != null) {
-                if (seconds < 0 || seconds > 59) {
-                    return null;
-                }
-                seconds = parseInt(seconds, 10);
-            }
-            var milliseconds = matches[8];
-            if (milliseconds != null) {
-                milliseconds = parseInt((0, util_1.normalizeMillisecondsField)(milliseconds));
-            }
-            // Time is implemented as Datetime with year 0, month 1, day 1 and null timezoneOffset
-            return new datetime_1.DateTime(0, 1, 1, hours, minutes, seconds, milliseconds, null);
-        }
-        else {
-            return null;
-        }
+            });
+        });
     };
     return ToTime;
 }(expression_1.Expression));
@@ -8504,28 +11109,33 @@ var Convert = /** @class */ (function (_super) {
         return _this;
     }
     Convert.prototype.exec = function (ctx) {
-        switch (this.toType) {
-            case '{urn:hl7-org:elm-types:r1}Boolean':
-                return new ToBoolean({ type: 'ToBoolean', operand: this.operand }).execute(ctx);
-            case '{urn:hl7-org:elm-types:r1}Concept':
-                return new ToConcept({ type: 'ToConcept', operand: this.operand }).execute(ctx);
-            case '{urn:hl7-org:elm-types:r1}Decimal':
-                return new ToDecimal({ type: 'ToDecimal', operand: this.operand }).execute(ctx);
-            case '{urn:hl7-org:elm-types:r1}Integer':
-                return new ToInteger({ type: 'ToInteger', operand: this.operand }).execute(ctx);
-            case '{urn:hl7-org:elm-types:r1}String':
-                return new ToString({ type: 'ToString', operand: this.operand }).execute(ctx);
-            case '{urn:hl7-org:elm-types:r1}Quantity':
-                return new ToQuantity({ type: 'ToQuantity', operand: this.operand }).execute(ctx);
-            case '{urn:hl7-org:elm-types:r1}DateTime':
-                return new ToDateTime({ type: 'ToDateTime', operand: this.operand }).execute(ctx);
-            case '{urn:hl7-org:elm-types:r1}Date':
-                return new ToDate({ type: 'ToDate', operand: this.operand }).execute(ctx);
-            case '{urn:hl7-org:elm-types:r1}Time':
-                return new ToTime({ type: 'ToTime', operand: this.operand }).execute(ctx);
-            default:
-                return this.execArgs(ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (this.toType) {
+                    case '{urn:hl7-org:elm-types:r1}Boolean':
+                        return [2 /*return*/, new ToBoolean({ type: 'ToBoolean', operand: this.operand }).execute(ctx)];
+                    case '{urn:hl7-org:elm-types:r1}Concept':
+                        return [2 /*return*/, new ToConcept({ type: 'ToConcept', operand: this.operand }).execute(ctx)];
+                    case '{urn:hl7-org:elm-types:r1}Decimal':
+                        return [2 /*return*/, new ToDecimal({ type: 'ToDecimal', operand: this.operand }).execute(ctx)];
+                    case '{urn:hl7-org:elm-types:r1}Integer':
+                        return [2 /*return*/, new ToInteger({ type: 'ToInteger', operand: this.operand }).execute(ctx)];
+                    case '{urn:hl7-org:elm-types:r1}String':
+                        return [2 /*return*/, new ToString({ type: 'ToString', operand: this.operand }).execute(ctx)];
+                    case '{urn:hl7-org:elm-types:r1}Quantity':
+                        return [2 /*return*/, new ToQuantity({ type: 'ToQuantity', operand: this.operand }).execute(ctx)];
+                    case '{urn:hl7-org:elm-types:r1}DateTime':
+                        return [2 /*return*/, new ToDateTime({ type: 'ToDateTime', operand: this.operand }).execute(ctx)];
+                    case '{urn:hl7-org:elm-types:r1}Date':
+                        return [2 /*return*/, new ToDate({ type: 'ToDate', operand: this.operand }).execute(ctx)];
+                    case '{urn:hl7-org:elm-types:r1}Time':
+                        return [2 /*return*/, new ToTime({ type: 'ToTime', operand: this.operand }).execute(ctx)];
+                    default:
+                        return [2 /*return*/, this.execArgs(ctx)];
+                }
+                return [2 /*return*/];
+            });
+        });
     };
     return Convert;
 }(expression_1.Expression));
@@ -8538,13 +11148,23 @@ var ConvertsToBoolean = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToBoolean.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToBoolean, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToBoolean, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToBoolean;
 }(expression_1.Expression));
@@ -8557,13 +11177,23 @@ var ConvertsToDate = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToDate.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToDate, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToDate, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToDate;
 }(expression_1.Expression));
@@ -8576,13 +11206,23 @@ var ConvertsToDateTime = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToDateTime.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToDateTime, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToDateTime, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToDateTime;
 }(expression_1.Expression));
@@ -8595,13 +11235,23 @@ var ConvertsToDecimal = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToDecimal.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToDecimal, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToDecimal, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToDecimal;
 }(expression_1.Expression));
@@ -8614,13 +11264,23 @@ var ConvertsToInteger = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToInteger.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToInteger, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToInteger, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToInteger;
 }(expression_1.Expression));
@@ -8633,13 +11293,23 @@ var ConvertsToQuantity = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToQuantity.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToQuantity, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToQuantity, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToQuantity;
 }(expression_1.Expression));
@@ -8652,13 +11322,23 @@ var ConvertsToRatio = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToRatio.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToRatio, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToRatio, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToRatio;
 }(expression_1.Expression));
@@ -8671,13 +11351,23 @@ var ConvertsToString = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToString.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToString, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToString, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToString;
 }(expression_1.Expression));
@@ -8690,30 +11380,51 @@ var ConvertsToTime = /** @class */ (function (_super) {
         return _this;
     }
     ConvertsToTime.prototype.exec = function (ctx) {
-        var operatorValue = this.execArgs(ctx);
-        if (operatorValue === null) {
-            return null;
-        }
-        else {
-            return canConvertToType(ToTime, this.operand, ctx);
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var operatorValue;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        operatorValue = _a.sent();
+                        if (operatorValue === null) {
+                            return [2 /*return*/, null];
+                        }
+                        else {
+                            return [2 /*return*/, canConvertToType(ToTime, this.operand, ctx)];
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertsToTime;
 }(expression_1.Expression));
 exports.ConvertsToTime = ConvertsToTime;
 function canConvertToType(toFunction, operand, ctx) {
-    try {
-        var value = new toFunction({ type: toFunction.name, operand: operand }).execute(ctx);
-        if (value != null) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    catch (error) {
-        return false;
-    }
+    return __awaiter(this, void 0, void 0, function () {
+        var value, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, new toFunction({ type: toFunction.name, operand: operand }).execute(ctx)];
+                case 1:
+                    value = _a.sent();
+                    if (value != null) {
+                        return [2 /*return*/, true];
+                    }
+                    else {
+                        return [2 /*return*/, false];
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    return [2 /*return*/, false];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
 }
 var ConvertQuantity = /** @class */ (function (_super) {
     __extends(ConvertQuantity, _super);
@@ -8721,16 +11432,26 @@ var ConvertQuantity = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     ConvertQuantity.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), quantity = _a[0], newUnit = _a[1];
-        if (quantity != null && newUnit != null) {
-            try {
-                return quantity.convertUnit(newUnit);
-            }
-            catch (error) {
-                // Cannot convert input to target unit, spec says to return null
-                return null;
-            }
-        }
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, quantity, newUnit;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), quantity = _a[0], newUnit = _a[1];
+                        if (quantity != null && newUnit != null) {
+                            try {
+                                return [2 /*return*/, quantity.convertUnit(newUnit)];
+                            }
+                            catch (error) {
+                                // Cannot convert input to target unit, spec says to return null
+                                return [2 /*return*/, null];
+                            }
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     return ConvertQuantity;
 }(expression_1.Expression));
@@ -8741,17 +11462,26 @@ var CanConvertQuantity = /** @class */ (function (_super) {
         return _super.call(this, json) || this;
     }
     CanConvertQuantity.prototype.exec = function (ctx) {
-        var _a = this.execArgs(ctx), quantity = _a[0], newUnit = _a[1];
-        if (quantity != null && newUnit != null) {
-            try {
-                quantity.convertUnit(newUnit);
-                return true;
-            }
-            catch (error) {
-                return false;
-            }
-        }
-        return null;
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, quantity, newUnit;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        _a = _b.sent(), quantity = _a[0], newUnit = _a[1];
+                        if (quantity != null && newUnit != null) {
+                            try {
+                                quantity.convertUnit(newUnit);
+                                return [2 /*return*/, true];
+                            }
+                            catch (error) {
+                                return [2 /*return*/, false];
+                            }
+                        }
+                        return [2 /*return*/, null];
+                }
+            });
+        });
     };
     return CanConvertQuantity;
 }(expression_1.Expression));
@@ -8773,15 +11503,24 @@ var Is = /** @class */ (function (_super) {
         return _this;
     }
     Is.prototype.exec = function (ctx) {
-        var arg = this.execArgs(ctx);
-        if (arg === null) {
-            return false;
-        }
-        if (typeof arg._is !== 'function' && !isSystemType(this.isTypeSpecifier)) {
-            // We need an _is implementation in order to check non System types
-            throw new Error("Patient Source does not support Is operation for localId: ".concat(this.localId));
-        }
-        return ctx.matchesTypeSpecifier(arg, this.isTypeSpecifier);
+        return __awaiter(this, void 0, void 0, function () {
+            var arg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.execArgs(ctx)];
+                    case 1:
+                        arg = _a.sent();
+                        if (arg === null) {
+                            return [2 /*return*/, false];
+                        }
+                        if (typeof arg._is !== 'function' && !isSystemType(this.isTypeSpecifier)) {
+                            // We need an _is implementation in order to check non System types
+                            throw new Error("Patient Source does not support Is operation for localId: ".concat(this.localId));
+                        }
+                        return [2 /*return*/, ctx.matchesTypeSpecifier(arg, this.isTypeSpecifier)];
+                }
+            });
+        });
     };
     return Is;
 }(expression_1.Expression));
@@ -8957,6 +11696,42 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnfilteredContext = exports.PatientContext = exports.Context = void 0;
 var exception_1 = require("../datatypes/exception");
@@ -9015,7 +11790,11 @@ var Context = /** @class */ (function () {
         }
     };
     Context.prototype.findRecords = function (profile) {
-        return this.parent && this.parent.findRecords(profile);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.parent && this.parent.findRecords(profile)];
+            });
+        });
     };
     Context.prototype.childContext = function (context_values) {
         if (context_values === void 0) { context_values = {}; }
@@ -9361,7 +12140,11 @@ var PatientContext = /** @class */ (function (_super) {
         return this.localId_context[localId];
     };
     PatientContext.prototype.findRecords = function (profile) {
-        return this.patient && this.patient.findRecords(profile);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.patient && this.patient.findRecords(profile)];
+            });
+        });
     };
     return PatientContext;
 }(Context));
@@ -9380,7 +12163,11 @@ var UnfilteredContext = /** @class */ (function (_super) {
         return this;
     };
     UnfilteredContext.prototype.findRecords = function (_template) {
-        throw new exception_1.Exception('Retreives are not currently supported in Unfiltered Context');
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                throw new exception_1.Exception('Retreives are not currently supported in Unfiltered Context');
+            });
+        });
     };
     UnfilteredContext.prototype.getLibraryContext = function (_library) {
         throw new exception_1.Exception('Library expressions are not currently supported in Unfiltered Context');
@@ -9404,6 +12191,42 @@ exports.UnfilteredContext = UnfilteredContext;
 
 },{"../datatypes/datatypes":6,"../datatypes/exception":8,"../util/util":55,"./messageListeners":44}],43:[function(require,module,exports){
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Executor = void 0;
 var messageListeners_1 = require("./messageListeners");
@@ -9434,46 +12257,98 @@ var Executor = /** @class */ (function () {
         return this;
     };
     Executor.prototype.exec_expression = function (expression, patientSource, executionDateTime) {
-        var _a;
-        var r = new results_1.Results();
-        var expr = this.library.expressions[expression];
-        if (expr != null) {
-            while (patientSource.currentPatient()) {
-                var patient_ctx = new context_1.PatientContext(this.library, patientSource.currentPatient(), this.codeService, this.parameters, executionDateTime, this.messageListener);
-                r.recordPatientResults(patient_ctx, (_a = {}, _a[expression] = expr.execute(patient_ctx), _a));
-                patientSource.nextPatient();
-            }
-        }
-        return r;
+        return __awaiter(this, void 0, void 0, function () {
+            var r, expr, patient_ctx;
+            var _a;
+            return __generator(this, function (_b) {
+                r = new results_1.Results();
+                expr = this.library.expressions[expression];
+                if (expr != null) {
+                    while (patientSource.currentPatient()) {
+                        patient_ctx = new context_1.PatientContext(this.library, patientSource.currentPatient(), this.codeService, this.parameters, executionDateTime, this.messageListener);
+                        r.recordPatientResults(patient_ctx, (_a = {}, _a[expression] = expr.execute(patient_ctx), _a));
+                        patientSource.nextPatient();
+                    }
+                }
+                return [2 /*return*/, r];
+            });
+        });
     };
     Executor.prototype.exec = function (patientSource, executionDateTime) {
-        var r = this.exec_patient_context(patientSource, executionDateTime);
-        var unfilteredContext = new context_1.UnfilteredContext(this.library, r, this.codeService, this.parameters, executionDateTime, this.messageListener);
-        var resultMap = {};
-        for (var key in this.library.expressions) {
-            var expr = this.library.expressions[key];
-            if (expr.context === 'Unfiltered') {
-                resultMap[key] = expr.exec(unfilteredContext);
-            }
-        }
-        r.recordUnfilteredResults(resultMap);
-        return r;
+        return __awaiter(this, void 0, void 0, function () {
+            var r, unfilteredContext, resultMap, _a, _b, _i, key, expr, _c, _d;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0: return [4 /*yield*/, this.exec_patient_context(patientSource, executionDateTime)];
+                    case 1:
+                        r = _e.sent();
+                        unfilteredContext = new context_1.UnfilteredContext(this.library, r, this.codeService, this.parameters, executionDateTime, this.messageListener);
+                        resultMap = {};
+                        _a = [];
+                        for (_b in this.library.expressions)
+                            _a.push(_b);
+                        _i = 0;
+                        _e.label = 2;
+                    case 2:
+                        if (!(_i < _a.length)) return [3 /*break*/, 5];
+                        key = _a[_i];
+                        expr = this.library.expressions[key];
+                        if (!(expr.context === 'Unfiltered')) return [3 /*break*/, 4];
+                        _c = resultMap;
+                        _d = key;
+                        return [4 /*yield*/, expr.exec(unfilteredContext)];
+                    case 3:
+                        _c[_d] = _e.sent();
+                        _e.label = 4;
+                    case 4:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 5:
+                        r.recordUnfilteredResults(resultMap);
+                        return [2 /*return*/, r];
+                }
+            });
+        });
     };
     Executor.prototype.exec_patient_context = function (patientSource, executionDateTime) {
-        var r = new results_1.Results();
-        while (patientSource.currentPatient()) {
-            var patient_ctx = new context_1.PatientContext(this.library, patientSource.currentPatient(), this.codeService, this.parameters, executionDateTime, this.messageListener);
-            var resultMap = {};
-            for (var key in this.library.expressions) {
-                var expr = this.library.expressions[key];
-                if (expr.context === 'Patient') {
-                    resultMap[key] = expr.execute(patient_ctx);
+        return __awaiter(this, void 0, void 0, function () {
+            var r, patient_ctx, resultMap, _a, _b, _i, key, expr, _c, _d;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0:
+                        r = new results_1.Results();
+                        _e.label = 1;
+                    case 1:
+                        if (!patientSource.currentPatient()) return [3 /*break*/, 6];
+                        patient_ctx = new context_1.PatientContext(this.library, patientSource.currentPatient(), this.codeService, this.parameters, executionDateTime, this.messageListener);
+                        resultMap = {};
+                        _a = [];
+                        for (_b in this.library.expressions)
+                            _a.push(_b);
+                        _i = 0;
+                        _e.label = 2;
+                    case 2:
+                        if (!(_i < _a.length)) return [3 /*break*/, 5];
+                        key = _a[_i];
+                        expr = this.library.expressions[key];
+                        if (!(expr.context === 'Patient')) return [3 /*break*/, 4];
+                        _c = resultMap;
+                        _d = key;
+                        return [4 /*yield*/, expr.execute(patient_ctx)];
+                    case 3:
+                        _c[_d] = _e.sent();
+                        _e.label = 4;
+                    case 4:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 5:
+                        r.recordPatientResults(patient_ctx, resultMap);
+                        patientSource.nextPatient();
+                        return [3 /*break*/, 1];
+                    case 6: return [2 /*return*/, r];
                 }
-            }
-            r.recordPatientResults(patient_ctx, resultMap);
-            patientSource.nextPatient();
-        }
-        return r;
+            });
+        });
     };
     return Executor;
 }());
@@ -10590,8 +13465,53 @@ function fixUnit(unit) {
 
 },{"./math":53,"@lhncbc/ucum-lhc":66}],55:[function(require,module,exports){
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTimezoneSeparatorFromString = exports.normalizeMillisecondsField = exports.normalizeMillisecondsFieldInString = exports.jsDate = exports.anyTrue = exports.allTrue = exports.typeIsArray = exports.isNull = exports.numerical_sort = exports.removeNulls = void 0;
+exports.asyncMergeSort = exports.getTimezoneSeparatorFromString = exports.normalizeMillisecondsField = exports.normalizeMillisecondsFieldInString = exports.jsDate = exports.anyTrue = exports.allTrue = exports.typeIsArray = exports.isNull = exports.numerical_sort = exports.removeNulls = void 0;
 function removeNulls(things) {
     return things.filter(function (x) { return x != null; });
 }
@@ -10666,6 +13586,57 @@ function getTimezoneSeparatorFromString(string) {
     return '';
 }
 exports.getTimezoneSeparatorFromString = getTimezoneSeparatorFromString;
+function asyncMergeSort(arr, compareFn) {
+    return __awaiter(this, void 0, void 0, function () {
+        var midpoint, left, right;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (arr.length <= 1)
+                        return [2 /*return*/, arr];
+                    midpoint = Math.floor(arr.length / 2);
+                    return [4 /*yield*/, asyncMergeSort(arr.slice(0, midpoint), compareFn)];
+                case 1:
+                    left = _a.sent();
+                    return [4 /*yield*/, asyncMergeSort(arr.slice(midpoint), compareFn)];
+                case 2:
+                    right = _a.sent();
+                    return [2 /*return*/, merge(left, right, compareFn)];
+            }
+        });
+    });
+}
+exports.asyncMergeSort = asyncMergeSort;
+function merge(left, right, compareFn) {
+    return __awaiter(this, void 0, void 0, function () {
+        var sorted, sortedElem, sortedElem;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    sorted = [];
+                    _a.label = 1;
+                case 1:
+                    if (!(left.length > 0 && right.length > 0)) return [3 /*break*/, 3];
+                    return [4 /*yield*/, compareFn(left[0], right[0])];
+                case 2:
+                    if ((_a.sent()) < 0) {
+                        sortedElem = left.shift();
+                        if (sortedElem !== undefined) {
+                            sorted.push(sortedElem);
+                        }
+                    }
+                    else {
+                        sortedElem = right.shift();
+                        if (sortedElem !== undefined) {
+                            sorted.push(sortedElem);
+                        }
+                    }
+                    return [3 /*break*/, 1];
+                case 3: return [2 /*return*/, __spreadArray(__spreadArray(__spreadArray([], sorted, true), left, true), right, true)];
+            }
+        });
+    });
+}
 
 },{}],56:[function(require,module,exports){
 module.exports={"license":"The following data (prefixes and units) was generated by the UCUM LHC code from the UCUM data and selected LOINC combinations of UCUM units.  The license for the UCUM LHC code (demo and library code as well as the combined units) is located at https://github.com/lhncbc/ucum-lhc/blob/LICENSE.md.","prefixes":{"config":["code_","ciCode_","name_","printSymbol_","value_","exp_"],"data":[["E","EX","exa","E",1000000000000000000,"18"],["G","GA","giga","G",1000000000,"9"],["Gi","GIB","gibi","Gi",1073741824,null],["Ki","KIB","kibi","Ki",1024,null],["M","MA","mega","M",1000000,"6"],["Mi","MIB","mebi","Mi",1048576,null],["P","PT","peta","P",1000000000000000,"15"],["T","TR","tera","T",1000000000000,"12"],["Ti","TIB","tebi","Ti",1099511627776,null],["Y","YA","yotta","Y",1e+24,"24"],["Z","ZA","zetta","Z",1e+21,"21"],["a","A","atto","a",1e-18,"-18"],["c","C","centi","c",0.01,"-2"],["d","D","deci","d",0.1,"-1"],["da","DA","deka","da",10,"1"],["f","F","femto","f",1e-15,"-15"],["h","H","hecto","h",100,"2"],["k","K","kilo","k",1000,"3"],["m","M","milli","m",0.001,"-3"],["n","N","nano","n",1e-9,"-9"],["p","P","pico","p",1e-12,"-12"],["u","U","micro","μ",0.000001,"-6"],["y","YO","yocto","y",1.0000000000000001e-24,"-24"],["z","ZO","zepto","z",1e-21,"-21"]]},"units":{"config":["isBase_","name_","csCode_","ciCode_","property_","magnitude_",["dim_","dimVec_"],"printSymbol_","class_","isMetric_","variable_","cnv_","cnvPfx_","isSpecial_","isArbitrary_","moleExp_","synonyms_","source_","loincProperty_","category_","guidance_","csUnitString_","ciUnitString_","baseFactorStr_","baseFactor_","defError_"],"data":[[true,"meter","m","M","length",1,[1,0,0,0,0,0,0],"m",null,false,"L",null,1,false,false,0,"meters; metres; distance","UCUM","Len","Clinical","unit of length = 1.09361 yards",null,null,null,null,false],[true,"second - time","s","S","time",1,[0,1,0,0,0,0,0],"s",null,false,"T",null,1,false,false,0,"seconds","UCUM","Time","Clinical","",null,null,null,null,false],[true,"gram","g","G","mass",1,[0,0,1,0,0,0,0],"g",null,false,"M",null,1,false,false,0,"grams; gm","UCUM","Mass","Clinical","",null,null,null,null,false],[true,"radian","rad","RAD","plane angle",1,[0,0,0,1,0,0,0],"rad",null,false,"A",null,1,false,false,0,"radians","UCUM","Angle","Clinical","unit of angular measure where 1 radian = 1/2π turn =  57.296 degrees. ",null,null,null,null,false],[true,"degree Kelvin","K","K","temperature",1,[0,0,0,0,1,0,0],"K",null,false,"C",null,1,false,false,0,"Kelvin; degrees","UCUM","Temp","Clinical","absolute, thermodynamic temperature scale ",null,null,null,null,false],[true,"coulomb","C","C","electric charge",1,[0,0,0,0,0,1,0],"C",null,false,"Q",null,1,false,false,0,"coulombs","UCUM","","Clinical","defined as amount of 1 electron charge = 6.2415093×10^18 e, and equivalent to 1 Ampere-second",null,null,null,null,false],[true,"candela","cd","CD","luminous intensity",1,[0,0,0,0,0,0,1],"cd",null,false,"F",null,1,false,false,0,"candelas","UCUM","","Clinical","SI base unit of luminous intensity",null,null,null,null,false],[false,"the number ten for arbitrary powers","10*","10*","number",10,[0,0,0,0,0,0,0],"10","dimless",false,null,null,1,false,false,0,"10^; 10 to the arbitrary powers","UCUM","Num","Clinical","10* by itself is the same as 10, but users can add digits after the *. For example, 10*3 = 1000.","1","1","10",10,false],[false,"the number ten for arbitrary powers","10^","10^","number",10,[0,0,0,0,0,0,0],"10","dimless",false,null,null,1,false,false,0,"10*; 10 to the arbitrary power","UCUM","Num","Clinical","10* by itself is the same as 10, but users can add digits after the *. For example, 10*3 = 1000.","1","1","10",10,false],[false,"the number pi","[pi]","[PI]","number",3.141592653589793,[0,0,0,0,0,0,0],"π","dimless",false,null,null,1,false,false,0,"π","UCUM","","Constant","a mathematical constant; the ratio of a circle's circumference to its diameter ≈ 3.14159","1","1","3.1415926535897932384626433832795028841971693993751058209749445923",3.141592653589793,false],[false,"","%","%","fraction",0.01,[0,0,0,0,0,0,0],"%","dimless",false,null,null,1,false,false,0,"percents","UCUM","FR; NFR; MFR; CFR; SFR Rto; etc. ","Clinical","","10*-2","10*-2","1",1,false],[false,"parts per thousand","[ppth]","[PPTH]","fraction",0.001,[0,0,0,0,0,0,0],"ppth","dimless",false,null,null,1,false,false,0,"ppth; 10^-3","UCUM","MCnc; MCnt","Clinical","[ppth] is often used in solution concentrations as 1 g/L or 1 g/kg.\n\nCan be ambigous and would be better if the metric units was used directly. ","10*-3","10*-3","1",1,false],[false,"parts per million","[ppm]","[PPM]","fraction",0.000001,[0,0,0,0,0,0,0],"ppm","dimless",false,null,null,1,false,false,0,"ppm; 10^-6","UCUM","MCnt; MCnc; SFr","Clinical","[ppm] is often used in solution concentrations as 1 mg/L  or 1 mg/kg. Also used to express mole fractions as 1 mmol/mol.\n\n[ppm] is also used in nuclear magnetic resonance (NMR) to represent chemical shift - the difference of a measured frequency in parts per million from the reference frequency.\n\nCan be ambigous and would be better if the metric units was used directly. ","10*-6","10*-6","1",1,false],[false,"parts per billion","[ppb]","[PPB]","fraction",1e-9,[0,0,0,0,0,0,0],"ppb","dimless",false,null,null,1,false,false,0,"ppb; 10^-9","UCUM","MCnt; MCnc; SFr","Clinical","[ppb] is often used in solution concentrations as 1 ug/L  or 1 ug/kg. Also used to express mole fractions as 1 umol/mol.\n\nCan be ambigous and would be better if the metric units was used directly. ","10*-9","10*-9","1",1,false],[false,"parts per trillion","[pptr]","[PPTR]","fraction",1e-12,[0,0,0,0,0,0,0],"pptr","dimless",false,null,null,1,false,false,0,"pptr; 10^-12","UCUM","MCnt; MCnc; SFr","Clinical","[pptr] is often used in solution concentrations as 1 ng/L or 1 ng/kg. Also used to express mole fractions as 1 nmol/mol.\n\nCan be ambigous and would be better if the metric units was used directly. ","10*-12","10*-12","1",1,false],[false,"mole","mol","MOL","amount of substance",6.0221367e+23,[0,0,0,0,0,0,0],"mol","si",true,null,null,1,false,false,1,"moles","UCUM","Sub","Clinical","Measure the number of molecules ","10*23","10*23","6.0221367",6.0221367,false],[false,"steradian - solid angle","sr","SR","solid angle",1,[0,0,0,2,0,0,0],"sr","si",true,null,null,1,false,false,0,"square radian; rad2; rad^2","UCUM","Angle","Clinical","unit of solid angle in three-dimensional geometry analagous to radian; used in photometry which measures the perceived brightness of object by human eye (e.g. radiant intensity = watt/steradian)","rad2","RAD2","1",1,false],[false,"hertz","Hz","HZ","frequency",1,[0,-1,0,0,0,0,0],"Hz","si",true,null,null,1,false,false,0,"Herz; frequency; frequencies","UCUM","Freq; Num","Clinical","equal to one cycle per second","s-1","S-1","1",1,false],[false,"newton","N","N","force",1000,[1,-2,1,0,0,0,0],"N","si",true,null,null,1,false,false,0,"Newtons","UCUM","Force","Clinical","unit of force with base units kg.m/s2","kg.m/s2","KG.M/S2","1",1,false],[false,"pascal","Pa","PAL","pressure",1000,[-1,-2,1,0,0,0,0],"Pa","si",true,null,null,1,false,false,0,"pascals","UCUM","Pres","Clinical","standard unit of pressure equal to 1 newton per square meter (N/m2)","N/m2","N/M2","1",1,false],[false,"joule","J","J","energy",1000,[2,-2,1,0,0,0,0],"J","si",true,null,null,1,false,false,0,"joules","UCUM","Enrg","Clinical","unit of energy defined as the work required to move an object 1 m with a force of 1 N (N.m) or an electric charge of 1 C through 1 V (C.V), or to produce 1 W for 1 s (W.s) ","N.m","N.M","1",1,false],[false,"watt","W","W","power",1000,[2,-3,1,0,0,0,0],"W","si",true,null,null,1,false,false,0,"watts","UCUM","EngRat","Clinical","unit of power equal to 1 Joule per second (J/s) =  kg⋅m2⋅s−3","J/s","J/S","1",1,false],[false,"Ampere","A","A","electric current",1,[0,-1,0,0,0,1,0],"A","si",true,null,null,1,false,false,0,"Amperes","UCUM","ElpotRat","Clinical","unit of electric current equal to flow rate of electrons equal to 16.2415×10^18 elementary charges moving past a boundary in one second or 1 Coulomb/second","C/s","C/S","1",1,false],[false,"volt","V","V","electric potential",1000,[2,-2,1,0,0,-1,0],"V","si",true,null,null,1,false,false,0,"volts","UCUM","Elpot","Clinical","unit of electric potential (voltage) = 1 Joule per Coulomb (J/C)","J/C","J/C","1",1,false],[false,"farad","F","F","electric capacitance",0.001,[-2,2,-1,0,0,2,0],"F","si",true,null,null,1,false,false,0,"farads; electric capacitance","UCUM","","Clinical","CGS unit of electric capacitance with base units C/V (Coulomb per Volt)","C/V","C/V","1",1,false],[false,"ohm","Ohm","OHM","electric resistance",1000,[2,-1,1,0,0,-2,0],"Ω","si",true,null,null,1,false,false,0,"Ω; resistance; ohms","UCUM","","Clinical","unit of electrical resistance with units of Volt per Ampere","V/A","V/A","1",1,false],[false,"siemens","S","SIE","electric conductance",0.001,[-2,1,-1,0,0,2,0],"S","si",true,null,null,1,false,false,0,"Reciprocal ohm; mho; Ω−1; conductance","UCUM","","Clinical","unit of electric conductance (the inverse of electrical resistance) equal to ohm^-1","Ohm-1","OHM-1","1",1,false],[false,"weber","Wb","WB","magnetic flux",1000,[2,-1,1,0,0,-1,0],"Wb","si",true,null,null,1,false,false,0,"magnetic flux; webers","UCUM","","Clinical","unit of magnetic flux equal to Volt second","V.s","V.S","1",1,false],[false,"degree Celsius","Cel","CEL","temperature",1,[0,0,0,0,1,0,0],"°C","si",true,null,"Cel",1,true,false,0,"°C; degrees","UCUM","Temp","Clinical","","K",null,null,1,false],[false,"tesla","T","T","magnetic flux density",1000,[0,-1,1,0,0,-1,0],"T","si",true,null,null,1,false,false,0,"Teslas; magnetic field","UCUM","","Clinical","SI unit of magnetic field strength for magnetic field B equal to 1 Weber/square meter =  1 kg/(s2*A)","Wb/m2","WB/M2","1",1,false],[false,"henry","H","H","inductance",1000,[2,0,1,0,0,-2,0],"H","si",true,null,null,1,false,false,0,"henries; inductance","UCUM","","Clinical","unit of electrical inductance; usually expressed in millihenrys (mH) or microhenrys (uH).","Wb/A","WB/A","1",1,false],[false,"lumen","lm","LM","luminous flux",1,[0,0,0,2,0,0,1],"lm","si",true,null,null,1,false,false,0,"luminous flux; lumens","UCUM","","Clinical","unit of luminous flux defined as 1 lm = 1 cd⋅sr (candela times sphere)","cd.sr","CD.SR","1",1,false],[false,"lux","lx","LX","illuminance",1,[-2,0,0,2,0,0,1],"lx","si",true,null,null,1,false,false,0,"illuminance; luxes","UCUM","","Clinical","unit of illuminance equal to one lumen per square meter. ","lm/m2","LM/M2","1",1,false],[false,"becquerel","Bq","BQ","radioactivity",1,[0,-1,0,0,0,0,0],"Bq","si",true,null,null,1,false,false,0,"activity; radiation; becquerels","UCUM","","Clinical","measure of the atomic radiation rate with units s^-1","s-1","S-1","1",1,false],[false,"gray","Gy","GY","energy dose",1,[2,-2,0,0,0,0,0],"Gy","si",true,null,null,1,false,false,0,"absorbed doses; ionizing radiation doses; kerma; grays","UCUM","EngCnt","Clinical","unit of ionizing radiation dose with base units of 1 joule of radiation energy per kilogram of matter","J/kg","J/KG","1",1,false],[false,"sievert","Sv","SV","dose equivalent",1,[2,-2,0,0,0,0,0],"Sv","si",true,null,null,1,false,false,0,"sieverts; radiation dose quantities; equivalent doses; effective dose; operational dose; committed dose","UCUM","","Clinical","SI unit for radiation dose equivalent equal to 1 Joule/kilogram.","J/kg","J/KG","1",1,false],[false,"degree - plane angle","deg","DEG","plane angle",0.017453292519943295,[0,0,0,1,0,0,0],"°","iso1000",false,null,null,1,false,false,0,"°; degree of arc; arc degree; arcdegree; angle","UCUM","Angle","Clinical","one degree is equivalent to π/180 radians.","[pi].rad/360","[PI].RAD/360","2",2,false],[false,"gon","gon","GON","plane angle",0.015707963267948967,[0,0,0,1,0,0,0],"□<sup>g</sup>","iso1000",false,null,null,1,false,false,0,"gon (grade); gons","UCUM","Angle","Nonclinical","unit of plane angle measurement equal to 1/400 circle","deg","DEG","0.9",0.9,false],[false,"arc minute","'","'","plane angle",0.0002908882086657216,[0,0,0,1,0,0,0],"'","iso1000",false,null,null,1,false,false,0,"arcminutes; arcmin; arc minutes; arc mins","UCUM","Angle","Clinical","equal to 1/60 degree; used in optometry and opthamology (e.g. visual acuity tests)","deg/60","DEG/60","1",1,false],[false,"arc second","''","''","plane angle",0.00000484813681109536,[0,0,0,1,0,0,0],"''","iso1000",false,null,null,1,false,false,0,"arcseconds; arcsecs","UCUM","Angle","Clinical","equal to 1/60 arcminute = 1/3600 degree; used in optometry and opthamology (e.g. visual acuity tests)","'/60","'/60","1",1,false],[false,"Liters","l","L","volume",0.001,[3,0,0,0,0,0,0],"l","iso1000",true,null,null,1,false,false,0,"cubic decimeters; decimeters cubed; decimetres; dm3; dm^3; litres; liters, LT ","UCUM","Vol","Clinical","Because lower case \"l\" can be read as the number \"1\", though this is a valid UCUM units. UCUM strongly reccomends using  \"L\"","dm3","DM3","1",1,false],[false,"Liters","L","L","volume",0.001,[3,0,0,0,0,0,0],"L","iso1000",true,null,null,1,false,false,0,"cubic decimeters; decimeters cubed; decimetres; dm3; dm^3; litres; liters, LT ","UCUM","Vol","Clinical","Because lower case \"l\" can be read as the number \"1\", though this is a valid UCUM units. UCUM strongly reccomends using  \"L\"","l",null,"1",1,false],[false,"are","ar","AR","area",100,[2,0,0,0,0,0,0],"a","iso1000",true,null,null,1,false,false,0,"100 m2; 100 m^2; 100 square meter; meters squared; metres","UCUM","Area","Clinical","metric base unit for area defined as 100 m^2","m2","M2","100",100,false],[false,"minute","min","MIN","time",60,[0,1,0,0,0,0,0],"min","iso1000",false,null,null,1,false,false,0,"minutes","UCUM","Time","Clinical","","s","S","60",60,false],[false,"hour","h","HR","time",3600,[0,1,0,0,0,0,0],"h","iso1000",false,null,null,1,false,false,0,"hours; hrs; age","UCUM","Time","Clinical","","min","MIN","60",60,false],[false,"day","d","D","time",86400,[0,1,0,0,0,0,0],"d","iso1000",false,null,null,1,false,false,0,"days; age; dy; 24 hours; 24 hrs","UCUM","Time","Clinical","","h","HR","24",24,false],[false,"tropical year","a_t","ANN_T","time",31556925.216,[0,1,0,0,0,0,0],"a<sub>t</sub>","iso1000",false,null,null,1,false,false,0,"solar years; a tropical; years","UCUM","Time","Clinical","has an average of 365.242181 days but is constantly changing.","d","D","365.24219",365.24219,false],[false,"mean Julian year","a_j","ANN_J","time",31557600,[0,1,0,0,0,0,0],"a<sub>j</sub>","iso1000",false,null,null,1,false,false,0,"mean Julian yr; a julian; years","UCUM","Time","Clinical","has an average of 365.25 days, and in everyday use, has been replaced by the Gregorian year. However, this unit is used in astronomy to calculate light year. ","d","D","365.25",365.25,false],[false,"mean Gregorian year","a_g","ANN_G","time",31556952,[0,1,0,0,0,0,0],"a<sub>g</sub>","iso1000",false,null,null,1,false,false,0,"mean Gregorian yr; a gregorian; years","UCUM","Time","Clinical","has an average of 365.2425 days and is the most internationally used civil calendar.","d","D","365.2425",365.2425,false],[false,"year","a","ANN","time",31557600,[0,1,0,0,0,0,0],"a","iso1000",false,null,null,1,false,false,0,"years; a; yr, yrs; annum","UCUM","Time","Clinical","","a_j","ANN_J","1",1,false],[false,"week","wk","WK","time",604800,[0,1,0,0,0,0,0],"wk","iso1000",false,null,null,1,false,false,0,"weeks; wks","UCUM","Time","Clinical","","d","D","7",7,false],[false,"synodal month","mo_s","MO_S","time",2551442.976,[0,1,0,0,0,0,0],"mo<sub>s</sub>","iso1000",false,null,null,1,false,false,0,"Moon; synodic month; lunar month; mo-s; mo s; months; moons","UCUM","Time","Nonclinical","has an average of 29.53 days per month, unit used in astronomy","d","D","29.53059",29.53059,false],[false,"mean Julian month","mo_j","MO_J","time",2629800,[0,1,0,0,0,0,0],"mo<sub>j</sub>","iso1000",false,null,null,1,false,false,0,"mo-julian; mo Julian; months","UCUM","Time","Clinical","has an average of 30.435 days per month","a_j/12","ANN_J/12","1",1,false],[false,"mean Gregorian month","mo_g","MO_G","time",2629746,[0,1,0,0,0,0,0],"mo<sub>g</sub>","iso1000",false,null,null,1,false,false,0,"months; month-gregorian; mo-gregorian","UCUM","Time","Clinical","has an average 30.436875 days per month and is from the most internationally used civil calendar.","a_g/12","ANN_G/12","1",1,false],[false,"month","mo","MO","time",2629800,[0,1,0,0,0,0,0],"mo","iso1000",false,null,null,1,false,false,0,"months; duration","UCUM","Time","Clinical","based on Julian calendar which has an average of 30.435 days per month (this unit is used in astronomy but not in everyday life - see mo_g)","mo_j","MO_J","1",1,false],[false,"metric ton","t","TNE","mass",1000000,[0,0,1,0,0,0,0],"t","iso1000",true,null,null,1,false,false,0,"tonnes; megagrams; tons","UCUM","Mass","Nonclinical","equal to 1000 kg used in the US (recognized by NIST as metric ton), and internationally (recognized as tonne)","kg","KG","1e3",1000,false],[false,"bar","bar","BAR","pressure",100000000,[-1,-2,1,0,0,0,0],"bar","iso1000",true,null,null,1,false,false,0,"bars","UCUM","Pres","Nonclinical","unit of pressure equal to 10^5 Pascals, primarily used by meteorologists and in weather forecasting","Pa","PAL","1e5",100000,false],[false,"unified atomic mass unit","u","AMU","mass",1.6605402e-24,[0,0,1,0,0,0,0],"u","iso1000",true,null,null,1,false,false,0,"unified atomic mass units; amu; Dalton; Da","UCUM","Mass","Clinical","the mass of 1/12 of an unbound Carbon-12 atom nuclide equal to 1.6606x10^-27 kg ","g","G","1.6605402e-24",1.6605402e-24,false],[false,"astronomic unit","AU","ASU","length",149597870691,[1,0,0,0,0,0,0],"AU","iso1000",false,null,null,1,false,false,0,"AU; units","UCUM","Len","Clinical","unit of length used in astronomy for measuring distance in Solar system","Mm","MAM","149597.870691",149597.870691,false],[false,"parsec","pc","PRS","length",30856780000000000,[1,0,0,0,0,0,0],"pc","iso1000",true,null,null,1,false,false,0,"parsecs","UCUM","Len","Clinical","unit of length equal to 3.26 light years, nad used to measure large distances to objects outside our Solar System","m","M","3.085678e16",30856780000000000,false],[false,"velocity of light in a vacuum","[c]","[C]","velocity",299792458,[1,-1,0,0,0,0,0],"<i>c</i>","const",true,null,null,1,false,false,0,"speed of light","UCUM","Vel","Constant","equal to 299792458 m/s (approximately 3 x 10^8 m/s)","m/s","M/S","299792458",299792458,false],[false,"Planck constant","[h]","[H]","action",6.6260755e-31,[2,-1,1,0,0,0,0],"<i>h</i>","const",true,null,null,1,false,false,0,"Planck's constant","UCUM","","Constant","constant = 6.62607004 × 10-34 m2.kg/s; defined as quantum of action","J.s","J.S","6.6260755e-34",6.6260755e-34,false],[false,"Boltzmann constant","[k]","[K]","(unclassified)",1.380658e-20,[2,-2,1,0,-1,0,0],"<i>k</i>","const",true,null,null,1,false,false,0,"k; kB","UCUM","","Constant","physical constant relating energy at the individual particle level with temperature = 1.38064852 ×10^−23 J/K","J/K","J/K","1.380658e-23",1.380658e-23,false],[false,"permittivity of vacuum - electric","[eps_0]","[EPS_0]","electric permittivity",8.854187817000001e-15,[-3,2,-1,0,0,2,0],"<i>ε<sub><r>0</r></sub></i>","const",true,null,null,1,false,false,0,"ε0; Electric Constant; vacuum permittivity; permittivity of free space ","UCUM","","Constant","approximately equal to 8.854 × 10^−12 F/m (farads per meter)","F/m","F/M","8.854187817e-12",8.854187817e-12,false],[false,"permeability of vacuum - magnetic","[mu_0]","[MU_0]","magnetic permeability",0.0012566370614359172,[1,0,1,0,0,-2,0],"<i>μ<sub><r>0</r></sub></i>","const",true,null,null,1,false,false,0,"μ0; vacuum permeability; permeability of free space; magnetic constant","UCUM","","Constant","equal to 4π×10^−7 N/A2 (Newtons per square ampere) ≈ 1.2566×10^−6 H/m (Henry per meter)","N/A2","4.[PI].10*-7.N/A2","1",0.0000012566370614359173,false],[false,"elementary charge","[e]","[E]","electric charge",1.60217733e-19,[0,0,0,0,0,1,0],"<i>e</i>","const",true,null,null,1,false,false,0,"e; q; electric charges","UCUM","","Constant","the magnitude of the electric charge carried by a single electron or proton ≈ 1.60217×10^-19 Coulombs","C","C","1.60217733e-19",1.60217733e-19,false],[false,"electronvolt","eV","EV","energy",1.60217733e-16,[2,-2,1,0,0,0,0],"eV","iso1000",true,null,null,1,false,false,0,"Electron Volts; electronvolts","UCUM","Eng","Clinical","unit of kinetic energy = 1 V * 1.602×10^−19 C = 1.6×10−19 Joules","[e].V","[E].V","1",1,false],[false,"electron mass","[m_e]","[M_E]","mass",9.1093897e-28,[0,0,1,0,0,0,0],"<i>m<sub><r>e</r></sub></i>","const",true,null,null,1,false,false,0,"electron rest mass; me","UCUM","Mass","Constant","approximately equal to 9.10938356 × 10-31 kg; defined as the mass of a stationary electron","g","g","9.1093897e-28",9.1093897e-28,false],[false,"proton mass","[m_p]","[M_P]","mass",1.6726231e-24,[0,0,1,0,0,0,0],"<i>m<sub><r>p</r></sub></i>","const",true,null,null,1,false,false,0,"mp; masses","UCUM","Mass","Constant","approximately equal to 1.672622×10−27 kg","g","g","1.6726231e-24",1.6726231e-24,false],[false,"Newtonian constant of gravitation","[G]","[GC]","(unclassified)",6.67259e-14,[3,-2,-1,0,0,0,0],"<i>G</i>","const",true,null,null,1,false,false,0,"G; gravitational constant; Newton's constant","UCUM","","Constant","gravitational constant = 6.674×10−11 N⋅m2/kg2","m3.kg-1.s-2","M3.KG-1.S-2","6.67259e-11",6.67259e-11,false],[false,"standard acceleration of free fall","[g]","[G]","acceleration",9.80665,[1,-2,0,0,0,0,0],"<i>g<sub>n</sub></i>","const",true,null,null,1,false,false,0,"standard gravity; g; ɡ0; ɡn","UCUM","Accel","Constant","defined by standard = 9.80665 m/s2","m/s2","M/S2","980665e-5",9.80665,false],[false,"Torr","Torr","Torr","pressure",133322,[-1,-2,1,0,0,0,0],"Torr","const",false,null,null,1,false,false,0,"torrs","UCUM","Pres","Clinical","1 torr = 1 mmHg; unit used to measure blood pressure","Pa","PAL","133.322",133.322,false],[false,"standard atmosphere","atm","ATM","pressure",101325000,[-1,-2,1,0,0,0,0],"atm","const",false,null,null,1,false,false,0,"reference pressure; atmos; std atmosphere","UCUM","Pres","Clinical","defined as being precisely equal to 101,325 Pa","Pa","PAL","101325",101325,false],[false,"light-year","[ly]","[LY]","length",9460730472580800,[1,0,0,0,0,0,0],"l.y.","const",true,null,null,1,false,false,0,"light years; ly","UCUM","Len","Constant","unit of astronomal distance = 5.88×10^12 mi","[c].a_j","[C].ANN_J","1",1,false],[false,"gram-force","gf","GF","force",9.80665,[1,-2,1,0,0,0,0],"gf","const",true,null,null,1,false,false,0,"Newtons; gram forces","UCUM","Force","Clinical","May be specific to unit related to cardiac output","g.[g]","G.[G]","1",1,false],[false,"Kayser","Ky","KY","lineic number",100,[-1,0,0,0,0,0,0],"K","cgs",true,null,null,1,false,false,0,"wavenumbers; kaysers","UCUM","InvLen","Clinical","unit of wavelength equal to cm^-1","cm-1","CM-1","1",1,false],[false,"Gal","Gal","GL","acceleration",0.01,[1,-2,0,0,0,0,0],"Gal","cgs",true,null,null,1,false,false,0,"galileos; Gals","UCUM","Accel","Clinical","unit of acceleration used in gravimetry; equivalent to cm/s2 ","cm/s2","CM/S2","1",1,false],[false,"dyne","dyn","DYN","force",0.01,[1,-2,1,0,0,0,0],"dyn","cgs",true,null,null,1,false,false,0,"dynes","UCUM","Force","Clinical","unit of force equal to 10^-5 Newtons","g.cm/s2","G.CM/S2","1",1,false],[false,"erg","erg","ERG","energy",0.0001,[2,-2,1,0,0,0,0],"erg","cgs",true,null,null,1,false,false,0,"10^-7 Joules, 10-7 Joules; 100 nJ; 100 nanoJoules; 1 dyne cm; 1 g.cm2/s2","UCUM","Eng","Clinical","unit of energy = 1 dyne centimeter = 10^-7 Joules","dyn.cm","DYN.CM","1",1,false],[false,"Poise","P","P","dynamic viscosity",100,[-1,-1,1,0,0,0,0],"P","cgs",true,null,null,1,false,false,0,"dynamic viscosity; poises","UCUM","Visc","Clinical","unit of dynamic viscosity where 1 Poise = 1/10 Pascal second","dyn.s/cm2","DYN.S/CM2","1",1,false],[false,"Biot","Bi","BI","electric current",10,[0,-1,0,0,0,1,0],"Bi","cgs",true,null,null,1,false,false,0,"Bi; abamperes; abA","UCUM","ElpotRat","Clinical","equal to 10 amperes","A","A","10",10,false],[false,"Stokes","St","ST","kinematic viscosity",0.0001,[2,-1,0,0,0,0,0],"St","cgs",true,null,null,1,false,false,0,"kinematic viscosity","UCUM","Visc","Clinical","unit of kimematic viscosity with units cm2/s","cm2/s","CM2/S","1",1,false],[false,"Maxwell","Mx","MX","flux of magnetic induction",0.00001,[2,-1,1,0,0,-1,0],"Mx","cgs",true,null,null,1,false,false,0,"magnetix flux; Maxwells","UCUM","","Clinical","unit of magnetic flux","Wb","WB","1e-8",1e-8,false],[false,"Gauss","G","GS","magnetic flux density",0.1,[0,-1,1,0,0,-1,0],"Gs","cgs",true,null,null,1,false,false,0,"magnetic fields; magnetic flux density; induction; B","UCUM","magnetic","Clinical","CGS unit of magnetic flux density, known as magnetic field B; defined as one maxwell unit per square centimeter (see Oersted for CGS unit for H field)","T","T","1e-4",0.0001,false],[false,"Oersted","Oe","OE","magnetic field intensity",79.57747154594767,[-1,-1,0,0,0,1,0],"Oe","cgs",true,null,null,1,false,false,0,"H magnetic B field; Oersteds","UCUM","","Clinical","CGS unit of the auxiliary magnetic field H defined as 1 dyne per unit pole = 1000/4π amperes per meter (see Gauss for CGS unit for B field)","A/m","/[PI].A/M","250",79.57747154594767,false],[false,"Gilbert","Gb","GB","magnetic tension",0.7957747154594768,[0,-1,0,0,0,1,0],"Gb","cgs",true,null,null,1,false,false,0,"Gi; magnetomotive force; Gilberts","UCUM","","Clinical","unit of magnetomotive force (magnetic potential)","Oe.cm","OE.CM","1",1,false],[false,"stilb","sb","SB","lum. intensity density",10000,[-2,0,0,0,0,0,1],"sb","cgs",true,null,null,1,false,false,0,"stilbs","UCUM","","Obsolete","unit of luminance; equal to and replaced by unit candela per square centimeter (cd/cm2)","cd/cm2","CD/CM2","1",1,false],[false,"Lambert","Lmb","LMB","brightness",3183.098861837907,[-2,0,0,0,0,0,1],"L","cgs",true,null,null,1,false,false,0,"luminance; lamberts","UCUM","","Clinical","unit of luminance defined as 1 lambert = 1/ π candela per square meter","cd/cm2/[pi]","CD/CM2/[PI]","1",1,false],[false,"phot","ph","PHT","illuminance",0.0001,[-2,0,0,2,0,0,1],"ph","cgs",true,null,null,1,false,false,0,"phots","UCUM","","Clinical","CGS photometric unit of illuminance, or luminous flux through an area equal to 10000 lumens per square meter = 10000 lux","lx","LX","1e-4",0.0001,false],[false,"Curie","Ci","CI","radioactivity",37000000000,[0,-1,0,0,0,0,0],"Ci","cgs",true,null,null,1,false,false,0,"curies","UCUM","","Obsolete","unit for measuring atomic disintegration rate; replaced by the Bequerel (Bq) unit","Bq","BQ","37e9",37000000000,false],[false,"Roentgen","R","ROE","ion dose",2.58e-7,[0,0,-1,0,0,1,0],"R","cgs",true,null,null,1,false,false,0,"röntgen; Roentgens","UCUM","","Clinical","unit of exposure of X-rays and gamma rays in air; unit used primarily in the US but strongly discouraged by NIST","C/kg","C/KG","2.58e-4",0.000258,false],[false,"radiation absorbed dose","RAD","[RAD]","energy dose",0.01,[2,-2,0,0,0,0,0],"RAD","cgs",true,null,null,1,false,false,0,"doses","UCUM","","Clinical","unit of radiation absorbed dose used primarily in the US with base units 100 ergs per gram of material. Also see the SI unit Gray (Gy).","erg/g","ERG/G","100",100,false],[false,"radiation equivalent man","REM","[REM]","dose equivalent",0.01,[2,-2,0,0,0,0,0],"REM","cgs",true,null,null,1,false,false,0,"Roentgen Equivalent in Man; rems; dose equivalents","UCUM","","Clinical","unit of equivalent dose which measures the effect of radiation on humans equal to 0.01 sievert. Used primarily in the US. Also see SI unit Sievert (Sv)","RAD","[RAD]","1",1,false],[false,"inch","[in_i]","[IN_I]","length",0.025400000000000002,[1,0,0,0,0,0,0],"in","intcust",false,null,null,1,false,false,0,"inches; in; international inch; body height","UCUM","Len","Clinical","standard unit for inch in the US and internationally","cm","CM","254e-2",2.54,false],[false,"foot","[ft_i]","[FT_I]","length",0.3048,[1,0,0,0,0,0,0],"ft","intcust",false,null,null,1,false,false,0,"ft; fts; foot; international foot; feet; international feet; height","UCUM","Len","Clinical","unit used in the US and internationally","[in_i]","[IN_I]","12",12,false],[false,"yard","[yd_i]","[YD_I]","length",0.9144000000000001,[1,0,0,0,0,0,0],"yd","intcust",false,null,null,1,false,false,0,"international yards; yds; distance","UCUM","Len","Clinical","standard unit used in the US and internationally","[ft_i]","[FT_I]","3",3,false],[false,"mile","[mi_i]","[MI_I]","length",1609.344,[1,0,0,0,0,0,0],"mi","intcust",false,null,null,1,false,false,0,"international miles; mi I; statute mile","UCUM","Len","Clinical","standard unit used in the US and internationally","[ft_i]","[FT_I]","5280",5280,false],[false,"fathom","[fth_i]","[FTH_I]","depth of water",1.8288000000000002,[1,0,0,0,0,0,0],"fth","intcust",false,null,null,1,false,false,0,"international fathoms","UCUM","Len","Nonclinical","unit used in the US and internationally to measure depth of water; same length as the US fathom","[ft_i]","[FT_I]","6",6,false],[false,"nautical mile","[nmi_i]","[NMI_I]","length",1852,[1,0,0,0,0,0,0],"n.mi","intcust",false,null,null,1,false,false,0,"nautical mile; nautical miles; international nautical mile; international nautical miles; nm; n.m.; nmi","UCUM","Len","Nonclinical","standard unit used in the US and internationally","m","M","1852",1852,false],[false,"knot","[kn_i]","[KN_I]","velocity",0.5144444444444445,[1,-1,0,0,0,0,0],"knot","intcust",false,null,null,1,false,false,0,"kn; kt; international knots","UCUM","Vel","Nonclinical","defined as equal to one nautical mile (1.852 km) per hour","[nmi_i]/h","[NMI_I]/H","1",1,false],[false,"square inch","[sin_i]","[SIN_I]","area",0.0006451600000000001,[2,0,0,0,0,0,0],null,"intcust",false,null,null,1,false,false,0,"in2; in^2; inches squared; sq inch; inches squared; international","UCUM","Area","Clinical","standard unit used in the US and internationally","[in_i]2","[IN_I]2","1",1,false],[false,"square foot","[sft_i]","[SFT_I]","area",0.09290304,[2,0,0,0,0,0,0],null,"intcust",false,null,null,1,false,false,0,"ft2; ft^2; ft squared; sq ft; feet; international","UCUM","Area","Clinical","standard unit used in the US and internationally","[ft_i]2","[FT_I]2","1",1,false],[false,"square yard","[syd_i]","[SYD_I]","area",0.8361273600000002,[2,0,0,0,0,0,0],null,"intcust",false,null,null,1,false,false,0,"yd2; yd^2; sq. yds; yards squared; international","UCUM","Area","Clinical","standard unit used in the US and internationally","[yd_i]2","[YD_I]2","1",1,false],[false,"cubic inch","[cin_i]","[CIN_I]","volume",0.000016387064000000003,[3,0,0,0,0,0,0],null,"intcust",false,null,null,1,false,false,0,"in3; in^3; in*3; inches^3; inches*3; cu. in; cu in; cubic inches; inches cubed; cin","UCUM","Vol","Clinical","standard unit used in the US and internationally","[in_i]3","[IN_I]3","1",1,false],[false,"cubic foot","[cft_i]","[CFT_I]","volume",0.028316846592000004,[3,0,0,0,0,0,0],null,"intcust",false,null,null,1,false,false,0,"ft3; ft^3; ft*3; cu. ft; cubic feet; cubed; [ft_i]3; international","UCUM","Vol","Clinical","","[ft_i]3","[FT_I]3","1",1,false],[false,"cubic yard","[cyd_i]","[CYD_I]","volume",0.7645548579840002,[3,0,0,0,0,0,0],"cu.yd","intcust",false,null,null,1,false,false,0,"cubic yards; cubic yds; cu yards; CYs; yards^3; yd^3; yds^3; yd3; yds3","UCUM","Vol","Nonclinical","standard unit used in the US and internationally","[yd_i]3","[YD_I]3","1",1,false],[false,"board foot","[bf_i]","[BF_I]","volume",0.002359737216,[3,0,0,0,0,0,0],null,"intcust",false,null,null,1,false,false,0,"BDFT; FBM; BF; board feet; international","UCUM","Vol","Nonclinical","unit of volume used to measure lumber","[in_i]3","[IN_I]3","144",144,false],[false,"cord","[cr_i]","[CR_I]","volume",3.6245563637760005,[3,0,0,0,0,0,0],null,"intcust",false,null,null,1,false,false,0,"crd I; international cords","UCUM","Vol","Nonclinical","unit of measure of dry volume used to measure firewood equal 128 ft3","[ft_i]3","[FT_I]3","128",128,false],[false,"mil","[mil_i]","[MIL_I]","length",0.000025400000000000004,[1,0,0,0,0,0,0],"mil","intcust",false,null,null,1,false,false,0,"thou, thousandth; mils; international","UCUM","Len","Clinical","equal to 0.001 international inch","[in_i]","[IN_I]","1e-3",0.001,false],[false,"circular mil","[cml_i]","[CML_I]","area",5.067074790974979e-10,[2,0,0,0,0,0,0],"circ.mil","intcust",false,null,null,1,false,false,0,"circular mils; cml I; international","UCUM","Area","Clinical","","[pi]/4.[mil_i]2","[PI]/4.[MIL_I]2","1",1,false],[false,"hand","[hd_i]","[HD_I]","height of horses",0.10160000000000001,[1,0,0,0,0,0,0],"hd","intcust",false,null,null,1,false,false,0,"hands; international","UCUM","Len","Nonclinical","used to measure horse height","[in_i]","[IN_I]","4",4,false],[false,"foot - US","[ft_us]","[FT_US]","length",0.3048006096012192,[1,0,0,0,0,0,0],"ft<sub>us</sub>","us-lengths",false,null,null,1,false,false,0,"US foot; foot US; us ft; ft us; height; visual distance; feet","UCUM","Len","Obsolete","Better to use [ft_i] which refers to the length used worldwide, including in the US;  [ft_us] may be confused with land survey units. ","m/3937","M/3937","1200",1200,false],[false,"yard - US","[yd_us]","[YD_US]","length",0.9144018288036575,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"US yards; us yds; distance","UCUM","Len; Nrat","Obsolete","Better to use [yd_i] which refers to the length used worldwide, including in the US; [yd_us] refers to unit used in land surveys in the US","[ft_us]","[FT_US]","3",3,false],[false,"inch - US","[in_us]","[IN_US]","length",0.0254000508001016,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"US inches; in us; us in; inch US","UCUM","Len","Obsolete","Better to use [in_i] which refers to the length used worldwide, including in the US","[ft_us]/12","[FT_US]/12","1",1,false],[false,"rod - US","[rd_us]","[RD_US]","length",5.029210058420117,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"US rod; US rods; rd US; US rd","UCUM","Len","Obsolete","","[ft_us]","[FT_US]","16.5",16.5,false],[false,"Gunter's chain - US","[ch_us]","[CH_US]","length",20.116840233680467,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"surveyor's chain; Surveyor's chain USA; Gunter’s measurement; surveyor’s measurement; Gunter's Chain USA","UCUM","Len","Obsolete","historical unit used for land survey used only in the US","[rd_us]","[RD_US]","4",4,false],[false,"link for Gunter's chain - US","[lk_us]","[LK_US]","length",0.20116840233680466,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"Links for Gunter's Chain USA","UCUM","Len","Obsolete","","[ch_us]/100","[CH_US]/100","1",1,false],[false,"Ramden's chain - US","[rch_us]","[RCH_US]","length",30.480060960121918,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"Ramsden's chain; engineer's chains","UCUM","Len","Obsolete","distance measuring device used for land survey","[ft_us]","[FT_US]","100",100,false],[false,"link for Ramden's chain - US","[rlk_us]","[RLK_US]","length",0.3048006096012192,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"links for Ramsden's chain","UCUM","Len","Obsolete","","[rch_us]/100","[RCH_US]/100","1",1,false],[false,"fathom - US","[fth_us]","[FTH_US]","length",1.828803657607315,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"US fathoms; fathom USA; fth us","UCUM","Len","Obsolete","same length as the international fathom - better to use international fathom ([fth_i])","[ft_us]","[FT_US]","6",6,false],[false,"furlong - US","[fur_us]","[FUR_US]","length",201.16840233680466,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"US furlongs; fur us","UCUM","Len","Nonclinical","distance unit in horse racing","[rd_us]","[RD_US]","40",40,false],[false,"mile - US","[mi_us]","[MI_US]","length",1609.3472186944373,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"U.S. Survey Miles; US statute miles; survey mi; US mi; distance","UCUM","Len","Nonclinical","Better to use [mi_i] which refers to the length used worldwide, including in the US","[fur_us]","[FUR_US]","8",8,false],[false,"acre - US","[acr_us]","[ACR_US]","area",4046.872609874252,[2,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"Acre USA Survey; Acre USA; survey acres","UCUM","Area","Nonclinical","an older unit based on pre 1959 US statute lengths that is still sometimes used in the US only for land survey purposes. ","[rd_us]2","[RD_US]2","160",160,false],[false,"square rod - US","[srd_us]","[SRD_US]","area",25.292953811714074,[2,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"rod2; rod^2; sq. rod; rods squared","UCUM","Area","Nonclinical","Used only in the US to measure land area, based on US statute land survey length units","[rd_us]2","[RD_US]2","1",1,false],[false,"square mile - US","[smi_us]","[SMI_US]","area",2589998.470319521,[2,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"mi2; mi^2; sq mi; miles squared","UCUM","Area","Nonclinical","historical unit used only in the US for land survey purposes (based on the US survey mile), not the internationally recognized [mi_i]","[mi_us]2","[MI_US]2","1",1,false],[false,"section","[sct]","[SCT]","area",2589998.470319521,[2,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"sct; sections","UCUM","Area","Nonclinical","tract of land approximately equal to 1 mile square containing 640 acres","[mi_us]2","[MI_US]2","1",1,false],[false,"township","[twp]","[TWP]","area",93239944.93150276,[2,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"twp; townships","UCUM","Area","Nonclinical","land measurement equal to 6 mile square","[sct]","[SCT]","36",36,false],[false,"mil - US","[mil_us]","[MIL_US]","length",0.0000254000508001016,[1,0,0,0,0,0,0],null,"us-lengths",false,null,null,1,false,false,0,"thou, thousandth; mils","UCUM","Len","Obsolete","better to use [mil_i] which is based on the internationally recognized inch","[in_us]","[IN_US]","1e-3",0.001,false],[false,"inch - British","[in_br]","[IN_BR]","length",0.025399980000000003,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"imperial inches; imp in; br in; british inches","UCUM","Len","Obsolete","","cm","CM","2.539998",2.539998,false],[false,"foot - British","[ft_br]","[FT_BR]","length",0.30479976000000003,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"British Foot; Imperial Foot; feet; imp fts; br fts","UCUM","Len","Obsolete","","[in_br]","[IN_BR]","12",12,false],[false,"rod - British","[rd_br]","[RD_BR]","length",5.02919604,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"British rods; br rd","UCUM","Len","Obsolete","","[ft_br]","[FT_BR]","16.5",16.5,false],[false,"Gunter's chain - British","[ch_br]","[CH_BR]","length",20.11678416,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"Gunter's Chain British; Gunters Chain British; Surveyor's Chain British","UCUM","Len","Obsolete","historical unit used for land survey used only in Great Britain","[rd_br]","[RD_BR]","4",4,false],[false,"link for Gunter's chain - British","[lk_br]","[LK_BR]","length",0.2011678416,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"Links for Gunter's Chain British","UCUM","Len","Obsolete","","[ch_br]/100","[CH_BR]/100","1",1,false],[false,"fathom - British","[fth_br]","[FTH_BR]","length",1.82879856,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"British fathoms; imperial fathoms; br fth; imp fth","UCUM","Len","Obsolete","","[ft_br]","[FT_BR]","6",6,false],[false,"pace - British","[pc_br]","[PC_BR]","length",0.7619994000000001,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"British paces; br pc","UCUM","Len","Nonclinical","traditional unit of length equal to 152.4 centimeters, or 1.52 meter. ","[ft_br]","[FT_BR]","2.5",2.5,false],[false,"yard - British","[yd_br]","[YD_BR]","length",0.91439928,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"British yards; Br yds; distance","UCUM","Len","Obsolete","","[ft_br]","[FT_BR]","3",3,false],[false,"mile - British","[mi_br]","[MI_BR]","length",1609.3427328000002,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"imperial miles; British miles; English statute miles; imp mi, br mi","UCUM","Len","Obsolete","","[ft_br]","[FT_BR]","5280",5280,false],[false,"nautical mile - British","[nmi_br]","[NMI_BR]","length",1853.1825408000002,[1,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"British nautical miles; Imperial nautical miles; Admiralty miles; n.m. br; imp nm","UCUM","Len","Obsolete","","[ft_br]","[FT_BR]","6080",6080,false],[false,"knot - British","[kn_br]","[KN_BR]","velocity",0.5147729280000001,[1,-1,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"British knots; kn br; kt","UCUM","Vel","Obsolete","based on obsolete British nautical mile ","[nmi_br]/h","[NMI_BR]/H","1",1,false],[false,"acre","[acr_br]","[ACR_BR]","area",4046.850049400269,[2,0,0,0,0,0,0],null,"brit-length",false,null,null,1,false,false,0,"Imperial acres; British; a; ac; ar; acr","UCUM","Area","Nonclinical","the standard unit for acre used in the US and internationally","[yd_br]2","[YD_BR]2","4840",4840,false],[false,"gallon - US","[gal_us]","[GAL_US]","fluid volume",0.0037854117840000006,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"US gallons; US liquid gallon; gal us; Queen Anne's wine gallon","UCUM","Vol","Nonclinical","only gallon unit used in the US; [gal_us] is only used in some other countries in South American and Africa to measure gasoline volume","[in_i]3","[IN_I]3","231",231,false],[false,"barrel - US","[bbl_us]","[BBL_US]","fluid volume",0.158987294928,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"bbl","UCUM","Vol","Nonclinical","[bbl_us] is the standard unit for oil barrel, which is a unit only used in the US to measure the volume oil. ","[gal_us]","[GAL_US]","42",42,false],[false,"quart - US","[qt_us]","[QT_US]","fluid volume",0.0009463529460000001,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"US quarts; us qts","UCUM","Vol","Clinical","Used only in the US","[gal_us]/4","[GAL_US]/4","1",1,false],[false,"pint - US","[pt_us]","[PT_US]","fluid volume",0.00047317647300000007,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"US pints; pint US; liquid pint; pt us; us pt","UCUM","Vol","Clinical","Used only in the US","[qt_us]/2","[QT_US]/2","1",1,false],[false,"gill - US","[gil_us]","[GIL_US]","fluid volume",0.00011829411825000002,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"US gills; gil us","UCUM","Vol","Nonclinical","only used in the context of alcohol volume in the US","[pt_us]/4","[PT_US]/4","1",1,false],[false,"fluid ounce - US","[foz_us]","[FOZ_US]","fluid volume",0.000029573529562500005,[3,0,0,0,0,0,0],"oz fl","us-volumes",false,null,null,1,false,false,0,"US fluid ounces; fl ozs; FO; fl. oz.; foz us","UCUM","Vol","Clinical","unit used only in the US","[gil_us]/4","[GIL_US]/4","1",1,false],[false,"fluid dram - US","[fdr_us]","[FDR_US]","fluid volume",0.0000036966911953125006,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"US fluid drams; fdr us","UCUM","Vol","Nonclinical","equal to 1/8 US fluid ounce = 3.69 mL; used informally to mean small amount of liquor, especially Scotch whiskey","[foz_us]/8","[FOZ_US]/8","1",1,false],[false,"minim - US","[min_us]","[MIN_US]","fluid volume",6.1611519921875e-8,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"min US; US min; ♏ US","UCUM","Vol","Obsolete","","[fdr_us]/60","[FDR_US]/60","1",1,false],[false,"cord - US","[crd_us]","[CRD_US]","fluid volume",3.6245563637760005,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"US cord; US cords; crd us; us crd","UCUM","Vol","Nonclinical","unit of measure of dry volume used to measure firewood equal 128 ft3 (the same as international cord [cr_i])","[ft_i]3","[FT_I]3","128",128,false],[false,"bushel - US","[bu_us]","[BU_US]","dry volume",0.03523907016688001,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"US bushels; US bsh; US bu","UCUM","Vol","Obsolete","Historical unit of dry volume that is rarely used today","[in_i]3","[IN_I]3","2150.42",2150.42,false],[false,"gallon - historical","[gal_wi]","[GAL_WI]","dry volume",0.004404883770860001,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"Corn Gallon British; Dry Gallon US; Gallons Historical; Grain Gallon British; Winchester Corn Gallon; historical winchester gallons; wi gal","UCUM","Vol","Obsolete","historical unit of dry volume no longer used","[bu_us]/8","[BU_US]/8","1",1,false],[false,"peck - US","[pk_us]","[PK_US]","dry volume",0.008809767541720002,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"US pecks; US pk","UCUM","Vol","Nonclinical","unit of dry volume rarely used today (can be used to measure volume of apples)","[bu_us]/4","[BU_US]/4","1",1,false],[false,"dry quart - US","[dqt_us]","[DQT_US]","dry volume",0.0011012209427150002,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"dry quarts; dry quart US; US dry quart; dry qt; us dry qt; dqt; dqt us","UCUM","Vol","Nonclinical","historical unit of dry volume only in the US, but is rarely used today","[pk_us]/8","[PK_US]/8","1",1,false],[false,"dry pint - US","[dpt_us]","[DPT_US]","dry volume",0.0005506104713575001,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"dry pints; dry pint US; US dry pint; dry pt; dpt; dpt us","UCUM","Vol","Nonclinical","historical unit of dry volume only in the US, but is rarely used today","[dqt_us]/2","[DQT_US]/2","1",1,false],[false,"tablespoon - US","[tbs_us]","[TBS_US]","volume",0.000014786764781250002,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"Tbs; tbsp; tbs us; US tablespoons","UCUM","Vol","Clinical","unit defined as 0.5 US fluid ounces or 3 teaspoons - used only in the US. See [tbs_m] for the unit used internationally and in the US for nutrional labelling. ","[foz_us]/2","[FOZ_US]/2","1",1,false],[false,"teaspoon - US","[tsp_us]","[TSP_US]","volume",0.0000049289215937500005,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"tsp; t; US teaspoons","UCUM","Vol","Nonclinical","unit defined as 1/6 US fluid ounces - used only in the US. See [tsp_m] for the unit used internationally and in the US for nutrional labelling. ","[tbs_us]/3","[TBS_US]/3","1",1,false],[false,"cup - US customary","[cup_us]","[CUP_US]","volume",0.00023658823650000004,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"cup us; us cups","UCUM","Vol","Nonclinical","Unit defined as 1/2 US pint or 16 US tablespoons ≈ 236.59 mL, which is not the standard unit defined by the FDA of 240 mL - see [cup_m] (metric cup)","[tbs_us]","[TBS_US]","16",16,false],[false,"fluid ounce - metric","[foz_m]","[FOZ_M]","fluid volume",0.000029999999999999997,[3,0,0,0,0,0,0],"oz fl","us-volumes",false,null,null,1,false,false,0,"metric fluid ounces; fozs m; fl ozs m","UCUM","Vol","Clinical","unit used only in the US for nutritional labelling, as set by the FDA","mL","ML","30",30,false],[false,"cup - US legal","[cup_m]","[CUP_M]","volume",0.00023999999999999998,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"cup m; metric cups","UCUM","Vol","Clinical","standard unit equal to 240 mL used in the US for nutritional labelling, as defined by the FDA. Note that this is different from the US customary cup (236.59 mL) and the metric cup used in Commonwealth nations (250 mL).","mL","ML","240",240,false],[false,"teaspoon - metric","[tsp_m]","[TSP_M]","volume",0.0000049999999999999996,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"tsp; t; metric teaspoons","UCUM","Vol","Clinical","standard unit used in the US and internationally","mL","mL","5",5,false],[false,"tablespoon - metric","[tbs_m]","[TBS_M]","volume",0.000014999999999999999,[3,0,0,0,0,0,0],null,"us-volumes",false,null,null,1,false,false,0,"metric tablespoons; Tbs; tbsp; T; tbs m","UCUM","Vol","Clinical","standard unit used in the US and internationally","mL","mL","15",15,false],[false,"gallon- British","[gal_br]","[GAL_BR]","volume",0.004546090000000001,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"imperial gallons, UK gallons; British gallons; br gal; imp gal","UCUM","Vol","Nonclinical","Used only in Great Britain and other Commonwealth countries","l","L","4.54609",4.54609,false],[false,"peck - British","[pk_br]","[PK_BR]","volume",0.009092180000000002,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"imperial pecks; British pecks; br pk; imp pk","UCUM","Vol","Nonclinical","unit of dry volume rarely used today (can be used to measure volume of apples)","[gal_br]","[GAL_BR]","2",2,false],[false,"bushel - British","[bu_br]","[BU_BR]","volume",0.03636872000000001,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"British bushels; imperial; br bsh; br bu; imp","UCUM","Vol","Obsolete","Historical unit of dry volume that is rarely used today","[pk_br]","[PK_BR]","4",4,false],[false,"quart - British","[qt_br]","[QT_BR]","volume",0.0011365225000000002,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"British quarts; imperial quarts; br qts","UCUM","Vol","Clinical","Used only in Great Britain and other Commonwealth countries","[gal_br]/4","[GAL_BR]/4","1",1,false],[false,"pint - British","[pt_br]","[PT_BR]","volume",0.0005682612500000001,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"British pints; imperial pints; pt br; br pt; imp pt; pt imp","UCUM","Vol","Clinical","Used only in Great Britain and other Commonwealth countries","[qt_br]/2","[QT_BR]/2","1",1,false],[false,"gill - British","[gil_br]","[GIL_BR]","volume",0.00014206531250000003,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"imperial gills; British gills; imp gill, br gill","UCUM","Vol","Nonclinical","only used in the context of alcohol volume in Great Britain","[pt_br]/4","[PT_BR]/4","1",1,false],[false,"fluid ounce - British","[foz_br]","[FOZ_BR]","volume",0.000028413062500000005,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"British fluid ounces; Imperial fluid ounces; br fozs; imp fozs; br fl ozs","UCUM","Vol","Clinical","Used only in Great Britain and other Commonwealth countries","[gil_br]/5","[GIL_BR]/5","1",1,false],[false,"fluid dram - British","[fdr_br]","[FDR_BR]","volume",0.0000035516328125000006,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"British fluid drams; fdr br","UCUM","Vol","Nonclinical","equal to 1/8 Imperial fluid ounce = 3.55 mL; used informally to mean small amount of liquor, especially Scotch whiskey","[foz_br]/8","[FOZ_BR]/8","1",1,false],[false,"minim - British","[min_br]","[MIN_BR]","volume",5.919388020833334e-8,[3,0,0,0,0,0,0],null,"brit-volumes",false,null,null,1,false,false,0,"min br; br min; ♏ br","UCUM","Vol","Obsolete","","[fdr_br]/60","[FDR_BR]/60","1",1,false],[false,"grain","[gr]","[GR]","mass",0.06479891,[0,0,1,0,0,0,0],null,"avoirdupois",false,null,null,1,false,false,0,"gr; grains","UCUM","Mass","Nonclinical","an apothecary measure of mass rarely used today","mg","MG","64.79891",64.79891,false],[false,"pound","[lb_av]","[LB_AV]","mass",453.59237,[0,0,1,0,0,0,0],"lb","avoirdupois",false,null,null,1,false,false,0,"avoirdupois pounds, international pounds; av lbs; pounds","UCUM","Mass","Clinical","standard unit used in the US and internationally","[gr]","[GR]","7000",7000,false],[false,"pound force - US","[lbf_av]","[LBF_AV]","force",4448.2216152605,[1,-2,1,0,0,0,0],"lbf","const",false,null,null,1,false,false,0,"lbfs; US lbf; US pound forces","UCUM","Force","Clinical","only rarely needed in health care - see [lb_av] which is the more common unit to express weight","[lb_av].[g]","[LB_AV].[G]","1",1,false],[false,"ounce","[oz_av]","[OZ_AV]","mass",28.349523125,[0,0,1,0,0,0,0],"oz","avoirdupois",false,null,null,1,false,false,0,"ounces; international ounces; avoirdupois ounces; av ozs","UCUM","Mass","Clinical","standard unit used in the US and internationally","[lb_av]/16","[LB_AV]/16","1",1,false],[false,"Dram mass unit","[dr_av]","[DR_AV]","mass",1.7718451953125,[0,0,1,0,0,0,0],null,"avoirdupois",false,null,null,1,false,false,0,"Dram; drams avoirdupois; avoidupois dram; international dram","UCUM","Mass","Clinical","unit from the avoirdupois system, which is used in the US and internationally","[oz_av]/16","[OZ_AV]/16","1",1,false],[false,"short hundredweight","[scwt_av]","[SCWT_AV]","mass",45359.237,[0,0,1,0,0,0,0],null,"avoirdupois",false,null,null,1,false,false,0,"hundredweights; s cwt; scwt; avoirdupois","UCUM","Mass","Nonclinical","Used only in the US to equal 100 pounds","[lb_av]","[LB_AV]","100",100,false],[false,"long hundredweight","[lcwt_av]","[LCWT_AV]","mass",50802.345440000005,[0,0,1,0,0,0,0],null,"avoirdupois",false,null,null,1,false,false,0,"imperial hundredweights; imp cwt; lcwt; avoirdupois","UCUM","Mass","Obsolete","","[lb_av]","[LB_AV]","112",112,false],[false,"short ton - US","[ston_av]","[STON_AV]","mass",907184.74,[0,0,1,0,0,0,0],null,"avoirdupois",false,null,null,1,false,false,0,"ton; US tons; avoirdupois tons","UCUM","Mass","Clinical","Used only in the US","[scwt_av]","[SCWT_AV]","20",20,false],[false,"long ton - British","[lton_av]","[LTON_AV]","mass",1016046.9088000001,[0,0,1,0,0,0,0],null,"avoirdupois",false,null,null,1,false,false,0,"imperial tons; weight tons; British long tons; long ton avoirdupois","UCUM","Mass","Nonclinical","Used only in Great Britain and other Commonwealth countries","[lcwt_av]","[LCWT_AV]","20",20,false],[false,"stone - British","[stone_av]","[STONE_AV]","mass",6350.293180000001,[0,0,1,0,0,0,0],null,"avoirdupois",false,null,null,1,false,false,0,"British stones; avoirdupois","UCUM","Mass","Nonclinical","Used primarily in the UK and Ireland to measure body weight","[lb_av]","[LB_AV]","14",14,false],[false,"pennyweight - troy","[pwt_tr]","[PWT_TR]","mass",1.5551738400000001,[0,0,1,0,0,0,0],null,"troy",false,null,null,1,false,false,0,"dwt; denarius weights","UCUM","Mass","Obsolete","historical unit used to measure mass and cost of precious metals","[gr]","[GR]","24",24,false],[false,"ounce - troy","[oz_tr]","[OZ_TR]","mass",31.103476800000003,[0,0,1,0,0,0,0],null,"troy",false,null,null,1,false,false,0,"troy ounces; tr ozs","UCUM","Mass","Nonclinical","unit of mass for precious metals and gemstones only","[pwt_tr]","[PWT_TR]","20",20,false],[false,"pound - troy","[lb_tr]","[LB_TR]","mass",373.2417216,[0,0,1,0,0,0,0],null,"troy",false,null,null,1,false,false,0,"troy pounds; tr lbs","UCUM","Mass","Nonclinical","only used for weighing precious metals","[oz_tr]","[OZ_TR]","12",12,false],[false,"scruple","[sc_ap]","[SC_AP]","mass",1.2959782,[0,0,1,0,0,0,0],null,"apoth",false,null,null,1,false,false,0,"scruples; sc ap","UCUM","Mass","Obsolete","","[gr]","[GR]","20",20,false],[false,"dram - apothecary","[dr_ap]","[DR_AP]","mass",3.8879346,[0,0,1,0,0,0,0],null,"apoth",false,null,null,1,false,false,0,"ʒ; drachm; apothecaries drams; dr ap; dram ap","UCUM","Mass","Nonclinical","unit still used in the US occasionally to measure amount of drugs in pharmacies","[sc_ap]","[SC_AP]","3",3,false],[false,"ounce - apothecary","[oz_ap]","[OZ_AP]","mass",31.1034768,[0,0,1,0,0,0,0],null,"apoth",false,null,null,1,false,false,0,"apothecary ounces; oz ap; ap ozs; ozs ap","UCUM","Mass","Obsolete","","[dr_ap]","[DR_AP]","8",8,false],[false,"pound - apothecary","[lb_ap]","[LB_AP]","mass",373.2417216,[0,0,1,0,0,0,0],null,"apoth",false,null,null,1,false,false,0,"apothecary pounds; apothecaries pounds; ap lb; lb ap; ap lbs; lbs ap","UCUM","Mass","Obsolete","","[oz_ap]","[OZ_AP]","12",12,false],[false,"ounce - metric","[oz_m]","[OZ_M]","mass",28,[0,0,1,0,0,0,0],null,"apoth",false,null,null,1,false,false,0,"metric ounces; m ozs","UCUM","Mass","Clinical","see [oz_av] (the avoirdupois ounce) for the standard ounce used internationally; [oz_m] is equal to 28 grams and is based on the apothecaries' system of mass units which is used in some US pharmacies. ","g","g","28",28,false],[false,"line","[lne]","[LNE]","length",0.002116666666666667,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"British lines; br L; L; l","UCUM","Len","Obsolete","","[in_i]/12","[IN_I]/12","1",1,false],[false,"point (typography)","[pnt]","[PNT]","length",0.0003527777777777778,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"DTP points; desktop publishing point; pt; pnt","UCUM","Len","Nonclinical","typography unit for typesetter's length","[lne]/6","[LNE]/6","1",1,false],[false,"pica (typography)","[pca]","[PCA]","length",0.004233333333333334,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"picas","UCUM","Len","Nonclinical","typography unit for typesetter's length","[pnt]","[PNT]","12",12,false],[false,"Printer's point (typography)","[pnt_pr]","[PNT_PR]","length",0.00035145980000000004,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"pnt pr","UCUM","Len","Nonclinical","typography unit for typesetter's length","[in_i]","[IN_I]","0.013837",0.013837,false],[false,"Printer's pica  (typography)","[pca_pr]","[PCA_PR]","length",0.004217517600000001,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"pca pr; Printer's picas","UCUM","Len","Nonclinical","typography unit for typesetter's length","[pnt_pr]","[PNT_PR]","12",12,false],[false,"pied","[pied]","[PIED]","length",0.3248,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"pieds du roi; Paris foot; royal; French; feet","UCUM","Len","Obsolete","","cm","CM","32.48",32.48,false],[false,"pouce","[pouce]","[POUCE]","length",0.027066666666666666,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"historical French inches; French royal inches","UCUM","Len","Obsolete","","[pied]/12","[PIED]/12","1",1,false],[false,"ligne","[ligne]","[LIGNE]","length",0.0022555555555555554,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"Paris lines; lignes","UCUM","Len","Obsolete","","[pouce]/12","[POUCE]/12","1",1,false],[false,"didot","[didot]","[DIDOT]","length",0.0003759259259259259,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"Didot point; dd; Didots Point; didots; points","UCUM","Len","Obsolete","typography unit for typesetter's length","[ligne]/6","[LIGNE]/6","1",1,false],[false,"cicero","[cicero]","[CICERO]","length",0.004511111111111111,[1,0,0,0,0,0,0],null,"typeset",false,null,null,1,false,false,0,"Didot's pica; ciceros; picas","UCUM","Len","Obsolete","typography unit for typesetter's length","[didot]","[DIDOT]","12",12,false],[false,"degrees Fahrenheit","[degF]","[DEGF]","temperature",0.5555555555555556,[0,0,0,0,1,0,0],"°F","heat",false,null,"degF",1,true,false,0,"°F; deg F","UCUM","Temp","Clinical","","K",null,null,0.5555555555555556,false],[false,"degrees Rankine","[degR]","[degR]","temperature",0.5555555555555556,[0,0,0,0,1,0,0],"°R","heat",false,null,null,1,false,false,0,"°R; °Ra; Rankine","UCUM","Temp","Obsolete","Replaced by Kelvin","K/9","K/9","5",5,false],[false,"degrees Réaumur","[degRe]","[degRe]","temperature",1.25,[0,0,0,0,1,0,0],"°Ré","heat",false,null,"degRe",1,true,false,0,"°Ré, °Re, °r; Réaumur; degree Reaumur; Reaumur","UCUM","Temp","Obsolete","replaced by Celsius","K",null,null,1.25,false],[false,"calorie at 15°C","cal_[15]","CAL_[15]","energy",4185.8,[2,-2,1,0,0,0,0],"cal<sub>15°C</sub>","heat",true,null,null,1,false,false,0,"calorie 15 C; cals 15 C; calories at 15 C","UCUM","Enrg","Nonclinical","equal to 4.1855 joules; calorie most often used in engineering","J","J","4.18580",4.1858,false],[false,"calorie at 20°C","cal_[20]","CAL_[20]","energy",4181.9,[2,-2,1,0,0,0,0],"cal<sub>20°C</sub>","heat",true,null,null,1,false,false,0,"calorie 20 C; cal 20 C; calories at 20 C","UCUM","Enrg","Clinical","equal to 4.18190  joules. ","J","J","4.18190",4.1819,false],[false,"mean calorie","cal_m","CAL_M","energy",4190.0199999999995,[2,-2,1,0,0,0,0],"cal<sub>m</sub>","heat",true,null,null,1,false,false,0,"mean cals; mean calories","UCUM","Enrg","Clinical","equal to 4.19002 joules. ","J","J","4.19002",4.19002,false],[false,"international table calorie","cal_IT","CAL_IT","energy",4186.8,[2,-2,1,0,0,0,0],"cal<sub>IT</sub>","heat",true,null,null,1,false,false,0,"calories IT; IT cals; international steam table calories","UCUM","Enrg","Nonclinical","used in engineering steam tables and defined as 1/860 international watt-hour; equal to 4.1868 joules","J","J","4.1868",4.1868,false],[false,"thermochemical calorie","cal_th","CAL_TH","energy",4184,[2,-2,1,0,0,0,0],"cal<sub>th</sub>","heat",true,null,null,1,false,false,0,"thermochemical calories; th cals","UCUM","Enrg","Clinical","equal to 4.184 joules; used as the unit in medicine and biochemistry (equal to cal)","J","J","4.184",4.184,false],[false,"calorie","cal","CAL","energy",4184,[2,-2,1,0,0,0,0],"cal","heat",true,null,null,1,false,false,0,"gram calories; small calories","UCUM","Enrg","Clinical","equal to 4.184 joules (the same value as the thermochemical calorie, which is the most common calorie used in medicine and biochemistry)","cal_th","CAL_TH","1",1,false],[false,"nutrition label Calories","[Cal]","[CAL]","energy",4184000,[2,-2,1,0,0,0,0],"Cal","heat",false,null,null,1,false,false,0,"food calories; Cal; kcal","UCUM","Eng","Clinical","","kcal_th","KCAL_TH","1",1,false],[false,"British thermal unit at 39°F","[Btu_39]","[BTU_39]","energy",1059670,[2,-2,1,0,0,0,0],"Btu<sub>39°F</sub>","heat",false,null,null,1,false,false,0,"BTU 39F; BTU 39 F; B.T.U. 39 F; B.Th.U. 39 F; BThU 39 F; British thermal units","UCUM","Eng","Nonclinical","equal to 1.05967 kJ; used as a measure of power in the electric power, steam generation, heating, and air conditioning industries","kJ","kJ","1.05967",1.05967,false],[false,"British thermal unit at 59°F","[Btu_59]","[BTU_59]","energy",1054800,[2,-2,1,0,0,0,0],"Btu<sub>59°F</sub>","heat",false,null,null,1,false,false,0,"BTU 59 F; BTU 59F; B.T.U. 59 F; B.Th.U. 59 F; BThU 59F; British thermal units","UCUM","Eng","Nonclinical","equal to  1.05480 kJ; used as a measure of power in the electric power, steam generation, heating, and air conditioning industries","kJ","kJ","1.05480",1.0548,false],[false,"British thermal unit at 60°F","[Btu_60]","[BTU_60]","energy",1054680,[2,-2,1,0,0,0,0],"Btu<sub>60°F</sub>","heat",false,null,null,1,false,false,0,"BTU 60 F; BTU 60F; B.T.U. 60 F; B.Th.U. 60 F; BThU 60 F; British thermal units 60 F","UCUM","Eng","Nonclinical","equal to 1.05468 kJ; used as a measure of power in the electric power, steam generation, heating, and air conditioning industries","kJ","kJ","1.05468",1.05468,false],[false,"mean British thermal unit","[Btu_m]","[BTU_M]","energy",1055870,[2,-2,1,0,0,0,0],"Btu<sub>m</sub>","heat",false,null,null,1,false,false,0,"BTU mean; B.T.U. mean; B.Th.U. mean; BThU mean; British thermal units mean; ","UCUM","Eng","Nonclinical","equal to 1.05587 kJ; used as a measure of power in the electric power, steam generation, heating, and air conditioning industries","kJ","kJ","1.05587",1.05587,false],[false,"international table British thermal unit","[Btu_IT]","[BTU_IT]","energy",1055055.85262,[2,-2,1,0,0,0,0],"Btu<sub>IT</sub>","heat",false,null,null,1,false,false,0,"BTU IT; B.T.U. IT; B.Th.U. IT; BThU IT; British thermal units IT","UCUM","Eng","Nonclinical","equal to 1.055 kJ; used as a measure of power in the electric power, steam generation, heating, and air conditioning industries","kJ","kJ","1.05505585262",1.05505585262,false],[false,"thermochemical British thermal unit","[Btu_th]","[BTU_TH]","energy",1054350,[2,-2,1,0,0,0,0],"Btu<sub>th</sub>","heat",false,null,null,1,false,false,0,"BTU Th; B.T.U. Th; B.Th.U. Th; BThU Th; thermochemical British thermal units","UCUM","Eng","Nonclinical","equal to 1.054350 kJ; used as a measure of power in the electric power, steam generation, heating, and air conditioning industries","kJ","kJ","1.054350",1.05435,false],[false,"British thermal unit","[Btu]","[BTU]","energy",1054350,[2,-2,1,0,0,0,0],"btu","heat",false,null,null,1,false,false,0,"BTU; B.T.U. ; B.Th.U.; BThU; British thermal units","UCUM","Eng","Nonclinical","equal to the thermochemical British thermal unit equal to 1.054350 kJ; used as a measure of power in the electric power, steam generation, heating, and air conditioning industries","[Btu_th]","[BTU_TH]","1",1,false],[false,"horsepower - mechanical","[HP]","[HP]","power",745699.8715822703,[2,-3,1,0,0,0,0],null,"heat",false,null,null,1,false,false,0,"imperial horsepowers","UCUM","EngRat","Nonclinical","refers to mechanical horsepower, which is unit used to measure engine power primarily in the US. ","[ft_i].[lbf_av]/s","[FT_I].[LBF_AV]/S","550",550,false],[false,"tex","tex","TEX","linear mass density (of textile thread)",0.001,[-1,0,1,0,0,0,0],"tex","heat",true,null,null,1,false,false,0,"linear mass density; texes","UCUM","","Clinical","unit of linear mass density for fibers equal to gram per 1000 meters","g/km","G/KM","1",1,false],[false,"Denier (linear mass density)","[den]","[DEN]","linear mass density (of textile thread)",0.0001111111111111111,[-1,0,1,0,0,0,0],"den","heat",false,null,null,1,false,false,0,"den; deniers","UCUM","","Nonclinical","equal to the mass in grams per 9000 meters of the fiber (1 denier = 1 strand of silk)","g/9/km","G/9/KM","1",1,false],[false,"meter of water column","m[H2O]","M[H2O]","pressure",9806650,[-1,-2,1,0,0,0,0],"m HO<sub><r>2</r></sub>","clinical",true,null,null,1,false,false,0,"mH2O; m H2O; meters of water column; metres; pressure","UCUM","Pres","Clinical","","kPa","KPAL","980665e-5",9.80665,false],[false,"meter of mercury column","m[Hg]","M[HG]","pressure",133322000,[-1,-2,1,0,0,0,0],"m Hg","clinical",true,null,null,1,false,false,0,"mHg; m Hg; meters of mercury column; metres; pressure","UCUM","Pres","Clinical","","kPa","KPAL","133.3220",133.322,false],[false,"inch of water column","[in_i'H2O]","[IN_I'H2O]","pressure",249088.91000000003,[-1,-2,1,0,0,0,0],"in HO<sub><r>2</r></sub>","clinical",false,null,null,1,false,false,0,"inches WC; inAq; in H2O; inch of water gauge; iwg; pressure","UCUM","Pres","Clinical","unit of pressure, especially in respiratory and ventilation care","m[H2O].[in_i]/m","M[H2O].[IN_I]/M","1",1,false],[false,"inch of mercury column","[in_i'Hg]","[IN_I'HG]","pressure",3386378.8000000003,[-1,-2,1,0,0,0,0],"in Hg","clinical",false,null,null,1,false,false,0,"inHg; in Hg; pressure; inches","UCUM","Pres","Clinical","unit of pressure used in US to measure barometric pressure and occasionally blood pressure (see mm[Hg] for unit used internationally)","m[Hg].[in_i]/m","M[HG].[IN_I]/M","1",1,false],[false,"peripheral vascular resistance unit","[PRU]","[PRU]","fluid resistance",133322000000,[-4,-1,1,0,0,0,0],"P.R.U.","clinical",false,null,null,1,false,false,0,"peripheral vascular resistance units; peripheral resistance unit; peripheral resistance units; PRU","UCUM","FldResist","Clinical","used to assess blood flow in the capillaries; equal to 1 mmH.min/mL = 133.3 Pa·min/mL","mm[Hg].s/ml","MM[HG].S/ML","1",1,false],[false,"Wood unit","[wood'U]","[WOOD'U]","fluid resistance",7999320000,[-4,-1,1,0,0,0,0],"Wood U.","clinical",false,null,null,1,false,false,0,"hybrid reference units; HRU; mmHg.min/L; vascular resistance","UCUM","Pres","Clinical","simplified unit of measurement for for measuring pulmonary vascular resistance that uses pressure; equal to mmHg.min/L","mm[Hg].min/L","MM[HG].MIN/L","1",1,false],[false,"diopter (lens)","[diop]","[DIOP]","refraction of a lens",1,[1,0,0,0,0,0,0],"dpt","clinical",false,null,"inv",1,false,false,0,"diopters; diop; dioptre; dpt; refractive power","UCUM","InvLen","Clinical","unit of optical power of lens represented by inverse meters (m^-1)","m","/M","1",1,false],[false,"prism diopter (magnifying power)","[p'diop]","[P'DIOP]","refraction of a prism",1,[0,0,0,1,0,0,0],"PD","clinical",false,null,"tanTimes100",1,true,false,0,"diopters; dioptres; p diops; pdiop; dpt; pdptr; Δ; cm/m; centimeter per meter; centimetre; metre","UCUM","Angle","Clinical","unit for prism correction in eyeglass prescriptions","rad",null,null,1,false],[false,"percent of slope","%[slope]","%[SLOPE]","slope",0.017453292519943295,[0,0,0,1,0,0,0],"%","clinical",false,null,"100tan",1,true,false,0,"% slope; %slope; percents slopes","UCUM","VelFr; ElpotRatFr; VelRtoFr; AccelFr","Clinical","","deg",null,null,1,false],[false,"mesh","[mesh_i]","[MESH_I]","lineic number",0.025400000000000002,[1,0,0,0,0,0,0],null,"clinical",false,null,"inv",1,false,false,0,"meshes","UCUM","NLen (lineic number)","Clinical","traditional unit of length defined as the number of strands or particles per inch","[in_i]","/[IN_I]","1",1,false],[false,"French (catheter gauge) ","[Ch]","[CH]","gauge of catheters",0.0003333333333333333,[1,0,0,0,0,0,0],"Ch","clinical",false,null,null,1,false,false,0,"Charrières, French scales; French gauges; Fr, Fg, Ga, FR, Ch","UCUM","Len; Circ; Diam","Clinical","","mm/3","MM/3","1",1,false],[false,"drop - metric (1/20 mL)","[drp]","[DRP]","volume",5e-8,[3,0,0,0,0,0,0],"drp","clinical",false,null,null,1,false,false,0,"drop dosing units; metric drops; gtt","UCUM","Vol","Clinical","standard unit used in the US and internationally for clinical medicine but note that although [drp] is defined as 1/20 milliliter, in practice, drop sizes will vary due to external factors","ml/20","ML/20","1",1,false],[false,"Hounsfield unit","[hnsf'U]","[HNSF'U]","x-ray attenuation",1,[0,0,0,0,0,0,0],"HF","clinical",false,null,null,1,false,false,0,"HU; units","UCUM","","Clinical","used to measure X-ray attenuation, especially in CT scans.","1","1","1",1,false],[false,"Metabolic Equivalent of Task ","[MET]","[MET]","metabolic cost of physical activity",5.833333333333334e-11,[3,-1,-1,0,0,0,0],"MET","clinical",false,null,null,1,false,false,0,"metabolic equivalents","UCUM","RelEngRat","Clinical","unit used to measure rate of energy expenditure per power in treadmill and other functional tests","mL/min/kg","ML/MIN/KG","3.5",3.5,false],[false,"homeopathic potency of decimal series (retired)","[hp'_X]","[HP'_X]","homeopathic potency (retired)",1,[0,0,0,0,0,0,0],"X","clinical",false,null,"hpX",1,true,false,0,null,"UCUM",null,null,null,"1",null,null,1,false],[false,"homeopathic potency of centesimal series (retired)","[hp'_C]","[HP'_C]","homeopathic potency (retired)",1,[0,0,0,0,0,0,0],"C","clinical",false,null,"hpC",1,true,false,0,null,"UCUM",null,null,null,"1",null,null,1,false],[false,"homeopathic potency of millesimal series (retired)","[hp'_M]","[HP'_M]","homeopathic potency (retired)",1,[0,0,0,0,0,0,0],"M","clinical",false,null,"hpM",1,true,false,0,null,"UCUM",null,null,null,"1",null,null,1,false],[false,"homeopathic potency of quintamillesimal series (retired)","[hp'_Q]","[HP'_Q]","homeopathic potency (retired)",1,[0,0,0,0,0,0,0],"Q","clinical",false,null,"hpQ",1,true,false,0,null,"UCUM",null,null,null,"1",null,null,1,false],[false,"homeopathic potency of decimal hahnemannian series","[hp_X]","[HP_X]","homeopathic potency (Hahnemann)",1,[0,0,0,0,0,0,0],"X","clinical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"homeopathic potency of centesimal hahnemannian series","[hp_C]","[HP_C]","homeopathic potency (Hahnemann)",1,[0,0,0,0,0,0,0],"C","clinical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"homeopathic potency of millesimal hahnemannian series","[hp_M]","[HP_M]","homeopathic potency (Hahnemann)",1,[0,0,0,0,0,0,0],"M","clinical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"homeopathic potency of quintamillesimal hahnemannian series","[hp_Q]","[HP_Q]","homeopathic potency (Hahnemann)",1,[0,0,0,0,0,0,0],"Q","clinical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"homeopathic potency of decimal korsakovian series","[kp_X]","[KP_X]","homeopathic potency (Korsakov)",1,[0,0,0,0,0,0,0],"X","clinical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"homeopathic potency of centesimal korsakovian series","[kp_C]","[KP_C]","homeopathic potency (Korsakov)",1,[0,0,0,0,0,0,0],"C","clinical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"homeopathic potency of millesimal korsakovian series","[kp_M]","[KP_M]","homeopathic potency (Korsakov)",1,[0,0,0,0,0,0,0],"M","clinical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"homeopathic potency of quintamillesimal korsakovian series","[kp_Q]","[KP_Q]","homeopathic potency (Korsakov)",1,[0,0,0,0,0,0,0],"Q","clinical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"equivalent","eq","EQ","amount of substance",6.0221367e+23,[0,0,0,0,0,0,0],"eq","chemical",true,null,null,1,false,false,1,"equivalents","UCUM","Sub","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"osmole","osm","OSM","amount of substance (dissolved particles)",6.0221367e+23,[0,0,0,0,0,0,0],"osm","chemical",true,null,null,1,false,false,1,"osmoles; osmols","UCUM","Osmol","Clinical","the number of moles of solute that contribute to the osmotic pressure of a solution","mol","MOL","1",1,false],[false,"pH","[pH]","[PH]","acidity",6.0221366999999994e+26,[-3,0,0,0,0,0,0],"pH","chemical",false,null,"pH",1,true,false,0,"pH scale","UCUM","LogCnc","Clinical","Log concentration of H+","mol/l",null,null,1,false],[false,"gram percent","g%","G%","mass concentration",10000,[-3,0,1,0,0,0,0],"g%","chemical",true,null,null,1,false,false,0,"gram %; gram%; grams per deciliter; g/dL; gm per dL; gram percents","UCUM","MCnc","Clinical","equivalent to unit gram per deciliter (g/dL), a unit often used in medical tests to represent solution concentrations","g/dl","G/DL","1",1,false],[false,"Svedberg unit","[S]","[S]","sedimentation coefficient",1e-13,[0,1,0,0,0,0,0],"S","chemical",false,null,null,1,false,false,0,"Sv; 10^-13 seconds; 100 fs; 100 femtoseconds","UCUM","Time","Clinical","unit of time used in measuring particle's sedimentation rate, usually after centrifugation. ","s","10*-13.S","1",1e-13,false],[false,"high power field (microscope)","[HPF]","[HPF]","view area in microscope",1,[0,0,0,0,0,0,0],"HPF","chemical",false,null,null,1,false,false,0,"HPF","UCUM","Area","Clinical","area visible under the maximum magnification power of the objective in microscopy (usually 400x)\n","1","1","1",1,false],[false,"low power field (microscope)","[LPF]","[LPF]","view area in microscope",1,[0,0,0,0,0,0,0],"LPF","chemical",false,null,null,1,false,false,0,"LPF; fields","UCUM","Area","Clinical","area visible under the low magnification of the objective in microscopy (usually 100 x)\n","1","1","100",100,false],[false,"katal","kat","KAT","catalytic activity",6.0221367e+23,[0,-1,0,0,0,0,0],"kat","chemical",true,null,null,1,false,false,1,"mol/secs; moles per second; mol*sec-1; mol*s-1; mol.s-1; katals; catalytic activity; enzymatic; enzyme units; activities","UCUM","CAct","Clinical","kat is a unit of catalytic activity with base units = mol/s. Rarely used because its units are too large to practically express catalytic activity. See enzyme unit [U] which is the standard unit for catalytic activity.","mol/s","MOL/S","1",1,false],[false,"enzyme unit","U","U","catalytic activity",10036894500000000,[0,-1,0,0,0,0,0],"U","chemical",true,null,null,1,false,false,1,"micromoles per minute; umol/min; umol per minute; umol min-1; enzymatic activity; enzyme activity","UCUM","CAct","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"international unit - arbitrary","[iU]","[IU]","arbitrary",1,[0,0,0,0,0,0,0],"IU","chemical",true,null,null,1,false,true,0,"international units; IE; F2","UCUM","Arb","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","1","1","1",1,false],[false,"international unit - arbitrary","[IU]","[IU]","arbitrary",1,[0,0,0,0,0,0,0],"i.U.","chemical",true,null,null,1,false,true,0,"international units; IE; F2","UCUM","Arb","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"arbitary unit","[arb'U]","[ARB'U]","arbitrary",1,[0,0,0,0,0,0,0],"arb. U","chemical",false,null,null,1,false,true,0,"arbitary units; arb units; arbU","UCUM","Arb","Clinical","relative unit of measurement to show the ratio of test measurement to reference measurement","1","1","1",1,false],[false,"United States Pharmacopeia unit","[USP'U]","[USP'U]","arbitrary",1,[0,0,0,0,0,0,0],"U.S.P.","chemical",false,null,null,1,false,true,0,"USP U; USP'U","UCUM","Arb","Clinical","a dose unit to express potency of drugs and vitamins defined by the United States Pharmacopoeia; usually 1 USP = 1 IU","1","1","1",1,false],[false,"GPL unit","[GPL'U]","[GPL'U]","biologic activity of anticardiolipin IgG",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"GPL Units; GPL U; IgG anticardiolipin units; IgG Phospholipid","UCUM","ACnc; AMass","Clinical","Units for an antiphospholipid test","1","1","1",1,false],[false,"MPL unit","[MPL'U]","[MPL'U]","biologic activity of anticardiolipin IgM",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"MPL units; MPL U; MPL'U; IgM anticardiolipin units; IgM Phospholipid Units ","UCUM","ACnc","Clinical","units for antiphospholipid test","1","1","1",1,false],[false,"APL unit","[APL'U]","[APL'U]","biologic activity of anticardiolipin IgA",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"APL units; APL U; IgA anticardiolipin; IgA Phospholipid; biologic activity of","UCUM","AMass; ACnc","Clinical","Units for an anti phospholipid syndrome test","1","1","1",1,false],[false,"Bethesda unit","[beth'U]","[BETH'U]","biologic activity of factor VIII inhibitor",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"BU","UCUM","ACnc","Clinical","measures of blood coagulation inhibitior for many blood factors","1","1","1",1,false],[false,"anti factor Xa unit","[anti'Xa'U]","[ANTI'XA'U]","biologic activity of factor Xa inhibitor (heparin)",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"units","UCUM","ACnc","Clinical","[anti'Xa'U] unit is equivalent to and can be converted to IU/mL. ","1","1","1",1,false],[false,"Todd unit","[todd'U]","[TODD'U]","biologic activity antistreptolysin O",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"units","UCUM","InvThres; RtoThres","Clinical","the unit for the results of the testing for antistreptolysin O (ASO)","1","1","1",1,false],[false,"Dye unit","[dye'U]","[DYE'U]","biologic activity of amylase",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"units","UCUM","CCnc","Obsolete","equivalent to the Somogyi unit, which is an enzyme unit for amylase but better to use U, the standard enzyme unit for measuring catalytic activity","1","1","1",1,false],[false,"Somogyi unit","[smgy'U]","[SMGY'U]","biologic activity of amylase",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"Somogyi units; smgy U","UCUM","CAct","Clinical","measures the enzymatic activity of amylase in blood serum - better to use base units mg/mL ","1","1","1",1,false],[false,"Bodansky unit","[bdsk'U]","[BDSK'U]","biologic activity of phosphatase",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"","UCUM","ACnc","Obsolete","Enzyme unit specific to alkaline phosphatase - better to use standard enzyme unit of U","1","1","1",1,false],[false,"King-Armstrong unit","[ka'U]","[KA'U]","biologic activity of phosphatase",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"King-Armstrong Units; King units","UCUM","AMass","Obsolete","enzyme units for acid phosphatase - better to use enzyme unit [U]","1","1","1",1,false],[false,"Kunkel unit","[knk'U]","[KNK'U]","arbitrary biologic activity",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,null,"UCUM",null,null,null,"1","1","1",1,false],[false,"Mac Lagan unit","[mclg'U]","[MCLG'U]","arbitrary biologic activity",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"galactose index; galactose tolerance test; thymol turbidity test unit; mclg U; units; indexes","UCUM","ACnc","Obsolete","unit for liver tests - previously used in thymol turbidity tests for liver disease diagnoses, and now is sometimes referred to in the oral galactose tolerance test","1","1","1",1,false],[false,"tuberculin unit","[tb'U]","[TB'U]","biologic activity of tuberculin",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"TU; units","UCUM","Arb","Clinical","amount of tuberculin antigen -usually in reference to a TB skin test ","1","1","1",1,false],[false,"50% cell culture infectious dose","[CCID_50]","[CCID_50]","biologic activity (infectivity) of an infectious agent preparation",1,[0,0,0,0,0,0,0],"CCID<sub>50</sub>","chemical",false,null,null,1,false,true,0,"CCID50; 50% cell culture infective doses","UCUM","NumThres","Clinical","","1","1","1",1,false],[false,"50% tissue culture infectious dose","[TCID_50]","[TCID_50]","biologic activity (infectivity) of an infectious agent preparation",1,[0,0,0,0,0,0,0],"TCID<sub>50</sub>","chemical",false,null,null,1,false,true,0,"TCID50; 50% tissue culture infective dose","UCUM","NumThres","Clinical","","1","1","1",1,false],[false,"50% embryo infectious dose","[EID_50]","[EID_50]","biologic activity (infectivity) of an infectious agent preparation",1,[0,0,0,0,0,0,0],"EID<sub>50</sub>","chemical",false,null,null,1,false,true,0,"EID50; 50% embryo infective doses; EID50 Egg Infective Dosage","UCUM","thresNum","Clinical","","1","1","1",1,false],[false,"plaque forming units","[PFU]","[PFU]","amount of an infectious agent",1,[0,0,0,0,0,0,0],"PFU","chemical",false,null,null,1,false,true,0,"PFU","UCUM","ACnc","Clinical","tests usually report unit as number of PFU per unit volume","1","1","1",1,false],[false,"focus forming units (cells)","[FFU]","[FFU]","amount of an infectious agent",1,[0,0,0,0,0,0,0],"FFU","chemical",false,null,null,1,false,true,0,"FFU","UCUM","EntNum","Clinical","","1","1","1",1,false],[false,"colony forming units","[CFU]","[CFU]","amount of a proliferating organism",1,[0,0,0,0,0,0,0],"CFU","chemical",false,null,null,1,false,true,0,"CFU","UCUM","Num","Clinical","","1","1","1",1,false],[false,"index of reactivity (allergen)","[IR]","[IR]","amount of an allergen callibrated through in-vivo testing using the Stallergenes® method.",1,[0,0,0,0,0,0,0],"IR","chemical",false,null,null,1,false,true,0,"IR; indexes","UCUM","Acnc","Clinical","amount of an allergen callibrated through in-vivo testing using the Stallergenes method. Usually reported in tests as IR/mL","1","1","1",1,false],[false,"bioequivalent allergen unit","[BAU]","[BAU]","amount of an allergen callibrated through in-vivo testing based on the ID50EAL method of (intradermal dilution for 50mm sum of erythema diameters",1,[0,0,0,0,0,0,0],"BAU","chemical",false,null,null,1,false,true,0,"BAU; Bioequivalent Allergy Units; bioequivalent allergen units","UCUM","Arb","Clinical","","1","1","1",1,false],[false,"allergy unit","[AU]","[AU]","procedure defined amount of an allergen using some reference standard",1,[0,0,0,0,0,0,0],"AU","chemical",false,null,null,1,false,true,0,"allergy units; allergen units; AU","UCUM","Arb","Clinical","Most standard test allergy units are reported as [IU] or as %. ","1","1","1",1,false],[false,"allergen unit for Ambrosia artemisiifolia","[Amb'a'1'U]","[AMB'A'1'U]","procedure defined amount of the major allergen of ragweed.",1,[0,0,0,0,0,0,0],"Amb a 1 U","chemical",false,null,null,1,false,true,0,"Amb a 1 unit; Antigen E; AgE U; allergen units","UCUM","Arb","Clinical","Amb a 1 is the major allergen in short ragweed, and can be converted Bioequivalent allergen units (BAU) where 350 Amb a 1 U/mL = 100,000 BAU/mL","1","1","1",1,false],[false,"protein nitrogen unit (allergen testing)","[PNU]","[PNU]","procedure defined amount of a protein substance",1,[0,0,0,0,0,0,0],"PNU","chemical",false,null,null,1,false,true,0,"protein nitrogen units; PNU","UCUM","Mass","Clinical","defined as 0.01 ug of phosphotungstic acid-precipitable protein nitrogen. Being replaced by bioequivalent allergy units (BAU).","1","1","1",1,false],[false,"Limit of flocculation","[Lf]","[LF]","procedure defined amount of an antigen substance",1,[0,0,0,0,0,0,0],"Lf","chemical",false,null,null,1,false,true,0,"Lf doses","UCUM","Arb","Clinical","the antigen content  forming 1:1 ratio against 1 unit of antitoxin","1","1","1",1,false],[false,"D-antigen unit (polio)","[D'ag'U]","[D'AG'U]","procedure defined amount of a poliomyelitis d-antigen substance",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"DAgU; units","UCUM","Acnc","Clinical","unit of potency of poliovirus vaccine used for poliomyelitis prevention reported as D antigen units/mL. The unit is poliovirus type-specific.","1","1","1",1,false],[false,"fibrinogen equivalent units","[FEU]","[FEU]","amount of fibrinogen broken down into the measured d-dimers",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"FEU","UCUM","MCnc","Clinical","Note both the FEU and DDU units are used to report D-dimer measurements. 1 DDU = 1/2 FFU","1","1","1",1,false],[false,"ELISA unit","[ELU]","[ELU]","arbitrary ELISA unit",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"Enzyme-Linked Immunosorbent Assay Units; ELU; EL. U","UCUM","ACnc","Clinical","","1","1","1",1,false],[false,"Ehrlich units (urobilinogen)","[EU]","[EU]","Ehrlich unit",1,[0,0,0,0,0,0,0],null,"chemical",false,null,null,1,false,true,0,"EU/dL; mg{urobilinogen}/dL","UCUM","ACnc","Clinical","","1","1","1",1,false],[false,"neper","Np","NEP","level",1,[0,0,0,0,0,0,0],"Np","levels",true,null,"ln",1,true,false,0,"nepers","UCUM","LogRto","Clinical","logarithmic unit for ratios of measurements of physical field and power quantities, such as gain and loss of electronic signals","1",null,null,1,false],[false,"bel","B","B","level",1,[0,0,0,0,0,0,0],"B","levels",true,null,"lg",1,true,false,0,"bels","UCUM","LogRto","Clinical","Logarithm of the ratio of power- or field-type quantities; usually expressed in decibels ","1",null,null,1,false],[false,"bel sound pressure","B[SPL]","B[SPL]","pressure level",0.02,[-1,-2,1,0,0,0,0],"B(SPL)","levels",true,null,"lgTimes2",1,true,false,0,"bel SPL; B SPL; sound pressure bels","UCUM","LogRto","Clinical","used to measure sound level in acoustics","Pa",null,null,0.00002,false],[false,"bel volt","B[V]","B[V]","electric potential level",1000,[2,-2,1,0,0,-1,0],"B(V)","levels",true,null,"lgTimes2",1,true,false,0,"bel V; B V; volts bels","UCUM","LogRtoElp","Clinical","used to express power gain in electrical circuits","V",null,null,1,false],[false,"bel millivolt","B[mV]","B[MV]","electric potential level",1,[2,-2,1,0,0,-1,0],"B(mV)","levels",true,null,"lgTimes2",1,true,false,0,"bel mV; B mV; millivolt bels; 10^-3V bels; 10*-3V ","UCUM","LogRtoElp","Clinical","used to express power gain in electrical circuits","mV",null,null,1,false],[false,"bel microvolt","B[uV]","B[UV]","electric potential level",0.001,[2,-2,1,0,0,-1,0],"B(μV)","levels",true,null,"lgTimes2",1,true,false,0,"bel uV; B uV; microvolts bels; 10^-6V bel; 10*-6V bel","UCUM","LogRto","Clinical","used to express power gain in electrical circuits","uV",null,null,1,false],[false,"bel 10 nanovolt","B[10.nV]","B[10.NV]","electric potential level",0.000010000000000000003,[2,-2,1,0,0,-1,0],"B(10 nV)","levels",true,null,"lgTimes2",1,true,false,0,"bel 10 nV; B 10 nV; 10 nanovolts bels","UCUM","LogRtoElp","Clinical","used to express power gain in electrical circuits","nV",null,null,10,false],[false,"bel watt","B[W]","B[W]","power level",1000,[2,-3,1,0,0,0,0],"B(W)","levels",true,null,"lg",1,true,false,0,"bel W; b W; b Watt; Watts bels","UCUM","LogRto","Clinical","used to express power","W",null,null,1,false],[false,"bel kilowatt","B[kW]","B[KW]","power level",1000000,[2,-3,1,0,0,0,0],"B(kW)","levels",true,null,"lg",1,true,false,0,"bel kW; B kW; kilowatt bel; kW bel; kW B","UCUM","LogRto","Clinical","used to express power","kW",null,null,1,false],[false,"stere","st","STR","volume",1,[3,0,0,0,0,0,0],"st","misc",true,null,null,1,false,false,0,"stère; m3; cubic meter; m^3; meters cubed; metre","UCUM","Vol","Nonclinical","equal to one cubic meter, usually used for measuring firewoord","m3","M3","1",1,false],[false,"Ångström","Ao","AO","length",1.0000000000000002e-10,[1,0,0,0,0,0,0],"Å","misc",false,null,null,1,false,false,0,"Å; Angstroms; Ao; Ångströms","UCUM","Len","Clinical","equal to 10^-10 meters; used to express wave lengths and atom scaled differences ","nm","NM","0.1",0.1,false],[false,"barn","b","BRN","action area",9.999999999999999e-29,[2,0,0,0,0,0,0],"b","misc",false,null,null,1,false,false,0,"barns","UCUM","Area","Clinical","used in high-energy physics to express cross-sectional areas","fm2","FM2","100",100,false],[false,"technical atmosphere","att","ATT","pressure",98066499.99999999,[-1,-2,1,0,0,0,0],"at","misc",false,null,null,1,false,false,0,"at; tech atm; tech atmosphere; kgf/cm2; atms; atmospheres","UCUM","Pres","Obsolete","non-SI unit of pressure equal to one kilogram-force per square centimeter","kgf/cm2","KGF/CM2","1",1,false],[false,"mho","mho","MHO","electric conductance",0.001,[-2,1,-1,0,0,2,0],"mho","misc",true,null,null,1,false,false,0,"siemens; ohm reciprocals; Ω^−1; Ω-1 ","UCUM","","Obsolete","unit of electric conductance (the inverse of electrical resistance) equal to ohm^-1","S","S","1",1,false],[false,"pound per square inch","[psi]","[PSI]","pressure",6894757.293168359,[-1,-2,1,0,0,0,0],"psi","misc",false,null,null,1,false,false,0,"psi; lb/in2; lb per in2","UCUM","Pres","Clinical","","[lbf_av]/[in_i]2","[LBF_AV]/[IN_I]2","1",1,false],[false,"circle - plane angle","circ","CIRC","plane angle",6.283185307179586,[0,0,0,1,0,0,0],"circ","misc",false,null,null,1,false,false,0,"angles; circles","UCUM","Angle","Clinical","","[pi].rad","[PI].RAD","2",2,false],[false,"spere - solid angle","sph","SPH","solid angle",12.566370614359172,[0,0,0,2,0,0,0],"sph","misc",false,null,null,1,false,false,0,"speres","UCUM","Angle","Clinical","equal to the solid angle of an entire sphere = 4πsr (sr = steradian) ","[pi].sr","[PI].SR","4",4,false],[false,"metric carat","[car_m]","[CAR_M]","mass",0.2,[0,0,1,0,0,0,0],"ct<sub>m</sub>","misc",false,null,null,1,false,false,0,"carats; ct; car m","UCUM","Mass","Nonclinical","unit of mass for gemstones","g","G","2e-1",0.2,false],[false,"carat of gold alloys","[car_Au]","[CAR_AU]","mass fraction",0.041666666666666664,[0,0,0,0,0,0,0],"ct<sub><r>Au</r></sub>","misc",false,null,null,1,false,false,0,"karats; k; kt; car au; carats","UCUM","MFr","Nonclinical","unit of purity for gold alloys","/24","/24","1",1,false],[false,"Smoot","[smoot]","[SMOOT]","length",1.7018000000000002,[1,0,0,0,0,0,0],null,"misc",false,null,null,1,false,false,0,"","UCUM","Len","Nonclinical","prank unit of length from MIT","[in_i]","[IN_I]","67",67,false],[false,"meter per square seconds per square root of hertz","[m/s2/Hz^(1/2)]","[M/S2/HZ^(1/2)]","amplitude spectral density",1,[2,-3,0,0,0,0,0],null,"misc",false,null,"sqrt",1,true,false,0,"m/s2/(Hz^.5); m/s2/(Hz^(1/2)); m per s2 per Hz^1/2","UCUM","","Constant","measures amplitude spectral density, and is equal to the square root of power spectral density\n ","m2/s4/Hz",null,null,1,false],[false,"bit - logarithmic","bit_s","BIT_S","amount of information",1,[0,0,0,0,0,0,0],"bit<sub>s</sub>","infotech",false,null,"ld",1,true,false,0,"bit-s; bit s; bit logarithmic","UCUM","LogA","Nonclinical","defined as the log base 2 of the number of distinct signals; cannot practically be used to express more than 1000 bits\n\nIn information theory, the definition of the amount of self-information and information entropy is often expressed with the binary logarithm (log base 2)","1",null,null,1,false],[false,"bit","bit","BIT","amount of information",1,[0,0,0,0,0,0,0],"bit","infotech",true,null,null,1,false,false,0,"bits","UCUM","","Nonclinical","dimensionless information unit of 1 used in computing and digital communications","1","1","1",1,false],[false,"byte","By","BY","amount of information",8,[0,0,0,0,0,0,0],"B","infotech",true,null,null,1,false,false,0,"bytes","UCUM","","Nonclinical","equal to 8 bits","bit","bit","8",8,false],[false,"baud","Bd","BD","signal transmission rate",1,[0,1,0,0,0,0,0],"Bd","infotech",true,null,"inv",1,false,false,0,"Bd; bauds","UCUM","Freq","Nonclinical","unit to express rate in symbols per second or pulses per second. ","s","/s","1",1,false],[false,"per twelve hour","/(12.h)","/HR","",0.000023148148148148147,[0,-1,0,0,0,0,0],"/h",null,false,null,null,1,false,false,0,"per 12 hours; 12hrs; 12 hrs; /12hrs","LOINC","Rat","Clinical","",null,null,null,null,false],[false,"per arbitrary unit","/[arb'U]","/[ARB'U]","",1,[0,0,0,0,0,0,0],"/arb/ U",null,false,null,null,1,false,true,0,"/arbU","LOINC","InvA ","Clinical","",null,null,null,null,false],[false,"per high power field","/[HPF]","/[HPF]","",1,[0,0,0,0,0,0,0],"/HPF",null,false,null,null,1,false,false,0,"/HPF; per HPF","LOINC","Naric","Clinical","",null,null,null,null,false],[false,"per international unit","/[IU]","/[IU]","",1,[0,0,0,0,0,0,0],"/i/U.",null,false,null,null,1,false,true,0,"international units; /IU; per IU","LOINC","InvA","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)",null,null,null,null,false],[false,"per low power field","/[LPF]","/[LPF]","",1,[0,0,0,0,0,0,0],"/LPF",null,false,null,null,1,false,false,0,"/LPF; per LPF","LOINC","Naric","Clinical","",null,null,null,null,false],[false,"per 10 billion  ","/10*10","/10*10","",1e-10,[0,0,0,0,0,0,0],"/10<sup>10<.sup>",null,false,null,null,1,false,false,0,"/10^10; per 10*10","LOINC","NFr","Clinical","used for counting entities, e.g. blood cells; usually these kinds of terms have numerators such as moles or milligrams, and counting that amount per the number in the denominator",null,null,null,null,false],[false,"per trillion ","/10*12","/10*12","",1e-12,[0,0,0,0,0,0,0],"/10<sup>12<.sup>",null,false,null,null,1,false,false,0,"/10^12; per 10*12","LOINC","NFr","Clinical","used for counting entities, e.g. blood cells; usually these kinds of terms have numerators such as moles or milligrams, and counting that amount per the number in the denominator",null,null,null,null,false],[false,"per thousand","/10*3","/10*3","",0.001,[0,0,0,0,0,0,0],"/10<sup>3<.sup>",null,false,null,null,1,false,false,0,"/10^3; per 10*3","LOINC","NFr","Clinical","used for counting entities, e.g. blood cells; usually these kinds of terms have numerators such as moles or milligrams, and counting that amount per the number in the denominator",null,null,null,null,false],[false,"per million","/10*6","/10*6","",0.000001,[0,0,0,0,0,0,0],"/10<sup>6<.sup>",null,false,null,null,1,false,false,0,"/10^6; per 10*6;","LOINC","NFr","Clinical","used for counting entities, e.g. blood cells; usually these kinds of terms have numerators such as moles or milligrams, and counting that amount per the number in the denominator",null,null,null,null,false],[false,"per billion","/10*9","/10*9","",1e-9,[0,0,0,0,0,0,0],"/10<sup>9<.sup>",null,false,null,null,1,false,false,0,"/10^9; per 10*9","LOINC","NFr","Clinical","used for counting entities, e.g. blood cells; usually these kinds of terms have numerators such as moles or milligrams, and counting that amount per the number in the denominator",null,null,null,null,false],[false,"per 100","/100","","",0.01,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"per hundred; 10^2; 10*2","LOINC","NFr","Clinical","used for counting entities, e.g. blood cells; usually these kinds of terms have numerators such as moles or milligrams, and counting that amount per the number in the denominator",null,null,null,null,false],[false,"per 100 cells","/100{cells}","","",0.01,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"/100 cells; /100cells; per hundred","LOINC","EntMass; EntNum; NFr","Clinical","",null,null,null,null,false],[false,"per 100 neutrophils","/100{neutrophils}","","",0.01,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"/100 neutrophils; /100neutrophils; per hundred","LOINC","EntMass; EntNum; NFr","Clinical","",null,null,null,null,false],[false,"per 100 spermatozoa","/100{spermatozoa}","","",0.01,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"/100 spermatozoa; /100spermatozoa; per hundred","LOINC","NFr","Clinical","",null,null,null,null,false],[false,"per 100 white blood cells","/100{WBCs}","","",0.01,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"/100 WBCs; /100WBCs; per hundred","LOINC","Ratio; NFr","Clinical","",null,null,null,null,false],[false,"per year","/a","/ANN","",3.168808781402895e-8,[0,-1,0,0,0,0,0],"/a",null,false,null,null,1,false,false,0,"/Years; /yrs; yearly","LOINC","NRat","Clinical","",null,null,null,null,false],[false,"per centimeter of water","/cm[H2O]","/CM[H2O]","",0.000010197162129779282,[1,2,-1,0,0,0,0],"/cm HO<sub><r>2<.r></sub>",null,false,null,null,1,false,false,0,"/cmH2O; /cm H2O; centimeters; centimetres","LOINC","InvPress","Clinical","",null,null,null,null,false],[false,"per day","/d","/D","",0.000011574074074074073,[0,-1,0,0,0,0,0],"/d",null,false,null,null,1,false,false,0,"/dy; per day","LOINC","NRat","Clinical","",null,null,null,null,false],[false,"per deciliter","/dL","/DL","",10000,[-3,0,0,0,0,0,0],"/dL",null,false,null,null,1,false,false,0,"per dL; /deciliter; decilitre","LOINC","NCnc","Clinical","",null,null,null,null,false],[false,"per gram","/g","/G","",1,[0,0,-1,0,0,0,0],"/g",null,false,null,null,1,false,false,0,"/gm; /gram; per g","LOINC","NCnt","Clinical","",null,null,null,null,false],[false,"per hour","/h","/HR","",0.0002777777777777778,[0,-1,0,0,0,0,0],"/h",null,false,null,null,1,false,false,0,"/hr; /hour; per hr","LOINC","NRat","Clinical","",null,null,null,null,false],[false,"per kilogram","/kg","/KG","",0.001,[0,0,-1,0,0,0,0],"/kg",null,false,null,null,1,false,false,0,"per kg; per kilogram","LOINC","NCnt","Clinical","",null,null,null,null,false],[false,"per liter","/L","/L","",1000,[-3,0,0,0,0,0,0],"/L",null,false,null,null,1,false,false,0,"/liter; litre","LOINC","NCnc","Clinical","",null,null,null,null,false],[false,"per square meter","/m2","/M2","",1,[-2,0,0,0,0,0,0],"/m<sup>2<.sup>",null,false,null,null,1,false,false,0,"/m^2; /m*2; /sq. m; per square meter; meter squared; metre","LOINC","Naric","Clinical","",null,null,null,null,false],[false,"per cubic meter","/m3","/M3","",1,[-3,0,0,0,0,0,0],"/m<sup>3<.sup>",null,false,null,null,1,false,false,0,"/m^3; /m*3; /cu. m; per cubic meter; meter cubed; per m3; metre","LOINC","NCncn","Clinical","",null,null,null,null,false],[false,"per milligram","/mg","/MG","",1000,[0,0,-1,0,0,0,0],"/mg",null,false,null,null,1,false,false,0,"/milligram; per mg","LOINC","NCnt","Clinical","",null,null,null,null,false],[false,"per minute","/min","/MIN","",0.016666666666666666,[0,-1,0,0,0,0,0],"/min",null,false,null,null,1,false,false,0,"/minute; per mins; breaths beats per minute","LOINC","NRat","Clinical","",null,null,null,null,false],[false,"per milliliter","/mL","/ML","",1000000,[-3,0,0,0,0,0,0],"/mL",null,false,null,null,1,false,false,0,"/milliliter; per mL; millilitre","LOINC","NCncn","Clinical","",null,null,null,null,false],[false,"per millimeter","/mm","/MM","",1000,[-1,0,0,0,0,0,0],"/mm",null,false,null,null,1,false,false,0,"/millimeter; per mm; millimetre","LOINC","InvLen","Clinical","",null,null,null,null,false],[false,"per month","/mo","/MO","",3.802570537683474e-7,[0,-1,0,0,0,0,0],"/mo",null,false,null,null,1,false,false,0,"/month; per mo; monthly; month","LOINC","NRat","Clinical","",null,null,null,null,false],[false,"per second","/s","/S","",1,[0,-1,0,0,0,0,0],"/s",null,false,null,null,1,false,false,0,"/second; /sec; per sec; frequency; Hertz; Herz; Hz; becquerels; Bq; s-1; s^-1","LOINC","NRat","Clinical","",null,null,null,null,false],[false,"per enzyme unit","/U","/U","",9.963241120049633e-17,[0,1,0,0,0,0,0],"/U",null,false,null,null,1,false,false,-1,"/enzyme units; per U","LOINC","InvC; NCat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)",null,null,null,null,false],[false,"per microliter","/uL","/UL","",999999999.9999999,[-3,0,0,0,0,0,0],"/μL",null,false,null,null,1,false,false,0,"/microliter; microlitre; /mcl; per uL","LOINC","ACnc","Clinical","",null,null,null,null,false],[false,"per week","/wk","/WK","",0.0000016534391534391535,[0,-1,0,0,0,0,0],"/wk",null,false,null,null,1,false,false,0,"/week; per wk; weekly, weeks","LOINC","NRat","Clinical","",null,null,null,null,false],[false,"APL unit per milliliter","[APL'U]/mL","[APL'U]/ML","biologic activity of anticardiolipin IgA",1000000,[-3,0,0,0,0,0,0],"/mL","chemical",false,null,null,1,false,true,0,"APL/mL; APL'U/mL; APL U/mL; APL/milliliter; IgA anticardiolipin units per milliliter; IgA Phospholipid Units; millilitre; biologic activity of","LOINC","ACnc","Clinical","Units for an anti phospholipid syndrome test","1","1","1",1,false],[false,"arbitrary unit per milliliter","[arb'U]/mL","[ARB'U]/ML","arbitrary",1000000,[-3,0,0,0,0,0,0],"(arb. U)/mL","chemical",false,null,null,1,false,true,0,"arb'U/mL; arbU/mL; arb U/mL; arbitrary units per milliliter; millilitre","LOINC","ACnc","Clinical","relative unit of measurement to show the ratio of test measurement to reference measurement","1","1","1",1,false],[false,"colony forming units per liter","[CFU]/L","[CFU]/L","amount of a proliferating organism",1000,[-3,0,0,0,0,0,0],"CFU/L","chemical",false,null,null,1,false,true,0,"CFU per Liter; CFU/L","LOINC","NCnc","Clinical","","1","1","1",1,false],[false,"colony forming units per milliliter","[CFU]/mL","[CFU]/ML","amount of a proliferating organism",1000000,[-3,0,0,0,0,0,0],"CFU/mL","chemical",false,null,null,1,false,true,0,"CFU per mL; CFU/mL","LOINC","NCnc","Clinical","","1","1","1",1,false],[false,"foot per foot - US","[ft_us]/[ft_us]","[FT_US]/[FT_US]","length",1,[0,0,0,0,0,0,0],"(ft<sub>us</sub>)/(ft<sub>us</sub>)","us-lengths",false,null,null,1,false,false,0,"ft/ft; ft per ft; feet per feet; visual acuity","","LenRto","Clinical","distance ratio to measure 20:20 vision","m/3937","M/3937","1200",1200,false],[false,"GPL unit per milliliter","[GPL'U]/mL","[GPL'U]/ML","biologic activity of anticardiolipin IgG",1000000,[-3,0,0,0,0,0,0],"/mL","chemical",false,null,null,1,false,true,0,"GPL U/mL; GPL'U/mL; GPL/mL; GPL U per mL; IgG Phospholipid Units per milliliters; IgG anticardiolipin units; millilitres ","LOINC","ACnc; AMass","Clinical","Units for an antiphospholipid test","1","1","1",1,false],[false,"international unit per 2 hour","[IU]/(2.h)","[IU]/HR","arbitrary",0.0001388888888888889,[0,-1,0,0,0,0,0],"(i.U.)/h","chemical",true,null,null,1,false,true,0,"IU/2hrs; IU/2 hours; IU per 2 hrs; international units per 2 hours","LOINC","ARat","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per 24 hour","[IU]/(24.h)","[IU]/HR","arbitrary",0.000011574074074074073,[0,-1,0,0,0,0,0],"(i.U.)/h","chemical",true,null,null,1,false,true,0,"IU/24hr; IU/24 hours; IU per 24 hrs; international units per 24 hours","LOINC","ARat","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per day","[IU]/d","[IU]/D","arbitrary",0.000011574074074074073,[0,-1,0,0,0,0,0],"(i.U.)/d","chemical",true,null,null,1,false,true,0,"IU/dy; IU/days; IU per dys; international units per day","LOINC","ARat","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per deciliter","[IU]/dL","[IU]/DL","arbitrary",10000,[-3,0,0,0,0,0,0],"(i.U.)/dL","chemical",true,null,null,1,false,true,0,"IU/dL; IU per dL; international units per deciliters; decilitres","LOINC","ACnc","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per gram","[IU]/g","[IU]/G","arbitrary",1,[0,0,-1,0,0,0,0],"(i.U.)/g","chemical",true,null,null,1,false,true,0,"IU/gm; IU/gram; IU per gm; IU per g; international units per gram","LOINC","ACnt","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per hour","[IU]/h","[IU]/HR","arbitrary",0.0002777777777777778,[0,-1,0,0,0,0,0],"(i.U.)/h","chemical",true,null,null,1,false,true,0,"IU/hrs; IU per hours; international units per hour","LOINC","ARat","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per kilogram","[IU]/kg","[IU]/KG","arbitrary",0.001,[0,0,-1,0,0,0,0],"(i.U.)/kg","chemical",true,null,null,1,false,true,0,"IU/kg; IU/kilogram; IU per kg; units","LOINC","ACnt","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per kilogram per day","[IU]/kg/d","[IU]/KG/D","arbitrary",1.1574074074074074e-8,[0,-1,-1,0,0,0,0],"(i.U.)/kg/d","chemical",true,null,null,1,false,true,0,"IU/kg/dy; IU/kg/day; IU/kilogram/day; IU per kg per day; units","LOINC","ACntRat","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per liter","[IU]/L","[IU]/L","arbitrary",1000,[-3,0,0,0,0,0,0],"(i.U.)/L","chemical",true,null,null,1,false,true,0,"IU/L; IU/liter; IU per liter; units; litre","LOINC","ACnc","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per minute","[IU]/min","[IU]/MIN","arbitrary",0.016666666666666666,[0,-1,0,0,0,0,0],"(i.U.)/min","chemical",true,null,null,1,false,true,0,"IU/min; IU/minute; IU per minute; international units","LOINC","ARat","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"international unit per milliliter","[IU]/mL","[IU]/ML","arbitrary",1000000,[-3,0,0,0,0,0,0],"(i.U.)/mL","chemical",true,null,null,1,false,true,0,"IU/mL; IU per mL; international units per milliliter; millilitre","LOINC","ACnc","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"MPL unit per milliliter","[MPL'U]/mL","[MPL'U]/ML","biologic activity of anticardiolipin IgM",1000000,[-3,0,0,0,0,0,0],"/mL","chemical",false,null,null,1,false,true,0,"MPL/mL; MPL U/mL; MPL'U/mL; IgM anticardiolipin units; IgM Phospholipid Units; millilitre ","LOINC","ACnc","Clinical","units for antiphospholipid test\n","1","1","1",1,false],[false,"number per high power field","{#}/[HPF]","/[HPF]","",1,[0,0,0,0,0,0,0],"/HPF",null,false,null,null,1,false,false,0,"#/HPF; # per HPF; number/HPF; numbers per high power field","LOINC","Naric","Clinical","",null,null,null,null,false],[false,"number per low power field","{#}/[LPF]","/[LPF]","",1,[0,0,0,0,0,0,0],"/LPF",null,false,null,null,1,false,false,0,"#/LPF; # per LPF; number/LPF; numbers per low power field","LOINC","Naric","Clinical","",null,null,null,null,false],[false,"IgA antiphosphatidylserine unit ","{APS'U}","","",1,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"APS Unit; Phosphatidylserine Antibody IgA Units","LOINC","ACnc","Clinical","unit for antiphospholipid test",null,null,null,null,false],[false,"EIA index","{EIA_index}","","",1,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"enzyme immunoassay index","LOINC","ACnc","Clinical","",null,null,null,null,false],[false,"kaolin clotting time","{KCT'U}","","",1,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"KCT","LOINC","Time","Clinical","sensitive test to detect lupus anticoagulants; measured in seconds",null,null,null,null,false],[false,"IgM antiphosphatidylserine unit","{MPS'U}","","",1,[0,0,0,0,0,0,0],null,null,false,null,null,1,false,false,0,"Phosphatidylserine Antibody IgM Measurement ","LOINC","ACnc","Clinical","",null,null,null,null,false],[false,"trillion per liter","10*12/L","(10*12)/L","number",1000000000000000,[-3,0,0,0,0,0,0],"(10<sup>12</sup>)/L","dimless",false,null,null,1,false,false,0,"10^12/L; 10*12 per Liter; trillion per liter; litre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"10^3 (used for cell count)","10*3","10*3","number",1000,[0,0,0,0,0,0,0],"10<sup>3</sup>","dimless",false,null,null,1,false,false,0,"10^3; thousand","LOINC","Num","Clinical","usually used for counting entities (e.g. blood cells) per volume","1","1","10",10,false],[false,"thousand per liter","10*3/L","(10*3)/L","number",1000000,[-3,0,0,0,0,0,0],"(10<sup>3</sup>)/L","dimless",false,null,null,1,false,false,0,"10^3/L; 10*3 per liter; litre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"thousand per milliliter","10*3/mL","(10*3)/ML","number",1000000000,[-3,0,0,0,0,0,0],"(10<sup>3</sup>)/mL","dimless",false,null,null,1,false,false,0,"10^3/mL; 10*3 per mL; thousand per milliliter; millilitre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"thousand per microliter","10*3/uL","(10*3)/UL","number",999999999999.9999,[-3,0,0,0,0,0,0],"(10<sup>3</sup>)/μL","dimless",false,null,null,1,false,false,0,"10^3/uL; 10*3 per uL; thousand per microliter; microlitre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"10 thousand per microliter","10*4/uL","(10*4)/UL","number",10000000000000,[-3,0,0,0,0,0,0],"(10<sup>4</sup>)/μL","dimless",false,null,null,1,false,false,0,"10^4/uL; 10*4 per uL; microlitre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"10^5 ","10*5","10*5","number",100000,[0,0,0,0,0,0,0],"10<sup>5</sup>","dimless",false,null,null,1,false,false,0,"one hundred thousand","LOINC","Num","Clinical","","1","1","10",10,false],[false,"10^6","10*6","10*6","number",1000000,[0,0,0,0,0,0,0],"10<sup>6</sup>","dimless",false,null,null,1,false,false,0,"","LOINC","Num","Clinical","","1","1","10",10,false],[false,"million colony forming unit per liter","10*6.[CFU]/L","(10*6).[CFU]/L","number",1000000000,[-3,0,0,0,0,0,0],"(10<sup>6</sup>).CFU/L","dimless",false,null,null,1,false,true,0,"10*6 CFU/L; 10^6 CFU/L; 10^6CFU; 10^6 CFU per liter; million colony forming units; litre","LOINC","ACnc","Clinical","","1","1","10",10,false],[false,"million international unit","10*6.[IU]","(10*6).[IU]","number",1000000,[0,0,0,0,0,0,0],"(10<sup>6</sup>).(i.U.)","dimless",false,null,null,1,false,true,0,"10*6 IU; 10^6 IU; international units","LOINC","arb","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","1","1","10",10,false],[false,"million per 24 hour","10*6/(24.h)","(10*6)/HR","number",11.574074074074074,[0,-1,0,0,0,0,0],"(10<sup>6</sup>)/h","dimless",false,null,null,1,false,false,0,"10*6/24hrs; 10^6/24 hrs; 10*6 per 24 hrs; 10^6 per 24 hours","LOINC","NRat","Clinical","","1","1","10",10,false],[false,"million per kilogram","10*6/kg","(10*6)/KG","number",1000,[0,0,-1,0,0,0,0],"(10<sup>6</sup>)/kg","dimless",false,null,null,1,false,false,0,"10^6/kg; 10*6 per kg; 10*6 per kilogram; millions","LOINC","NCnt","Clinical","","1","1","10",10,false],[false,"million per liter","10*6/L","(10*6)/L","number",1000000000,[-3,0,0,0,0,0,0],"(10<sup>6</sup>)/L","dimless",false,null,null,1,false,false,0,"10^6/L; 10*6 per Liter; 10^6 per Liter; litre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"million per milliliter","10*6/mL","(10*6)/ML","number",1000000000000,[-3,0,0,0,0,0,0],"(10<sup>6</sup>)/mL","dimless",false,null,null,1,false,false,0,"10^6/mL; 10*6 per mL; 10*6 per milliliter; millilitre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"million per microliter","10*6/uL","(10*6)/UL","number",1000000000000000,[-3,0,0,0,0,0,0],"(10<sup>6</sup>)/μL","dimless",false,null,null,1,false,false,0,"10^6/uL; 10^6 per uL; 10^6/mcl; 10^6 per mcl; 10^6 per microliter; microlitre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"10^8","10*8","10*8","number",100000000,[0,0,0,0,0,0,0],"10<sup>8</sup>","dimless",false,null,null,1,false,false,0,"100 million; one hundred million; 10^8","LOINC","Num","Clinical","","1","1","10",10,false],[false,"billion per liter","10*9/L","(10*9)/L","number",1000000000000,[-3,0,0,0,0,0,0],"(10<sup>9</sup>)/L","dimless",false,null,null,1,false,false,0,"10^9/L; 10*9 per Liter; litre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"billion per milliliter","10*9/mL","(10*9)/ML","number",1000000000000000,[-3,0,0,0,0,0,0],"(10<sup>9</sup>)/mL","dimless",false,null,null,1,false,false,0,"10^9/mL; 10*9 per mL; 10^9 per mL; 10*9 per milliliter; millilitre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"billion per microliter","10*9/uL","(10*9)/UL","number",1000000000000000000,[-3,0,0,0,0,0,0],"(10<sup>9</sup>)/μL","dimless",false,null,null,1,false,false,0,"10^9/uL; 10^9 per uL; 10^9/mcl; 10^9 per mcl; 10*9 per uL; 10*9 per mcl; 10*9/mcl; 10^9 per microliter; microlitre","LOINC","NCncn","Clinical","","1","1","10",10,false],[false,"10 liter per minute per square meter","10.L/(min.m2)","L/(MIN.M2)","",0.00016666666666666666,[1,-1,0,0,0,0,0],"L/(min.(m<sup>2</sup>))",null,false,null,null,1,false,false,0,"10 liters per minutes per square meter; 10 L per min per m2; m^2; 10 L/(min*m2); 10L/(min*m^2); litres; sq. meter; metre; meters squared","LOINC","ArVRat","Clinical","",null,null,null,null,false],[false,"10 liter per minute","10.L/min","L/MIN","",0.00016666666666666666,[3,-1,0,0,0,0,0],"L/min",null,false,null,null,1,false,false,0,"10 liters per minute; 10 L per min; 10L; 10 L/min; litre","LOINC","VRat","Clinical","",null,null,null,null,false],[false,"10 micronewton second per centimeter to the fifth power per square meter","10.uN.s/(cm5.m2)","(UN.S)/(CM5.M2)","",100000000,[-6,-1,1,0,0,0,0],"(μN.s)/(cm<sup>5</sup>).(m<sup>2</sup>)",null,false,null,null,1,false,false,0,"dyne seconds per centimeter5 and square meter; dyn.s/(cm5.m2); dyn.s/cm5/m2; cm^5; m^2","LOINC","","Clinical","unit to measure systemic vascular resistance per body surface area",null,null,null,null,false],[false,"24 hour","24.h","HR","",86400,[0,1,0,0,0,0,0],"h",null,false,null,null,1,false,false,0,"24hrs; 24 hrs; 24 hours; days; dy","LOINC","Time","Clinical","",null,null,null,null,false],[false,"ampere per meter","A/m","A/M","electric current",1,[-1,-1,0,0,0,1,0],"A/m","si",true,null,null,1,false,false,0,"A/m; amp/meter; magnetic field strength; H; B; amperes per meter; metre","LOINC","","Clinical","unit of magnetic field strength","C/s","C/S","1",1,false],[true,"centigram","cg","CG","mass",0.01,[0,0,1,0,0,0,0],"cg",null,false,"M",null,1,false,false,0,"centigrams; cg; cgm","LOINC","Mass","Clinical","",null,null,null,null,false],[false,"centiliter","cL","CL","volume",0.00001,[3,0,0,0,0,0,0],"cL","iso1000",true,null,null,1,false,false,0,"centiliters; centilitres","LOINC","Vol","Clinical","","l",null,"1",1,false],[true,"centimeter","cm","CM","length",0.01,[1,0,0,0,0,0,0],"cm",null,false,"L",null,1,false,false,0,"centimeters; centimetres","LOINC","Len","Clinical","",null,null,null,null,false],[false,"centimeter of water","cm[H2O]","CM[H2O]","pressure",98066.5,[-1,-2,1,0,0,0,0],"cm HO<sub><r>2</r></sub>","clinical",true,null,null,1,false,false,0,"cm H2O; cmH2O; centimetres; pressure","LOINC","Pres","Clinical","unit of pressure mostly applies to blood pressure","kPa","KPAL","980665e-5",9.80665,false],[false,"centimeter of water per liter per second","cm[H2O]/L/s","(CM[H2O]/L)/S","pressure",98066500,[-4,-3,1,0,0,0,0],"(cm HO<sub><r>2</r></sub>)/L/s","clinical",true,null,null,1,false,false,0,"cm[H2O]/(L/s); cm[H2O].s/L; cm H2O/L/sec; cmH2O/L/sec; cmH2O/Liter; cmH2O per L per secs; centimeters of water per liters per second; centimetres; litres; cm[H2O]/(L/s)","LOINC","PresRat","Clinical","unit used to measure mean pulmonary resistance","kPa","KPAL","980665e-5",9.80665,false],[false,"centimeter of water per second per meter","cm[H2O]/s/m","(CM[H2O]/S)/M","pressure",98066.5,[-2,-3,1,0,0,0,0],"(cm HO<sub><r>2</r></sub>)/s/m","clinical",true,null,null,1,false,false,0,"cm[H2O]/(s.m); cm H2O/s/m; cmH2O; cmH2O/sec/m; cmH2O per secs per meters; centimeters of water per seconds per meter; centimetres; metre","LOINC","PresRat","Clinical","unit used to measure pulmonary pressure time product","kPa","KPAL","980665e-5",9.80665,false],[false,"centimeter of mercury","cm[Hg]","CM[HG]","pressure",1333220,[-1,-2,1,0,0,0,0],"cm Hg","clinical",true,null,null,1,false,false,0,"centimeters of mercury; centimetres; cmHg; cm Hg","LOINC","Pres","Clinical","unit of pressure where 1 cmHg = 10 torr","kPa","KPAL","133.3220",133.322,false],[true,"square centimeter","cm2","CM2","length",0.0001,[2,0,0,0,0,0,0],"cm<sup>2</sup>",null,false,"L",null,1,false,false,0,"cm^2; sq cm; centimeters squared; square centimeters; centimetre; area","LOINC","Area","Clinical","",null,null,null,null,false],[true,"square centimeter per second","cm2/s","CM2/S","length",0.0001,[2,-1,0,0,0,0,0],"(cm<sup>2</sup>)/s",null,false,"L",null,1,false,false,0,"cm^2/sec; square centimeters per second; sq cm per sec; cm2; centimeters squared; centimetres","LOINC","AreaRat","Clinical","",null,null,null,null,false],[false,"centipoise","cP","CP","dynamic viscosity",1,[-1,-1,1,0,0,0,0],"cP","cgs",true,null,null,1,false,false,0,"cps; centiposes","LOINC","Visc","Clinical","unit of dynamic viscosity in the CGS system with base units: 10^−3 Pa.s = 1 mPa·.s (1 millipascal second)","dyn.s/cm2","DYN.S/CM2","1",1,false],[false,"centistoke","cSt","CST","kinematic viscosity",0.0000010000000000000002,[2,-1,0,0,0,0,0],"cSt","cgs",true,null,null,1,false,false,0,"centistokes","LOINC","Visc","Clinical","unit for kinematic viscosity with base units of mm^2/s (square millimeter per second)","cm2/s","CM2/S","1",1,false],[false,"dekaliter per minute","daL/min","DAL/MIN","volume",0.00016666666666666666,[3,-1,0,0,0,0,0],"daL/min","iso1000",true,null,null,1,false,false,0,"dekalitres; dekaliters per minute; per min","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"dekaliter per minute per square meter","daL/min/m2","(DAL/MIN)/M2","volume",0.00016666666666666666,[1,-1,0,0,0,0,0],"(daL/min)/(m<sup>2</sup>)","iso1000",true,null,null,1,false,false,0,"daL/min/m^2; daL/minute/m2; sq. meter; dekaliters per minutes per square meter; meter squared; dekalitres; metre","LOINC","ArVRat","Clinical","The area usually is the body surface area used to normalize cardiovascular measures for patient's size","l",null,"1",1,false],[false,"decibel","dB","DB","level",1,[0,0,0,0,0,0,0],"dB","levels",true,null,"lg",0.1,true,false,0,"decibels","LOINC","LogRto","Clinical","unit most commonly used in acoustics as unit of sound pressure level. (also see B[SPL] or bel sound pressure level). ","1",null,null,1,false],[false,"degree per second","deg/s","DEG/S","plane angle",0.017453292519943295,[0,-1,0,1,0,0,0],"°/s","iso1000",false,null,null,1,false,false,0,"deg/sec; deg per sec; °/sec; twist rate; angular speed; rotational speed","LOINC","ARat","Clinical","unit of angular (rotational) speed used to express turning rate","[pi].rad/360","[PI].RAD/360","2",2,false],[true,"decigram","dg","DG","mass",0.1,[0,0,1,0,0,0,0],"dg",null,false,"M",null,1,false,false,0,"decigrams; dgm; 0.1 grams; 1/10 gm","LOINC","Mass","Clinical","equal to 1/10 gram",null,null,null,null,false],[false,"deciliter","dL","DL","volume",0.0001,[3,0,0,0,0,0,0],"dL","iso1000",true,null,null,1,false,false,0,"deciliters; decilitres; 0.1 liters; 1/10 L","LOINC","Vol","Clinical","equal to 1/10 liter","l",null,"1",1,false],[true,"decimeter","dm","DM","length",0.1,[1,0,0,0,0,0,0],"dm",null,false,"L",null,1,false,false,0,"decimeters; decimetres; 0.1 meters; 1/10 m; 10 cm; centimeters","LOINC","Len","Clinical","equal to 1/10 meter or 10 centimeters",null,null,null,null,false],[true,"square decimeter per square second","dm2/s2","DM2/S2","length",0.010000000000000002,[2,-2,0,0,0,0,0],"(dm<sup>2</sup>)/(s<sup>2</sup>)",null,false,"L",null,1,false,false,0,"dm2 per s2; dm^2/s^2; decimeters squared per second squared; sq dm; sq sec","LOINC","EngMass (massic energy)","Clinical","units for energy per unit mass or Joules per kilogram (J/kg = kg.m2/s2/kg = m2/s2) ",null,null,null,null,false],[false,"dyne second per centimeter per square meter","dyn.s/(cm.m2)","(DYN.S)/(CM.M2)","force",1,[-2,-1,1,0,0,0,0],"(dyn.s)/(cm.(m<sup>2</sup>))","cgs",true,null,null,1,false,false,0,"(dyn*s)/(cm*m2); (dyn*s)/(cm*m^2); dyn s per cm per m2; m^2; dyne seconds per centimeters per square meter; centimetres; sq. meter; squared","LOINC","","Clinical","","g.cm/s2","G.CM/S2","1",1,false],[false,"dyne second per centimeter","dyn.s/cm","(DYN.S)/CM","force",1,[0,-1,1,0,0,0,0],"(dyn.s)/cm","cgs",true,null,null,1,false,false,0,"(dyn*s)/cm; dyn sec per cm; seconds; centimetre; dyne seconds","LOINC","","Clinical","","g.cm/s2","G.CM/S2","1",1,false],[false,"equivalent per liter","eq/L","EQ/L","amount of substance",6.0221366999999994e+26,[-3,0,0,0,0,0,0],"eq/L","chemical",true,null,null,1,false,false,1,"eq/liter; eq/litre; eqs; equivalents per liter; litre","LOINC","SCnc","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"equivalent per milliliter","eq/mL","EQ/ML","amount of substance",6.0221367e+29,[-3,0,0,0,0,0,0],"eq/mL","chemical",true,null,null,1,false,false,1,"equivalent/milliliter; equivalents per milliliter; eq per mL; millilitre","LOINC","SCnc","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"equivalent per millimole","eq/mmol","EQ/MMOL","amount of substance",1000,[0,0,0,0,0,0,0],"eq/mmol","chemical",true,null,null,1,false,false,0,"equivalent/millimole; equivalents per millimole; eq per mmol","LOINC","SRto","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"equivalent per micromole","eq/umol","EQ/UMOL","amount of substance",1000000,[0,0,0,0,0,0,0],"eq/μmol","chemical",true,null,null,1,false,false,0,"equivalent/micromole; equivalents per micromole; eq per umol","LOINC","SRto","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[true,"femtogram","fg","FG","mass",1e-15,[0,0,1,0,0,0,0],"fg",null,false,"M",null,1,false,false,0,"fg; fgm; femtograms; weight","LOINC","Mass","Clinical","equal to 10^-15 grams",null,null,null,null,false],[false,"femtoliter","fL","FL","volume",1e-18,[3,0,0,0,0,0,0],"fL","iso1000",true,null,null,1,false,false,0,"femtolitres; femtoliters","LOINC","Vol; EntVol","Clinical","equal to 10^-15 liters","l",null,"1",1,false],[true,"femtometer","fm","FM","length",1e-15,[1,0,0,0,0,0,0],"fm",null,false,"L",null,1,false,false,0,"femtometres; femtometers","LOINC","Len","Clinical","equal to 10^-15 meters",null,null,null,null,false],[false,"femtomole","fmol","FMOL","amount of substance",602213670,[0,0,0,0,0,0,0],"fmol","si",true,null,null,1,false,false,1,"femtomoles","LOINC","EntSub","Clinical","equal to 10^-15 moles","10*23","10*23","6.0221367",6.0221367,false],[false,"femtomole per gram","fmol/g","FMOL/G","amount of substance",602213670,[0,0,-1,0,0,0,0],"fmol/g","si",true,null,null,1,false,false,1,"femtomoles; fmol/gm; fmol per gm","LOINC","SCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"femtomole per liter","fmol/L","FMOL/L","amount of substance",602213670000,[-3,0,0,0,0,0,0],"fmol/L","si",true,null,null,1,false,false,1,"femtomoles; fmol per liter; litre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"femtomole per milligram","fmol/mg","FMOL/MG","amount of substance",602213670000,[0,0,-1,0,0,0,0],"fmol/mg","si",true,null,null,1,false,false,1,"fmol per mg; femtomoles","LOINC","SCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"femtomole per milliliter","fmol/mL","FMOL/ML","amount of substance",602213670000000,[-3,0,0,0,0,0,0],"fmol/mL","si",true,null,null,1,false,false,1,"femtomoles; millilitre; fmol per mL; fmol per milliliter","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[true,"gram meter","g.m","G.M","mass",1,[1,0,1,0,0,0,0],"g.m",null,false,"M",null,1,false,false,0,"g*m; gxm; meters; metres","LOINC","Enrg","Clinical","Unit for measuring stroke work (heart work)",null,null,null,null,false],[true,"gram per 100 gram","g/(100.g)","G/G","mass",0.01,[0,0,0,0,0,0,0],"g/g",null,false,"M",null,1,false,false,0,"g/100 gm; 100gm; grams per 100 grams; gm per 100 gm","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"gram per 12 hour","g/(12.h)","G/HR","mass",0.000023148148148148147,[0,-1,1,0,0,0,0],"g/h",null,false,"M",null,1,false,false,0,"gm/12hrs; 12 hrs; gm per 12 hrs; 12hrs; grams per 12 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per 24 hour","g/(24.h)","G/HR","mass",0.000011574074074074073,[0,-1,1,0,0,0,0],"g/h",null,false,"M",null,1,false,false,0,"gm/24hrs; gm/24 hrs; gm per 24 hrs; 24hrs; grams per 24 hours; gm/dy; gm per dy; grams per day","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per 3 days","g/(3.d)","G/D","mass",0.000003858024691358025,[0,-1,1,0,0,0,0],"g/d",null,false,"M",null,1,false,false,0,"gm/3dy; gm/3 dy; gm per 3 days; grams","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per 4 hour","g/(4.h)","G/HR","mass",0.00006944444444444444,[0,-1,1,0,0,0,0],"g/h",null,false,"M",null,1,false,false,0,"gm/4hrs; gm/4 hrs; gm per 4 hrs; 4hrs; grams per 4 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per 48 hour","g/(48.h)","G/HR","mass",0.000005787037037037037,[0,-1,1,0,0,0,0],"g/h",null,false,"M",null,1,false,false,0,"gm/48hrs; gm/48 hrs; gm per 48 hrs; 48hrs; grams per 48 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per 5 hour","g/(5.h)","G/HR","mass",0.00005555555555555556,[0,-1,1,0,0,0,0],"g/h",null,false,"M",null,1,false,false,0,"gm/5hrs; gm/5 hrs; gm per 5 hrs; 5hrs; grams per 5 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per 6 hour","g/(6.h)","G/HR","mass",0.000046296296296296294,[0,-1,1,0,0,0,0],"g/h",null,false,"M",null,1,false,false,0,"gm/6hrs; gm/6 hrs; gm per 6 hrs; 6hrs; grams per 6 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per 72 hour","g/(72.h)","G/HR","mass",0.000003858024691358025,[0,-1,1,0,0,0,0],"g/h",null,false,"M",null,1,false,false,0,"gm/72hrs; gm/72 hrs; gm per 72 hrs; 72hrs; grams per 72 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per cubic centimeter","g/cm3","G/CM3","mass",999999.9999999999,[-3,0,1,0,0,0,0],"g/(cm<sup>3</sup>)",null,false,"M",null,1,false,false,0,"g/cm^3; gm per cm3; g per cm^3; grams per centimeter cubed; cu. cm; centimetre; g/mL; gram per milliliter; millilitre","LOINC","MCnc","Clinical","g/cm3 = g/mL",null,null,null,null,false],[true,"gram per day","g/d","G/D","mass",0.000011574074074074073,[0,-1,1,0,0,0,0],"g/d",null,false,"M",null,1,false,false,0,"gm/dy; gm per dy; grams per day; gm/24hrs; gm/24 hrs; gm per 24 hrs; 24hrs; grams per 24 hours; serving","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per deciliter","g/dL","G/DL","mass",10000,[-3,0,1,0,0,0,0],"g/dL",null,false,"M",null,1,false,false,0,"gm/dL; gm per dL; grams per deciliter; decilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"gram per gram","g/g","G/G","mass",1,[0,0,0,0,0,0,0],"g/g",null,false,"M",null,1,false,false,0,"gm; grams","LOINC","MRto ","Clinical","",null,null,null,null,false],[true,"gram per hour","g/h","G/HR","mass",0.0002777777777777778,[0,-1,1,0,0,0,0],"g/h",null,false,"M",null,1,false,false,0,"gm/hr; gm per hr; grams; intake; output","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per hour per square meter","g/h/m2","(G/HR)/M2","mass",0.0002777777777777778,[-2,-1,1,0,0,0,0],"(g/h)/(m<sup>2</sup>)",null,false,"M",null,1,false,false,0,"gm/hr/m2; gm/h/m2; /m^2; sq. m; g per hr per m2; grams per hours per square meter; meter squared; metre","LOINC","ArMRat","Clinical","",null,null,null,null,false],[true,"gram per kilogram","g/kg ","G/KG","mass",0.001,[0,0,0,0,0,0,0],"g/kg",null,false,"M",null,1,false,false,0,"g per kg; gram per kilograms","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"gram per kilogram per 8 hour ","g/kg/(8.h)","(G/KG)/HR","mass",3.472222222222222e-8,[0,-1,0,0,0,0,0],"(g/kg)/h",null,false,"M",null,1,false,false,0,"g/(8.kg.h); gm/kg/8hrs; 8 hrs; g per kg per 8 hrs; 8hrs; grams per kilograms per 8 hours; shift","LOINC","MCntRat; RelMRat","Clinical","unit often used to describe mass in grams of protein consumed in a 8 hours, divided by the subject's body weight in kilograms. Also used to measure mass dose rate per body mass",null,null,null,null,false],[true,"gram per kilogram per day","g/kg/d","(G/KG)/D","mass",1.1574074074074074e-8,[0,-1,0,0,0,0,0],"(g/kg)/d",null,false,"M",null,1,false,false,0,"g/(kg.d); gm/kg/dy; gm per kg per dy; grams per kilograms per day","LOINC","RelMRat","Clinical","unit often used to describe mass in grams of protein consumed in a day, divided by the subject's body weight in kilograms. Also used to measure mass dose rate per body mass",null,null,null,null,false],[true,"gram per kilogram per hour","g/kg/h","(G/KG)/HR","mass",2.7777777777777776e-7,[0,-1,0,0,0,0,0],"(g/kg)/h",null,false,"M",null,1,false,false,0,"g/(kg.h); g/kg/hr; g per kg per hrs; grams per kilograms per hour","LOINC","MCntRat; RelMRat","Clinical","unit used to measure mass dose rate per body mass",null,null,null,null,false],[true,"gram per kilogram per minute","g/kg/min","(G/KG)/MIN","mass",0.000016666666666666667,[0,-1,0,0,0,0,0],"(g/kg)/min",null,false,"M",null,1,false,false,0,"g/(kg.min); g/kg/min; g per kg per min; grams per kilograms per minute","LOINC","MCntRat; RelMRat","Clinical","unit used to measure mass dose rate per body mass",null,null,null,null,false],[true,"gram per liter","g/L","G/L","mass",1000,[-3,0,1,0,0,0,0],"g/L",null,false,"M",null,1,false,false,0,"gm per liter; g/liter; grams per liter; litre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"gram per square meter","g/m2","G/M2","mass",1,[-2,0,1,0,0,0,0],"g/(m<sup>2</sup>)",null,false,"M",null,1,false,false,0,"g/m^2; gram/square meter; g/sq m; g per m2; g per m^2; grams per square meter; meters squared; metre","LOINC","ArMass","Clinical","Tests measure myocardial mass (heart ventricle system) per body surface area; unit used to measure mass dose per body surface area",null,null,null,null,false],[true,"gram per milligram","g/mg","G/MG","mass",1000,[0,0,0,0,0,0,0],"g/mg",null,false,"M",null,1,false,false,0,"g per mg; grams per milligram","LOINC","MCnt; MRto","Clinical","",null,null,null,null,false],[true,"gram per minute","g/min","G/MIN","mass",0.016666666666666666,[0,-1,1,0,0,0,0],"g/min",null,false,"M",null,1,false,false,0,"g per min; grams per minute; gram/minute","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"gram per milliliter","g/mL","G/ML","mass",1000000,[-3,0,1,0,0,0,0],"g/mL",null,false,"M",null,1,false,false,0,"g per mL; grams per milliliter; millilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"gram per millimole","g/mmol","G/MMOL","mass",1.6605401866749388e-21,[0,0,1,0,0,0,0],"g/mmol",null,false,"M",null,1,false,false,-1,"grams per millimole; g per mmol","LOINC","Ratio","Clinical","",null,null,null,null,false],[false,"joule per liter","J/L","J/L","energy",1000000,[-1,-2,1,0,0,0,0],"J/L","si",true,null,null,1,false,false,0,"joules per liter; litre; J per L","LOINC","EngCnc","Clinical","","N.m","N.M","1",1,false],[true,"degree Kelvin per Watt","K/W","K/W","temperature",0.001,[-2,3,-1,0,1,0,0],"K/W",null,false,"C",null,1,false,false,0,"degree Kelvin/Watt; K per W; thermal ohm; thermal resistance; degrees","LOINC","TempEngRat","Clinical","unit for absolute thermal resistance equal to the reciprocal of thermal conductance. Unit used for tests to measure work of breathing",null,null,null,null,false],[false,"kilo international unit per liter","k[IU]/L","K[IU]/L","arbitrary",1000000,[-3,0,0,0,0,0,0],"(ki.U.)/L","chemical",true,null,null,1,false,true,0,"kIU/L; kIU per L; kIU per liter; kilo international units; litre; allergens; allergy units","LOINC","ACnc","Clinical","IgE has an WHO reference standard so IgE allergen testing can be reported as k[IU]/L","[iU]","[IU]","1",1,false],[false,"kilo international unit per milliliter","k[IU]/mL","K[IU]/ML","arbitrary",1000000000,[-3,0,0,0,0,0,0],"(ki.U.)/mL","chemical",true,null,null,1,false,true,0,"kIU/mL; kIU per mL; kIU per milliliter; kilo international units; millilitre; allergens; allergy units","LOINC","ACnc","Clinical","IgE has an WHO reference standard so IgE allergen testing can be reported as k[IU]/mL","[iU]","[IU]","1",1,false],[false,"katal per kilogram","kat/kg","KAT/KG","catalytic activity",602213670000000000000,[0,-1,-1,0,0,0,0],"kat/kg","chemical",true,null,null,1,false,false,1,"kat per kg; katals per kilogram; mol/s/kg; moles per seconds per kilogram","LOINC","CCnt","Clinical","kat is a unit of catalytic activity with base units = mol/s. Rarely used because its units are too large to practically express catalytic activity. See enzyme unit [U] which is the standard unit for catalytic activity.","mol/s","MOL/S","1",1,false],[false,"katal per liter","kat/L","KAT/L","catalytic activity",6.0221366999999994e+26,[-3,-1,0,0,0,0,0],"kat/L","chemical",true,null,null,1,false,false,1,"kat per L; katals per liter; litre; mol/s/L; moles per seconds per liter","LOINC","CCnc","Clinical","kat is a unit of catalytic activity with base units = mol/s. Rarely used because its units are too large to practically express catalytic activity. See enzyme unit [U] which is the standard unit for catalytic activity.","mol/s","MOL/S","1",1,false],[false,"kilocalorie","kcal","KCAL","energy",4184000,[2,-2,1,0,0,0,0],"kcal","heat",true,null,null,1,false,false,0,"kilogram calories; large calories; food calories; kcals","LOINC","EngRat","Clinical","It is equal to 1000 calories (equal to 4.184 kJ). But in practical usage, kcal refers to food calories which excludes caloric content in fiber and other constitutes that is not digestible by humans. Also see nutrition label Calories ([Cal])","cal_th","CAL_TH","1",1,false],[false,"kilocalorie per 24 hour","kcal/(24.h)","KCAL/HR","energy",48.425925925925924,[2,-3,1,0,0,0,0],"kcal/h","heat",true,null,null,1,false,false,0,"kcal/24hrs; kcal/24 hrs; kcal per 24hrs; kilocalories per 24 hours; kilojoules; kJ/24hr; kJ/(24.h); kJ/dy; kilojoules per days; intake; calories burned; metabolic rate; food calories","","EngRat","Clinical","","cal_th","CAL_TH","1",1,false],[false,"kilocalorie per ounce","kcal/[oz_av]","KCAL/[OZ_AV]","energy",147586.25679704445,[2,-2,0,0,0,0,0],"kcal/oz","heat",true,null,null,1,false,false,0,"kcal/oz; kcal per ozs; large calories per ounces; food calories; servings; international","LOINC","EngCnt","Clinical","used in nutrition to represent calorie of food","cal_th","CAL_TH","1",1,false],[false,"kilocalorie per day","kcal/d","KCAL/D","energy",48.425925925925924,[2,-3,1,0,0,0,0],"kcal/d","heat",true,null,null,1,false,false,0,"kcal/dy; kcal per day; kilocalories per days; kilojoules; kJ/dy; kilojoules per days; intake; calories burned; metabolic rate; food calories","LOINC","EngRat","Clinical","unit in nutrition for food intake (measured in calories) in a day","cal_th","CAL_TH","1",1,false],[false,"kilocalorie per hour","kcal/h","KCAL/HR","energy",1162.2222222222222,[2,-3,1,0,0,0,0],"kcal/h","heat",true,null,null,1,false,false,0,"kcal/hrs; kcals per hr; intake; kilocalories per hours; kilojoules","LOINC","EngRat","Clinical","used in nutrition to represent caloric requirement or consumption","cal_th","CAL_TH","1",1,false],[false,"kilocalorie per kilogram per 24 hour","kcal/kg/(24.h)","(KCAL/KG)/HR","energy",0.04842592592592593,[2,-3,0,0,0,0,0],"(kcal/kg)/h","heat",true,null,null,1,false,false,0,"kcal/kg/24hrs; 24 hrs; kcal per kg per 24hrs; kilocalories per kilograms per 24 hours; kilojoules","LOINC","EngCntRat","Clinical","used in nutrition to represent caloric requirement per day based on subject's body weight in kilograms","cal_th","CAL_TH","1",1,false],[true,"kilogram","kg","KG","mass",1000,[0,0,1,0,0,0,0],"kg",null,false,"M",null,1,false,false,0,"kilograms; kgs","LOINC","Mass","Clinical","",null,null,null,null,false],[true,"kilogram meter per second","kg.m/s","(KG.M)/S","mass",1000,[1,-1,1,0,0,0,0],"(kg.m)/s",null,false,"M",null,1,false,false,0,"kg*m/s; kg.m per sec; kg*m per sec; p; momentum","LOINC","","Clinical","unit for momentum =  mass times velocity",null,null,null,null,false],[true,"kilogram per second per square meter","kg/(s.m2)","KG/(S.M2)","mass",1000,[-2,-1,1,0,0,0,0],"kg/(s.(m<sup>2</sup>))",null,false,"M",null,1,false,false,0,"kg/(s*m2); kg/(s*m^2); kg per s per m2; per sec; per m^2; kilograms per seconds per square meter; meter squared; metre","LOINC","ArMRat","Clinical","",null,null,null,null,false],[true,"kilogram per hour","kg/h","KG/HR","mass",0.2777777777777778,[0,-1,1,0,0,0,0],"kg/h",null,false,"M",null,1,false,false,0,"kg/hr; kg per hr; kilograms per hour","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"kilogram per liter","kg/L","KG/L","mass",1000000,[-3,0,1,0,0,0,0],"kg/L",null,false,"M",null,1,false,false,0,"kg per liter; litre; kilograms","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"kilogram per square meter","kg/m2","KG/M2","mass",1000,[-2,0,1,0,0,0,0],"kg/(m<sup>2</sup>)",null,false,"M",null,1,false,false,0,"kg/m^2; kg/sq. m; kg per m2; per m^2; per sq. m; kilograms; meter squared; metre; BMI","LOINC","Ratio","Clinical","units for body mass index (BMI)",null,null,null,null,false],[true,"kilogram per cubic meter","kg/m3","KG/M3","mass",1000,[-3,0,1,0,0,0,0],"kg/(m<sup>3</sup>)",null,false,"M",null,1,false,false,0,"kg/m^3; kg/cu. m; kg per m3; per m^3; per cu. m; kilograms; meters cubed; metre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"kilogram per minute","kg/min","KG/MIN","mass",16.666666666666668,[0,-1,1,0,0,0,0],"kg/min",null,false,"M",null,1,false,false,0,"kilogram/minute; kg per min; kilograms per minute","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"kilogram per mole","kg/mol","KG/MOL","mass",1.6605401866749388e-21,[0,0,1,0,0,0,0],"kg/mol",null,false,"M",null,1,false,false,-1,"kilogram/mole; kg per mol; kilograms per mole","LOINC","SCnt","Clinical","",null,null,null,null,false],[true,"kilogram per second","kg/s","KG/S","mass",1000,[0,-1,1,0,0,0,0],"kg/s",null,false,"M",null,1,false,false,0,"kg/sec; kilogram/second; kg per sec; kilograms; second","LOINC","MRat","Clinical","",null,null,null,null,false],[false,"kiloliter","kL","KL","volume",1,[3,0,0,0,0,0,0],"kL","iso1000",true,null,null,1,false,false,0,"kiloliters; kilolitres; m3; m^3; meters cubed; metre","LOINC","Vol","Clinical","","l",null,"1",1,false],[true,"kilometer","km","KM","length",1000,[1,0,0,0,0,0,0],"km",null,false,"L",null,1,false,false,0,"kilometers; kilometres; distance","LOINC","Len","Clinical","",null,null,null,null,false],[false,"kilopascal","kPa","KPAL","pressure",1000000,[-1,-2,1,0,0,0,0],"kPa","si",true,null,null,1,false,false,0,"kilopascals; pressure","LOINC","Pres; PPresDiff","Clinical","","N/m2","N/M2","1",1,false],[true,"kilosecond","ks","KS","time",1000,[0,1,0,0,0,0,0],"ks",null,false,"T",null,1,false,false,0,"kiloseconds; ksec","LOINC","Time","Clinical","",null,null,null,null,false],[false,"kilo enzyme unit","kU","KU","catalytic activity",10036894500000000000,[0,-1,0,0,0,0,0],"kU","chemical",true,null,null,1,false,false,1,"units; mmol/min; millimoles per minute","LOINC","CAct","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 kU = 1 mmol/min","umol/min","UMOL/MIN","1",1,false],[false,"kilo enzyme unit per gram","kU/g","KU/G","catalytic activity",10036894500000000000,[0,-1,-1,0,0,0,0],"kU/g","chemical",true,null,null,1,false,false,1,"units per grams; kU per gm","LOINC","CCnt","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 kU = 1 mmol/min","umol/min","UMOL/MIN","1",1,false],[false,"kilo enzyme unit per liter","kU/L","KU/L","catalytic activity",1.00368945e+22,[-3,-1,0,0,0,0,0],"kU/L","chemical",true,null,null,1,false,false,1,"units per liter; litre; enzymatic activity; enzyme activity per volume; activities","LOINC","ACnc; CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 kU = 1 mmol/min","umol/min","UMOL/MIN","1",1,false],[false,"kilo enzyme unit per milliliter","kU/mL","KU/ML","catalytic activity",1.00368945e+25,[-3,-1,0,0,0,0,0],"kU/mL","chemical",true,null,null,1,false,false,1,"kU per mL; units per milliliter; millilitre; enzymatic activity per volume; enzyme activities","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 kU = 1 mmol/min","umol/min","UMOL/MIN","1",1,false],[false,"Liters per 24 hour","L/(24.h)","L/HR","volume",1.1574074074074074e-8,[3,-1,0,0,0,0,0],"L/h","iso1000",true,null,null,1,false,false,0,"L/24hrs; L/24 hrs; L per 24hrs; liters per 24 hours; day; dy; litres; volume flow rate","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"Liters per 8 hour","L/(8.h)","L/HR","volume",3.472222222222222e-8,[3,-1,0,0,0,0,0],"L/h","iso1000",true,null,null,1,false,false,0,"L/8hrs; L/8 hrs; L per 8hrs; liters per 8 hours; litres; volume flow rate; shift","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"Liters per minute per square meter","L/(min.m2) ","L/(MIN.M2)","volume",0.000016666666666666667,[1,-1,0,0,0,0,0],"L/(min.(m<sup>2</sup>))","iso1000",true,null,null,1,false,false,0,"L/(min.m2); L/min/m^2; L/min/sq. meter; L per min per m2; m^2; liters per minutes per square meter; meter squared; litres; metre ","LOINC","ArVRat","Clinical","unit for tests that measure cardiac output per body surface area (cardiac index)","l",null,"1",1,false],[false,"Liters per day","L/d","L/D","volume",1.1574074074074074e-8,[3,-1,0,0,0,0,0],"L/d","iso1000",true,null,null,1,false,false,0,"L/dy; L per day; 24hrs; 24 hrs; 24 hours; liters; litres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"Liters per hour","L/h","L/HR","volume",2.7777777777777776e-7,[3,-1,0,0,0,0,0],"L/h","iso1000",true,null,null,1,false,false,0,"L/hr; L per hr; litres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"Liters per kilogram","L/kg","L/KG","volume",0.000001,[3,0,-1,0,0,0,0],"L/kg","iso1000",true,null,null,1,false,false,0,"L per kg; litre","LOINC","VCnt","Clinical","","l",null,"1",1,false],[false,"Liters per liter","L/L","L/L","volume",1,[0,0,0,0,0,0,0],"L/L","iso1000",true,null,null,1,false,false,0,"L per L; liter/liter; litre","LOINC","VFr","Clinical","","l",null,"1",1,false],[false,"Liters per minute","L/min","L/MIN","volume",0.000016666666666666667,[3,-1,0,0,0,0,0],"L/min","iso1000",true,null,null,1,false,false,0,"liters per minute; litre","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"Liters per minute per square meter","L/min/m2","(L/MIN)/M2","volume",0.000016666666666666667,[1,-1,0,0,0,0,0],"(L/min)/(m<sup>2</sup>)","iso1000",true,null,null,1,false,false,0,"L/(min.m2); L/min/m^2; L/min/sq. meter; L per min per m2; m^2; liters per minutes per square meter; meter squared; litres; metre ","","ArVRat","Clinical","unit for tests that measure cardiac output per body surface area (cardiac index)","l",null,"1",1,false],[false,"Liters per second","L/s","L/S","volume",0.001,[3,-1,0,0,0,0,0],"L/s","iso1000",true,null,null,1,false,false,0,"L per sec; litres","LOINC","VRat","Clinical","unit used often to measure gas flow and peak expiratory flow","l",null,"1",1,false],[false,"Liters per second per square second","L/s/s2","(L/S)/S2","volume",0.001,[3,-3,0,0,0,0,0],"(L/s)/(s<sup>2</sup>)","iso1000",true,null,null,1,false,false,0,"L/s/s^2; L/sec/sec2; L/sec/sec^2; L/sec/sq. sec; L per s per s2; L per sec per sec2; s^2; sec^2; liters per seconds per square second; second squared; litres ","LOINC","ArVRat","Clinical","unit for tests that measure cardiac output/body surface area","l",null,"1",1,false],[false,"lumen square meter","lm.m2","LM.M2","luminous flux",1,[2,0,0,2,0,0,1],"lm.(m<sup>2</sup>)","si",true,null,null,1,false,false,0,"lm*m2; lm*m^2; lumen meters squared; lumen sq. meters; metres","LOINC","","Clinical","","cd.sr","CD.SR","1",1,false],[true,"meter per second","m/s","M/S","length",1,[1,-1,0,0,0,0,0],"m/s",null,false,"L",null,1,false,false,0,"meter/second; m per sec; meters per second; metres; velocity; speed","LOINC","Vel","Clinical","unit of velocity",null,null,null,null,false],[true,"meter per square second","m/s2","M/S2","length",1,[1,-2,0,0,0,0,0],"m/(s<sup>2</sup>)",null,false,"L",null,1,false,false,0,"m/s^2; m/sq. sec; m per s2; per s^2; meters per square second; second squared; sq second; metres; acceleration","LOINC","Accel","Clinical","unit of acceleration",null,null,null,null,false],[false,"milli international unit per liter","m[IU]/L","M[IU]/L","arbitrary",1,[-3,0,0,0,0,0,0],"(mi.U.)/L","chemical",true,null,null,1,false,true,0,"mIU/L; m IU/L; mIU per liter; units; litre","LOINC","ACnc","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"milli  international unit per milliliter","m[IU]/mL","M[IU]/ML","arbitrary",1000.0000000000001,[-3,0,0,0,0,0,0],"(mi.U.)/mL","chemical",true,null,null,1,false,true,0,"mIU/mL; m IU/mL; mIU per mL; milli international units per milliliter; millilitre","LOINC","ACnc","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[true,"square meter","m2","M2","length",1,[2,0,0,0,0,0,0],"m<sup>2</sup>",null,false,"L",null,1,false,false,0,"m^2; sq m; square meters; meters squared; metres","LOINC","Area","Clinical","unit often used to represent body surface area",null,null,null,null,false],[true,"square meter per second","m2/s","M2/S","length",1,[2,-1,0,0,0,0,0],"(m<sup>2</sup>)/s",null,false,"L",null,1,false,false,0,"m^2/sec; m2 per sec; m^2 per sec; sq m/sec; meters squared/seconds; sq m per sec; meters squared; metres","LOINC","ArRat","Clinical","",null,null,null,null,false],[true,"cubic meter per second","m3/s","M3/S","length",1,[3,-1,0,0,0,0,0],"(m<sup>3</sup>)/s",null,false,"L",null,1,false,false,0,"m^3/sec; m3 per sec; m^3 per sec; cu m/sec; cubic meters per seconds; meters cubed; metres","LOINC","VRat","Clinical","",null,null,null,null,false],[false,"milliampere","mA","MA","electric current",0.001,[0,-1,0,0,0,1,0],"mA","si",true,null,null,1,false,false,0,"mamp; milliamperes","LOINC","ElpotRat","Clinical","unit of electric current","C/s","C/S","1",1,false],[false,"millibar","mbar","MBAR","pressure",100000,[-1,-2,1,0,0,0,0],"mbar","iso1000",true,null,null,1,false,false,0,"millibars","LOINC","Pres","Clinical","unit of pressure","Pa","PAL","1e5",100000,false],[false,"millibar second per liter","mbar.s/L","(MBAR.S)/L","pressure",100000000,[-4,-1,1,0,0,0,0],"(mbar.s)/L","iso1000",true,null,null,1,false,false,0,"mbar*s/L; mbar.s per L; mbar*s per L; millibar seconds per liter; millibar second per litre","LOINC","","Clinical","unit to measure expiratory resistance","Pa","PAL","1e5",100000,false],[false,"millibar per liter per second","mbar/L/s","(MBAR/L)/S","pressure",100000000,[-4,-3,1,0,0,0,0],"(mbar/L)/s","iso1000",true,null,null,1,false,false,0,"mbar/(L.s); mbar/L/sec; mbar/liter/second; mbar per L per sec; mbar per liter per second; millibars per liters per seconds; litres","LOINC","PresCncRat","Clinical","unit to measure expiratory resistance","Pa","PAL","1e5",100000,false],[false,"milliequivalent","meq","MEQ","amount of substance",602213670000000000000,[0,0,0,0,0,0,0],"meq","chemical",true,null,null,1,false,false,1,"milliequivalents; meqs","LOINC","Sub","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per 2 hour","meq/(2.h)","MEQ/HR","amount of substance",83640787500000000,[0,-1,0,0,0,0,0],"meq/h","chemical",true,null,null,1,false,false,1,"meq/2hrs; meq/2 hrs; meq per 2 hrs; milliequivalents per 2 hours","LOINC","SRat","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per 24 hour","meq/(24.h)","MEQ/HR","amount of substance",6970065625000000,[0,-1,0,0,0,0,0],"meq/h","chemical",true,null,null,1,false,false,1,"meq/24hrs; meq/24 hrs; meq per 24 hrs; milliequivalents per 24 hours","LOINC","SRat","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per 8 hour","meq/(8.h)","MEQ/HR","amount of substance",20910196875000000,[0,-1,0,0,0,0,0],"meq/h","chemical",true,null,null,1,false,false,1,"meq/8hrs; meq/8 hrs; meq per 8 hrs; milliequivalents per 8 hours; shift","LOINC","SRat","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per day","meq/d","MEQ/D","amount of substance",6970065625000000,[0,-1,0,0,0,0,0],"meq/d","chemical",true,null,null,1,false,false,1,"meq/dy; meq per day; milliquivalents per days; meq/24hrs; meq/24 hrs; meq per 24 hrs; milliequivalents per 24 hours","LOINC","SRat","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per deciliter","meq/dL","MEQ/DL","amount of substance",6.022136699999999e+24,[-3,0,0,0,0,0,0],"meq/dL","chemical",true,null,null,1,false,false,1,"meq per dL; milliequivalents per deciliter; decilitre","LOINC","SCnc","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per gram","meq/g","MEQ/G","amount of substance",602213670000000000000,[0,0,-1,0,0,0,0],"meq/g","chemical",true,null,null,1,false,false,1,"mgq/gm; meq per gm; milliequivalents per gram","LOINC","MCnt","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per hour","meq/h","MEQ/HR","amount of substance",167281575000000000,[0,-1,0,0,0,0,0],"meq/h","chemical",true,null,null,1,false,false,1,"meq/hrs; meq per hrs; milliequivalents per hour","LOINC","SRat","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per kilogram","meq/kg","MEQ/KG","amount of substance",602213670000000000,[0,0,-1,0,0,0,0],"meq/kg","chemical",true,null,null,1,false,false,1,"meq per kg; milliequivalents per kilogram","LOINC","SCnt","Clinical","equivalence equals moles per valence; used to measure dose per patient body mass","mol","MOL","1",1,false],[false,"milliequivalent per kilogram per hour","meq/kg/h","(MEQ/KG)/HR","amount of substance",167281575000000,[0,-1,-1,0,0,0,0],"(meq/kg)/h","chemical",true,null,null,1,false,false,1,"meq/(kg.h); meq/kg/hr; meq per kg per hr; milliequivalents per kilograms per hour","LOINC","SCntRat","Clinical","equivalence equals moles per valence; unit used to measure dose rate per patient body mass","mol","MOL","1",1,false],[false,"milliequivalent per liter","meq/L","MEQ/L","amount of substance",6.0221367e+23,[-3,0,0,0,0,0,0],"meq/L","chemical",true,null,null,1,false,false,1,"milliequivalents per liter; litre; meq per l; acidity","LOINC","SCnc","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per square meter","meq/m2","MEQ/M2","amount of substance",602213670000000000000,[-2,0,0,0,0,0,0],"meq/(m<sup>2</sup>)","chemical",true,null,null,1,false,false,1,"meq/m^2; meq/sq. m; milliequivalents per square meter; meter squared; metre","LOINC","ArSub","Clinical","equivalence equals moles per valence; note that the use of m2 in clinical units ofter refers to body surface area","mol","MOL","1",1,false],[false,"milliequivalent per minute","meq/min","MEQ/MIN","amount of substance",10036894500000000000,[0,-1,0,0,0,0,0],"meq/min","chemical",true,null,null,1,false,false,1,"meq per min; milliequivalents per minute","LOINC","SRat","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[false,"milliequivalent per milliliter","meq/mL","MEQ/ML","amount of substance",6.0221367e+26,[-3,0,0,0,0,0,0],"meq/mL","chemical",true,null,null,1,false,false,1,"meq per mL; milliequivalents per milliliter; millilitre","LOINC","SCnc","Clinical","equivalence equals moles per valence","mol","MOL","1",1,false],[true,"milligram","mg","MG","mass",0.001,[0,0,1,0,0,0,0],"mg",null,false,"M",null,1,false,false,0,"milligrams","LOINC","Mass","Clinical","",null,null,null,null,false],[true,"milligram per 10 hour","mg/(10.h)","MG/HR","mass",2.7777777777777777e-8,[0,-1,1,0,0,0,0],"mg/h",null,false,"M",null,1,false,false,0,"mg/10hrs; mg/10 hrs; mg per 10 hrs; milligrams per 10 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"milligram per 12 hour","mg/(12.h)","MG/HR","mass",2.3148148148148148e-8,[0,-1,1,0,0,0,0],"mg/h",null,false,"M",null,1,false,false,0,"mg/12hrs; mg/12 hrs; per 12 hrs; 12hrs; milligrams per 12 hours","LOINC","MRat","Clinical","units used for tests in urine",null,null,null,null,false],[true,"milligram per 2 hour","mg/(2.h)","MG/HR","mass",1.3888888888888888e-7,[0,-1,1,0,0,0,0],"mg/h",null,false,"M",null,1,false,false,0,"mg/2hrs; mg/2 hrs; mg per 2 hrs; 2hrs; milligrams per 2 hours","LOINC","MRat","Clinical","units used for tests in urine",null,null,null,null,false],[true,"milligram per 24 hour","mg/(24.h)","MG/HR","mass",1.1574074074074074e-8,[0,-1,1,0,0,0,0],"mg/h",null,false,"M",null,1,false,false,0,"mg/24hrs; mg/24 hrs; milligrams per 24 hours; mg/kg/dy; mg per kg per day; milligrams per kilograms per days","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"milligram per 6 hour","mg/(6.h)","MG/HR","mass",4.6296296296296295e-8,[0,-1,1,0,0,0,0],"mg/h",null,false,"M",null,1,false,false,0,"mg/6hrs; mg/6 hrs; mg per 6 hrs; 6hrs; milligrams per 6 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"milligram per 72 hour","mg/(72.h)","MG/HR","mass",3.858024691358025e-9,[0,-1,1,0,0,0,0],"mg/h",null,false,"M",null,1,false,false,0,"mg/72hrs; mg/72 hrs; 72 hrs; 72hrs; milligrams per 72 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"milligram per 8 hour","mg/(8.h)","MG/HR","mass",3.472222222222222e-8,[0,-1,1,0,0,0,0],"mg/h",null,false,"M",null,1,false,false,0,"mg/8hrs; mg/8 hrs; milligrams per 8 hours; shift","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"milligram per day","mg/d","MG/D","mass",1.1574074074074074e-8,[0,-1,1,0,0,0,0],"mg/d",null,false,"M",null,1,false,false,0,"mg/24hrs; mg/24 hrs; milligrams per 24 hours; mg/dy; mg per day; milligrams","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"milligram per deciliter","mg/dL","MG/DL","mass",10,[-3,0,1,0,0,0,0],"mg/dL",null,false,"M",null,1,false,false,0,"mg per dL; milligrams per deciliter; decilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"milligram per gram","mg/g","MG/G","mass",0.001,[0,0,0,0,0,0,0],"mg/g",null,false,"M",null,1,false,false,0,"mg per gm; milligrams per gram","LOINC","MCnt; MRto","Clinical","",null,null,null,null,false],[true,"milligram per hour","mg/h","MG/HR","mass",2.7777777777777776e-7,[0,-1,1,0,0,0,0],"mg/h",null,false,"M",null,1,false,false,0,"mg/hr; mg per hr; milligrams","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"milligram per kilogram","mg/kg","MG/KG","mass",0.000001,[0,0,0,0,0,0,0],"mg/kg",null,false,"M",null,1,false,false,0,"mg per kg; milligrams per kilograms","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"milligram per kilogram per 8 hour","mg/kg/(8.h)","(MG/KG)/HR","mass",3.472222222222222e-11,[0,-1,0,0,0,0,0],"(mg/kg)/h",null,false,"M",null,1,false,false,0,"mg/(8.h.kg); mg/kg/8hrs; mg/kg/8 hrs; mg per kg per 8hrs; 8 hrs; milligrams per kilograms per 8 hours; shift","LOINC","RelMRat; MCntRat","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"milligram per kilogram per day","mg/kg/d","(MG/KG)/D","mass",1.1574074074074074e-11,[0,-1,0,0,0,0,0],"(mg/kg)/d",null,false,"M",null,1,false,false,0,"mg/(kg.d); mg/(kg.24.h)mg/kg/dy; mg per kg per day; milligrams per kilograms per days; mg/kg/(24.h); mg/kg/24hrs; 24 hrs; 24 hours","LOINC","RelMRat ","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"milligram per kilogram per hour","mg/kg/h","(MG/KG)/HR","mass",2.7777777777777777e-10,[0,-1,0,0,0,0,0],"(mg/kg)/h",null,false,"M",null,1,false,false,0,"mg/(kg.h); mg/kg/hr; mg per kg per hr; milligrams per kilograms per hour","LOINC","RelMRat; MCntRat","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"milligram per kilogram per minute","mg/kg/min","(MG/KG)/MIN","mass",1.6666666666666667e-8,[0,-1,0,0,0,0,0],"(mg/kg)/min",null,false,"M",null,1,false,false,0,"mg/(kg.min); mg per kg per min; milligrams per kilograms per minute","LOINC","RelMRat; MCntRat","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"milligram per liter","mg/L","MG/L","mass",1,[-3,0,1,0,0,0,0],"mg/L",null,false,"M",null,1,false,false,0,"mg per l; milligrams per liter; litre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"milligram per square meter","mg/m2","MG/M2","mass",0.001,[-2,0,1,0,0,0,0],"mg/(m<sup>2</sup>)",null,false,"M",null,1,false,false,0,"mg/m^2; mg/sq. m; mg per m2; mg per m^2; mg per sq. milligrams; meter squared; metre","LOINC","ArMass","Clinical","",null,null,null,null,false],[true,"milligram per cubic meter","mg/m3","MG/M3","mass",0.001,[-3,0,1,0,0,0,0],"mg/(m<sup>3</sup>)",null,false,"M",null,1,false,false,0,"mg/m^3; mg/cu. m; mg per m3; milligrams per cubic meter; meter cubed; metre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"milligram per milligram","mg/mg","MG/MG","mass",1,[0,0,0,0,0,0,0],"mg/mg",null,false,"M",null,1,false,false,0,"mg per mg; milligrams; milligram/milligram","LOINC","MRto","Clinical","",null,null,null,null,false],[true,"milligram per minute","mg/min","MG/MIN","mass",0.000016666666666666667,[0,-1,1,0,0,0,0],"mg/min",null,false,"M",null,1,false,false,0,"mg per min; milligrams per minutes; milligram/minute","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"milligram per milliliter","mg/mL","MG/ML","mass",1000.0000000000001,[-3,0,1,0,0,0,0],"mg/mL",null,false,"M",null,1,false,false,0,"mg per mL; milligrams per milliliters; millilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"milligram per millimole","mg/mmol","MG/MMOL","mass",1.660540186674939e-24,[0,0,1,0,0,0,0],"mg/mmol",null,false,"M",null,1,false,false,-1,"mg per mmol; milligrams per millimole; ","LOINC","Ratio","Clinical","",null,null,null,null,false],[true,"milligram per week","mg/wk","MG/WK","mass",1.6534391534391535e-9,[0,-1,1,0,0,0,0],"mg/wk",null,false,"M",null,1,false,false,0,"mg/week; mg per wk; milligrams per weeks; milligram/week","LOINC","Mrat","Clinical","",null,null,null,null,false],[false,"milliliter","mL","ML","volume",0.000001,[3,0,0,0,0,0,0],"mL","iso1000",true,null,null,1,false,false,0,"milliliters; millilitres","LOINC","Vol","Clinical","","l",null,"1",1,false],[false,"milliliter per 10 hour","mL/(10.h)","ML/HR","volume",2.7777777777777777e-11,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/10hrs; ml/10 hrs; mL per 10hrs; 10 hrs; milliliters per 10 hours; millilitres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 12 hour","mL/(12.h)","ML/HR","volume",2.3148148148148147e-11,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/12hrs; ml/12 hrs; mL per 12hrs; 12 hrs; milliliters per 12 hours; millilitres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 2 hour","mL/(2.h)","ML/HR","volume",1.3888888888888888e-10,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/2hrs; ml/2 hrs; mL per 2hrs; 2 hrs; milliliters per 2 hours; millilitres ","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 24 hour","mL/(24.h)","ML/HR","volume",1.1574074074074074e-11,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/24hrs; ml/24 hrs; mL per 24hrs; 24 hrs; milliliters per 24 hours; millilitres; ml/dy; /day; ml per dy; days; fluid outputs; fluid inputs; flow rate","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 4 hour","mL/(4.h)","ML/HR","volume",6.944444444444444e-11,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/4hrs; ml/4 hrs; mL per 4hrs; 4 hrs; milliliters per 4 hours; millilitres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 5 hour","mL/(5.h)","ML/HR","volume",5.5555555555555553e-11,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/5hrs; ml/5 hrs; mL per 5hrs; 5 hrs; milliliters per 5 hours; millilitres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 6 hour","mL/(6.h)","ML/HR","volume",4.6296296296296294e-11,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/6hrs; ml/6 hrs; mL per 6hrs; 6 hrs; milliliters per 6 hours; millilitres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 72 hour","mL/(72.h)","ML/HR","volume",3.8580246913580245e-12,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/72hrs; ml/72 hrs; mL per 72hrs; 72 hrs; milliliters per 72 hours; millilitres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 8 hour","mL/(8.h)","ML/HR","volume",3.472222222222222e-11,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"ml/8hrs; ml/8 hrs; mL per 8hrs; 8 hrs; milliliters per 8 hours; millilitres; shift","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per 8 hour per kilogram","mL/(8.h)/kg","(ML/HR)/KG","volume",3.472222222222222e-14,[3,-1,-1,0,0,0,0],"(mL/h)/kg","iso1000",true,null,null,1,false,false,0,"mL/kg/(8.h); ml/8h/kg; ml/8 h/kg; ml/8hr/kg; ml/8 hr/kgr; mL per 8h per kg; 8 h; 8hr; 8 hr; milliliters per 8 hours per kilogram; millilitres; shift","LOINC","VRatCnt","Clinical","unit used to measure renal excretion volume rate per body mass","l",null,"1",1,false],[false,"milliliter per square inch (international)","mL/[sin_i]","ML/[SIN_I]","volume",0.0015500031000061998,[1,0,0,0,0,0,0],"mL","iso1000",true,null,null,1,false,false,0,"mL/sin; mL/in2; mL/in^2; mL per sin; in2; in^2; sq. in; milliliters per square inch; inch squared","LOINC","ArVol","Clinical","","l",null,"1",1,false],[false,"milliliter per centimeter of water","mL/cm[H2O]","ML/CM[H2O]","volume",1.0197162129779282e-11,[4,2,-1,0,0,0,0],"mL/(cm HO<sub><r>2</r></sub>)","iso1000",true,null,null,1,false,false,0,"milliliters per centimeter of water; millilitre per centimetre of water; millilitres per centimetre of water; mL/cmH2O; mL/cm H2O; mL per cmH2O; mL per cm H2O","LOINC","Compli","Clinical","unit used to measure dynamic lung compliance","l",null,"1",1,false],[false,"milliliter per day","mL/d","ML/D","volume",1.1574074074074074e-11,[3,-1,0,0,0,0,0],"mL/d","iso1000",true,null,null,1,false,false,0,"ml/day; ml per day; milliliters per day; 24 hours; 24hrs; millilitre;","LOINC","VRat","Clinical","usually used to measure fluid output or input; flow rate","l",null,"1",1,false],[false,"milliliter per deciliter","mL/dL","ML/DL","volume",0.009999999999999998,[0,0,0,0,0,0,0],"mL/dL","iso1000",true,null,null,1,false,false,0,"mL per dL; millilitres; decilitre; milliliters","LOINC","VFr; VFrDiff","Clinical","","l",null,"1",1,false],[false,"milliliter per hour","mL/h","ML/HR","volume",2.7777777777777777e-10,[3,-1,0,0,0,0,0],"mL/h","iso1000",true,null,null,1,false,false,0,"mL/hr; mL per hr; milliliters per hour; millilitres; fluid intake; fluid output","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per kilogram","mL/kg","ML/KG","volume",9.999999999999999e-10,[3,0,-1,0,0,0,0],"mL/kg","iso1000",true,null,null,1,false,false,0,"mL per kg; milliliters per kilogram; millilitres","LOINC","VCnt","Clinical","","l",null,"1",1,false],[false,"milliliter per kilogram per 8 hour","mL/kg/(8.h)","(ML/KG)/HR","volume",3.472222222222222e-14,[3,-1,-1,0,0,0,0],"(mL/kg)/h","iso1000",true,null,null,1,false,false,0,"mL/(8.h.kg); mL/kg/8hrs; mL/kg/8 hrs; mL per kg per 8hrs; 8 hrs; milliliters per kilograms per 8 hours; millilitres; shift","LOINC","VCntRat; RelEngRat","Clinical","unit used to measure renal excretion volume rate per body mass","l",null,"1",1,false],[false,"milliliter per kilogram per day","mL/kg/d","(ML/KG)/D","volume",1.1574074074074072e-14,[3,-1,-1,0,0,0,0],"(mL/kg)/d","iso1000",true,null,null,1,false,false,0,"mL/(kg.d); mL/kg/dy; mL per kg per day; milliliters per kilograms per day; mg/kg/24hrs; 24 hrs; per 24 hours millilitres","LOINC","VCntRat; RelEngRat","Clinical","unit used to measure renal excretion volume rate per body mass","l",null,"1",1,false],[false,"milliliter per kilogram per hour","mL/kg/h","(ML/KG)/HR","volume",2.7777777777777774e-13,[3,-1,-1,0,0,0,0],"(mL/kg)/h","iso1000",true,null,null,1,false,false,0,"mL/(kg.h); mL/kg/hr; mL per kg per hr; milliliters per kilograms per hour; millilitres","LOINC","VCntRat; RelEngRat","Clinical","unit used to measure renal excretion volume rate per body mass","l",null,"1",1,false],[false,"milliliter per kilogram per minute","mL/kg/min","(ML/KG)/MIN","volume",1.6666666666666664e-11,[3,-1,-1,0,0,0,0],"(mL/kg)/min","iso1000",true,null,null,1,false,false,0,"mL/(kg.min); mL/kg/dy; mL per kg per day; milliliters per kilograms per day; millilitres","LOINC","RelEngRat","Clinical","used for tests that measure activity metabolic rate compared to standard resting metabolic rate ","l",null,"1",1,false],[false,"milliliter per square meter","mL/m2","ML/M2","volume",0.000001,[1,0,0,0,0,0,0],"mL/(m<sup>2</sup>)","iso1000",true,null,null,1,false,false,0,"mL/m^2; mL/sq. meter; mL per m2; m^2; sq. meter; milliliters per square meter; millilitres; meter squared","LOINC","ArVol","Clinical","used for tests that relate to heart work - e.g. ventricular stroke volume; atrial volume per body surface area","l",null,"1",1,false],[false,"milliliter per millibar","mL/mbar","ML/MBAR","volume",1e-11,[4,2,-1,0,0,0,0],"mL/mbar","iso1000",true,null,null,1,false,false,0,"mL per mbar; milliliters per millibar; millilitres","LOINC","","Clinical","unit used to measure dynamic lung compliance","l",null,"1",1,false],[false,"milliliter per minute","mL/min","ML/MIN","volume",1.6666666666666667e-8,[3,-1,0,0,0,0,0],"mL/min","iso1000",true,null,null,1,false,false,0,"mL per min; milliliters; millilitres","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"milliliter per minute per square meter","mL/min/m2","(ML/MIN)/M2","volume",1.6666666666666667e-8,[1,-1,0,0,0,0,0],"(mL/min)/(m<sup>2</sup>)","iso1000",true,null,null,1,false,false,0,"ml/min/m^2; ml/min/sq. meter; mL per min per m2; m^2; sq. meter; milliliters per minutes per square meter; millilitres; metre; meter squared","LOINC","ArVRat","Clinical","unit used to measure volume per body surface area; oxygen consumption index","l",null,"1",1,false],[false,"milliliter per millimeter","mL/mm","ML/MM","volume",0.001,[2,0,0,0,0,0,0],"mL/mm","iso1000",true,null,null,1,false,false,0,"mL per mm; milliliters per millimeter; millilitres; millimetre","LOINC","Lineic Volume","Clinical","","l",null,"1",1,false],[false,"milliliter per second","mL/s","ML/S","volume",0.000001,[3,-1,0,0,0,0,0],"mL/s","iso1000",true,null,null,1,false,false,0,"ml/sec; mL per sec; milliliters per second; millilitres","LOINC","Vel; VelRat; VRat","Clinical","","l",null,"1",1,false],[true,"millimeter","mm","MM","length",0.001,[1,0,0,0,0,0,0],"mm",null,false,"L",null,1,false,false,0,"millimeters; millimetres; height; length; diameter; thickness; axis; curvature; size","LOINC","Len","Clinical","",null,null,null,null,false],[true,"millimeter per hour","mm/h","MM/HR","length",2.7777777777777776e-7,[1,-1,0,0,0,0,0],"mm/h",null,false,"L",null,1,false,false,0,"mm/hr; mm per hr; millimeters per hour; millimetres","LOINC","Vel","Clinical","unit to measure sedimentation rate",null,null,null,null,false],[true,"millimeter per minute","mm/min","MM/MIN","length",0.000016666666666666667,[1,-1,0,0,0,0,0],"mm/min",null,false,"L",null,1,false,false,0,"mm per min; millimeters per minute; millimetres","LOINC","Vel","Clinical","",null,null,null,null,false],[false,"millimeter of water","mm[H2O]","MM[H2O]","pressure",9806.65,[-1,-2,1,0,0,0,0],"mm HO<sub><r>2</r></sub>","clinical",true,null,null,1,false,false,0,"mmH2O; mm H2O; millimeters of water; millimetres","LOINC","Pres","Clinical","","kPa","KPAL","980665e-5",9.80665,false],[false,"millimeter of mercury","mm[Hg]","MM[HG]","pressure",133322,[-1,-2,1,0,0,0,0],"mm Hg","clinical",true,null,null,1,false,false,0,"mmHg; mm Hg; millimeters of mercury; millimetres","LOINC","Pres; PPres; Ratio","Clinical","1 mm[Hg] = 1 torr; unit to measure blood pressure","kPa","KPAL","133.3220",133.322,false],[true,"square millimeter","mm2","MM2","length",0.000001,[2,0,0,0,0,0,0],"mm<sup>2</sup>",null,false,"L",null,1,false,false,0,"mm^2; sq. mm.; sq. millimeters; millimeters squared; millimetres","LOINC","Area","Clinical","",null,null,null,null,false],[false,"millimole","mmol","MMOL","amount of substance",602213670000000000000,[0,0,0,0,0,0,0],"mmol","si",true,null,null,1,false,false,1,"millimoles","LOINC","Sub","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per 12 hour","mmol/(12.h)","MMOL/HR","amount of substance",13940131250000000,[0,-1,0,0,0,0,0],"mmol/h","si",true,null,null,1,false,false,1,"mmol/12hrs; mmol/12 hrs; mmol per 12 hrs; 12hrs; millimoles per 12 hours","LOINC","SRat","Clinical","unit for tests related to urine","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per 2 hour","mmol/(2.h)","MMOL/HR","amount of substance",83640787500000000,[0,-1,0,0,0,0,0],"mmol/h","si",true,null,null,1,false,false,1,"mmol/2hrs; mmol/2 hrs; mmol per 2 hrs; 2hrs; millimoles per 2 hours","LOINC","SRat","Clinical","unit for tests related to urine","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per 24 hour","mmol/(24.h)","MMOL/HR","amount of substance",6970065625000000,[0,-1,0,0,0,0,0],"mmol/h","si",true,null,null,1,false,false,1,"mmol/24hrs; mmol/24 hrs; mmol per 24 hrs; 24hrs; millimoles per 24 hours","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per 5 hour","mmol/(5.h)","MMOL/HR","amount of substance",33456315000000000,[0,-1,0,0,0,0,0],"mmol/h","si",true,null,null,1,false,false,1,"mmol/5hrs; mmol/5 hrs; mmol per 5 hrs; 5hrs; millimoles per 5 hours","LOINC","SRat","Clinical","unit for tests related to doses","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per 6 hour","mmol/(6.h)","MMOL/HR","amount of substance",27880262500000000,[0,-1,0,0,0,0,0],"mmol/h","si",true,null,null,1,false,false,1,"mmol/6hrs; mmol/6 hrs; mmol per 6 hrs; 6hrs; millimoles per 6 hours","LOINC","SRat","Clinical","unit for tests related to urine","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per 8 hour","mmol/(8.h)","MMOL/HR","amount of substance",20910196875000000,[0,-1,0,0,0,0,0],"mmol/h","si",true,null,null,1,false,false,1,"mmol/8hrs; mmol/8 hrs; mmol per 8 hrs; 8hrs; millimoles per 8 hours; shift","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per day","mmol/d","MMOL/D","amount of substance",6970065625000000,[0,-1,0,0,0,0,0],"mmol/d","si",true,null,null,1,false,false,1,"mmol/24hrs; mmol/24 hrs; mmol per 24 hrs; 24hrs; millimoles per 24 hours","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per deciliter","mmol/dL","MMOL/DL","amount of substance",6.022136699999999e+24,[-3,0,0,0,0,0,0],"mmol/dL","si",true,null,null,1,false,false,1,"mmol per dL; millimoles; decilitre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per gram","mmol/g","MMOL/G","amount of substance",602213670000000000000,[0,0,-1,0,0,0,0],"mmol/g","si",true,null,null,1,false,false,1,"mmol per gram; millimoles","LOINC","SCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per hour","mmol/h","MMOL/HR","amount of substance",167281575000000000,[0,-1,0,0,0,0,0],"mmol/h","si",true,null,null,1,false,false,1,"mmol/hr; mmol per hr; millimoles per hour","LOINC","SRat","Clinical","unit for tests related to urine","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per kilogram","mmol/kg","MMOL/KG","amount of substance",602213670000000000,[0,0,-1,0,0,0,0],"mmol/kg","si",true,null,null,1,false,false,1,"mmol per kg; millimoles per kilogram","LOINC","SCnt","Clinical","unit for tests related to stool","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per kilogram per 8 hour","mmol/kg/(8.h)","(MMOL/KG)/HR","amount of substance",20910196875000,[0,-1,-1,0,0,0,0],"(mmol/kg)/h","si",true,null,null,1,false,false,1,"mmol/(8.h.kg); mmol/kg/8hrs; mmol/kg/8 hrs; mmol per kg per 8hrs; 8 hrs; millimoles per kilograms per 8 hours; shift","LOINC","CCnt","Clinical","unit used to measure molar dose rate per patient body mass","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per kilogram per day","mmol/kg/d","(MMOL/KG)/D","amount of substance",6970065625000,[0,-1,-1,0,0,0,0],"(mmol/kg)/d","si",true,null,null,1,false,false,1,"mmol/kg/dy; mmol/kg/day; mmol per kg per dy; millimoles per kilograms per day","LOINC","RelSRat","Clinical","unit used to measure molar dose rate per patient body mass","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per kilogram per hour","mmol/kg/h","(MMOL/KG)/HR","amount of substance",167281575000000,[0,-1,-1,0,0,0,0],"(mmol/kg)/h","si",true,null,null,1,false,false,1,"mmol/kg/hr; mmol per kg per hr; millimoles per kilograms per hour","LOINC","CCnt","Clinical","unit used to measure molar dose rate per patient body mass","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per kilogram per minute","mmol/kg/min","(MMOL/KG)/MIN","amount of substance",10036894500000000,[0,-1,-1,0,0,0,0],"(mmol/kg)/min","si",true,null,null,1,false,false,1,"mmol/(kg.min); mmol/kg/min; mmol per kg per min; millimoles per kilograms per minute","LOINC","CCnt","Clinical","unit used to measure molar dose rate per patient body mass; note that the unit for the enzyme unit U = umol/min. mmol/kg/min = kU/kg; ","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per liter","mmol/L","MMOL/L","amount of substance",6.0221367e+23,[-3,0,0,0,0,0,0],"mmol/L","si",true,null,null,1,false,false,1,"mmol per L; millimoles per liter; litre","LOINC","SCnc","Clinical","unit for tests related to doses","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per square meter","mmol/m2","MMOL/M2","amount of substance",602213670000000000000,[-2,0,0,0,0,0,0],"mmol/(m<sup>2</sup>)","si",true,null,null,1,false,false,1,"mmol/m^2; mmol/sq. meter; mmol per m2; m^2; sq. meter; millimoles; meter squared; metre","LOINC","ArSub","Clinical","unit used to measure molar dose per patient body surface area","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per minute","mmol/min","MMOL/MIN","amount of substance",10036894500000000000,[0,-1,0,0,0,0,0],"mmol/min","si",true,null,null,1,false,false,1,"mmol per min; millimoles per minute","LOINC","Srat; CAct","Clinical","unit for the enzyme unit U = umol/min. mmol/min = kU","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per millimole","mmol/mmol","MMOL/MMOL","amount of substance",1,[0,0,0,0,0,0,0],"mmol/mmol","si",true,null,null,1,false,false,0,"mmol per mmol; millimoles per millimole","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per mole","mmol/mol","MMOL/MOL","amount of substance",0.001,[0,0,0,0,0,0,0],"mmol/mol","si",true,null,null,1,false,false,0,"mmol per mol; millimoles per mole","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"millimole per second per liter","mmol/s/L","(MMOL/S)/L","amount of substance",6.0221367e+23,[-3,-1,0,0,0,0,0],"(mmol/s)/L","si",true,null,null,1,false,false,1,"mmol/sec/L; mmol per s per L; per sec; millimoles per seconds per liter; litre","LOINC","CCnc ","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"mole per kilogram","mol/kg","MOL/KG","amount of substance",602213670000000000000,[0,0,-1,0,0,0,0],"mol/kg","si",true,null,null,1,false,false,1,"mol per kg; moles; mols","LOINC","SCnt","Clinical","unit for tests related to stool","10*23","10*23","6.0221367",6.0221367,false],[false,"mole per kilogram per second","mol/kg/s","(MOL/KG)/S","amount of substance",602213670000000000000,[0,-1,-1,0,0,0,0],"(mol/kg)/s","si",true,null,null,1,false,false,1,"mol/kg/sec; mol per kg per sec; moles per kilograms per second; mols","LOINC","CCnt","Clinical","unit of catalytic activity (mol/s) per mass (kg)","10*23","10*23","6.0221367",6.0221367,false],[false,"mole per liter","mol/L","MOL/L","amount of substance",6.0221366999999994e+26,[-3,0,0,0,0,0,0],"mol/L","si",true,null,null,1,false,false,1,"mol per L; moles per liter; litre; moles; mols","LOINC","SCnc","Clinical","unit often used in tests measuring oxygen content","10*23","10*23","6.0221367",6.0221367,false],[false,"mole per cubic meter","mol/m3","MOL/M3","amount of substance",6.0221367e+23,[-3,0,0,0,0,0,0],"mol/(m<sup>3</sup>)","si",true,null,null,1,false,false,1,"mol/m^3; mol/cu. m; mol per m3; m^3; cu. meter; mols; moles; meters cubed; metre; mole per kiloliter; kilolitre; mol/kL","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"mole per milliliter","mol/mL","MOL/ML","amount of substance",6.0221367e+29,[-3,0,0,0,0,0,0],"mol/mL","si",true,null,null,1,false,false,1,"mol per mL; moles; millilitre; mols","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"mole per mole","mol/mol","MOL/MOL","amount of substance",1,[0,0,0,0,0,0,0],"mol/mol","si",true,null,null,1,false,false,0,"mol per mol; moles per mol; mols","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"mole per second","mol/s","MOL/S","amount of substance",6.0221367e+23,[0,-1,0,0,0,0,0],"mol/s","si",true,null,null,1,false,false,1,"mol per sec; moles per second; mols","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"milliosmole","mosm","MOSM","amount of substance (dissolved particles)",602213670000000000000,[0,0,0,0,0,0,0],"mosm","chemical",true,null,null,1,false,false,1,"milliosmoles","LOINC","Osmol","Clinical","equal to 1/1000 of an osmole","mol","MOL","1",1,false],[false,"milliosmole per kilogram","mosm/kg","MOSM/KG","amount of substance (dissolved particles)",602213670000000000,[0,0,-1,0,0,0,0],"mosm/kg","chemical",true,null,null,1,false,false,1,"mosm per kg; milliosmoles per kilogram","LOINC","Osmol","Clinical","","mol","MOL","1",1,false],[false,"milliosmole per liter","mosm/L","MOSM/L","amount of substance (dissolved particles)",6.0221367e+23,[-3,0,0,0,0,0,0],"mosm/L","chemical",true,null,null,1,false,false,1,"mosm per liter; litre; milliosmoles","LOINC","Osmol","Clinical","","mol","MOL","1",1,false],[false,"millipascal","mPa","MPAL","pressure",1,[-1,-2,1,0,0,0,0],"mPa","si",true,null,null,1,false,false,0,"millipascals","LOINC","Pres","Clinical","unit of pressure","N/m2","N/M2","1",1,false],[false,"millipascal second","mPa.s","MPAL.S","pressure",1,[-1,-1,1,0,0,0,0],"mPa.s","si",true,null,null,1,false,false,0,"mPa*s; millipoise; mP; dynamic viscosity","LOINC","Visc","Clinical","base units for millipoise, a measurement of dynamic viscosity","N/m2","N/M2","1",1,false],[true,"megasecond","Ms","MAS","time",1000000,[0,1,0,0,0,0,0],"Ms",null,false,"T",null,1,false,false,0,"megaseconds","LOINC","Time","Clinical","",null,null,null,null,false],[true,"millisecond","ms","MS","time",0.001,[0,1,0,0,0,0,0],"ms",null,false,"T",null,1,false,false,0,"milliseconds; duration","LOINC","Time","Clinical","",null,null,null,null,false],[false,"milli enzyme unit per gram","mU/g","MU/G","catalytic activity",10036894500000,[0,-1,-1,0,0,0,0],"mU/g","chemical",true,null,null,1,false,false,1,"mU per gm; milli enzyme units per gram; enzyme activity; enzymatic activity per mass","LOINC","CCnt","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 mU = 1 nmol/min","umol/min","UMOL/MIN","1",1,false],[false,"milli enzyme unit per liter","mU/L","MU/L","catalytic activity",10036894500000000,[-3,-1,0,0,0,0,0],"mU/L","chemical",true,null,null,1,false,false,1,"mU per liter; litre; milli enzyme units enzymatic activity per volume; enzyme activity","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 mU = 1 nmol/min","umol/min","UMOL/MIN","1",1,false],[false,"milli enzyme unit per milligram","mU/mg","MU/MG","catalytic activity",10036894500000000,[0,-1,-1,0,0,0,0],"mU/mg","chemical",true,null,null,1,false,false,1,"mU per mg; milli enzyme units per milligram","LOINC","CCnt","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 mU = 1 nmol/min","umol/min","UMOL/MIN","1",1,false],[false,"milli enzyme unit per milliliter","mU/mL","MU/ML","catalytic activity",10036894500000000000,[-3,-1,0,0,0,0,0],"mU/mL","chemical",true,null,null,1,false,false,1,"mU per mL; milli enzyme units per milliliter; millilitre; enzymatic activity per volume; enzyme activity","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 mU = 1 nmol/min","umol/min","UMOL/MIN","1",1,false],[false,"milli enzyme unit per milliliter per minute","mU/mL/min","(MU/ML)/MIN","catalytic activity",167281575000000000,[-3,-2,0,0,0,0,0],"(mU/mL)/min","chemical",true,null,null,1,false,false,1,"mU per mL per min; mU per milliliters per minute; millilitres; milli enzyme units; enzymatic activity; enzyme activity","LOINC","CCncRat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 mU = 1 nmol/min","umol/min","UMOL/MIN","1",1,false],[false,"millivolt","mV","MV","electric potential",1,[2,-2,1,0,0,-1,0],"mV","si",true,null,null,1,false,false,0,"millivolts","LOINC","Elpot","Clinical","unit of electric potential (voltage)","J/C","J/C","1",1,false],[false,"Newton centimeter","N.cm","N.CM","force",10,[2,-2,1,0,0,0,0],"N.cm","si",true,null,null,1,false,false,0,"N*cm; Ncm; N cm; Newton*centimeters; Newton* centimetres; torque; work","LOINC","","Clinical","as a measurement of work, N.cm = 1/100 Joules;\nnote that N.m is the standard unit of measurement for torque (although dimensionally equivalent to Joule), and N.cm can also be thought of as a torqe unit","kg.m/s2","KG.M/S2","1",1,false],[false,"Newton second","N.s","N.S","force",1000,[1,-1,1,0,0,0,0],"N.s","si",true,null,null,1,false,false,0,"Newton*seconds; N*s; N s; Ns; impulse; imp","LOINC","","Clinical","standard unit of impulse","kg.m/s2","KG.M/S2","1",1,false],[true,"nanogram","ng","NG","mass",1e-9,[0,0,1,0,0,0,0],"ng",null,false,"M",null,1,false,false,0,"nanograms","LOINC","Mass","Clinical","",null,null,null,null,false],[true,"nanogram per 24 hour","ng/(24.h)","NG/HR","mass",1.1574074074074075e-14,[0,-1,1,0,0,0,0],"ng/h",null,false,"M",null,1,false,false,0,"ng/24hrs; ng/24 hrs; nanograms per 24 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"nanogram per 8 hour","ng/(8.h)","NG/HR","mass",3.4722222222222224e-14,[0,-1,1,0,0,0,0],"ng/h",null,false,"M",null,1,false,false,0,"ng/8hrs; ng/8 hrs; nanograms per 8 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"nanogram per million","ng/10*6","NG/(10*6)","mass",1e-15,[0,0,1,0,0,0,0],"ng/(10<sup>6</sup>)",null,false,"M",null,1,false,false,0,"ng/10^6; ng per 10*6; 10^6; nanograms","LOINC","MNum","Clinical","",null,null,null,null,false],[true,"nanogram per day","ng/d","NG/D","mass",1.1574074074074075e-14,[0,-1,1,0,0,0,0],"ng/d",null,false,"M",null,1,false,false,0,"ng/dy; ng per day; nanograms ","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"nanogram per deciliter","ng/dL","NG/DL","mass",0.00001,[-3,0,1,0,0,0,0],"ng/dL",null,false,"M",null,1,false,false,0,"ng per dL; nanograms per deciliter; decilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"nanogram per gram","ng/g","NG/G","mass",1e-9,[0,0,0,0,0,0,0],"ng/g",null,false,"M",null,1,false,false,0,"ng/gm; ng per gm; nanograms per gram","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"nanogram per hour","ng/h","NG/HR","mass",2.777777777777778e-13,[0,-1,1,0,0,0,0],"ng/h",null,false,"M",null,1,false,false,0,"ng/hr; ng per hr; nanograms per hour","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"nanogram per kilogram","ng/kg","NG/KG","mass",1e-12,[0,0,0,0,0,0,0],"ng/kg",null,false,"M",null,1,false,false,0,"ng per kg; nanograms per kilogram","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"nanogram per kilogram per 8 hour","ng/kg/(8.h)","(NG/KG)/HR","mass",3.472222222222222e-17,[0,-1,0,0,0,0,0],"(ng/kg)/h",null,false,"M",null,1,false,false,0,"ng/(8.h.kg); ng/kg/8hrs; ng/kg/8 hrs; ng per kg per 8hrs; 8 hrs; nanograms per kilograms per 8 hours; shift","LOINC","MRtoRat ","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"nanogram per kilogram per hour","ng/kg/h","(NG/KG)/HR","mass",2.7777777777777775e-16,[0,-1,0,0,0,0,0],"(ng/kg)/h",null,false,"M",null,1,false,false,0,"ng/(kg.h); ng/kg/hr; ng per kg per hr; nanograms per kilograms per hour","LOINC","MRtoRat ","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"nanogram per kilogram per minute","ng/kg/min","(NG/KG)/MIN","mass",1.6666666666666667e-14,[0,-1,0,0,0,0,0],"(ng/kg)/min",null,false,"M",null,1,false,false,0,"ng/(kg.min); ng per kg per min; nanograms per kilograms per minute","LOINC","MRtoRat ","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"nanogram per liter","ng/L","NG/L","mass",0.000001,[-3,0,1,0,0,0,0],"ng/L",null,false,"M",null,1,false,false,0,"ng per L; nanograms per liter; litre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"nanogram per square meter","ng/m2","NG/M2","mass",1e-9,[-2,0,1,0,0,0,0],"ng/(m<sup>2</sup>)",null,false,"M",null,1,false,false,0,"ng/m^2; ng/sq. m; ng per m2; m^2; sq. meter; nanograms; meter squared; metre","LOINC","ArMass","Clinical","unit used to measure mass dose per patient body surface area",null,null,null,null,false],[true,"nanogram per milligram","ng/mg","NG/MG","mass",0.000001,[0,0,0,0,0,0,0],"ng/mg",null,false,"M",null,1,false,false,0,"ng per mg; nanograms","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"nanogram per milligram per hour","ng/mg/h","(NG/MG)/HR","mass",2.7777777777777777e-10,[0,-1,0,0,0,0,0],"(ng/mg)/h",null,false,"M",null,1,false,false,0,"ng/mg/hr; ng per mg per hr; nanograms per milligrams per hour","LOINC","MRtoRat ","Clinical","",null,null,null,null,false],[true,"nanogram per minute","ng/min","NG/MIN","mass",1.6666666666666667e-11,[0,-1,1,0,0,0,0],"ng/min",null,false,"M",null,1,false,false,0,"ng per min; nanograms","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"nanogram per millliiter","ng/mL","NG/ML","mass",0.001,[-3,0,1,0,0,0,0],"ng/mL",null,false,"M",null,1,false,false,0,"ng per mL; nanograms; millilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"nanogram per milliliter per hour","ng/mL/h","(NG/ML)/HR","mass",2.7777777777777776e-7,[-3,-1,1,0,0,0,0],"(ng/mL)/h",null,false,"M",null,1,false,false,0,"ng/mL/hr; ng per mL per mL; nanograms per milliliter per hour; nanogram per millilitre per hour; nanograms per millilitre per hour; enzymatic activity per volume; enzyme activity per milliliters","LOINC","CCnc","Clinical","tests that measure enzymatic activity",null,null,null,null,false],[true,"nanogram per second","ng/s","NG/S","mass",1e-9,[0,-1,1,0,0,0,0],"ng/s",null,false,"M",null,1,false,false,0,"ng/sec; ng per sec; nanograms per second","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"nanogram per enzyme unit","ng/U","NG/U","mass",9.963241120049634e-26,[0,1,1,0,0,0,0],"ng/U",null,false,"M",null,1,false,false,-1,"ng per U; nanograms per enzyme unit","LOINC","CMass","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)",null,null,null,null,false],[false,"nanokatal","nkat","NKAT","catalytic activity",602213670000000,[0,-1,0,0,0,0,0],"nkat","chemical",true,null,null,1,false,false,1,"nanokatals","LOINC","CAct","Clinical","kat is a unit of catalytic activity with base units = mol/s. Rarely used because its units are too large to practically express catalytic activity. See enzyme unit [U] which is the standard unit for catalytic activity.","mol/s","MOL/S","1",1,false],[false,"nanoliter","nL","NL","volume",1.0000000000000002e-12,[3,0,0,0,0,0,0],"nL","iso1000",true,null,null,1,false,false,0,"nanoliters; nanolitres","LOINC","Vol","Clinical","","l",null,"1",1,false],[true,"nanometer","nm","NM","length",1e-9,[1,0,0,0,0,0,0],"nm",null,false,"L",null,1,false,false,0,"nanometers; nanometres","LOINC","Len","Clinical","",null,null,null,null,false],[true,"nanometer per second per liter","nm/s/L","(NM/S)/L","length",0.000001,[-2,-1,0,0,0,0,0],"(nm/s)/L",null,false,"L",null,1,false,false,0,"nm/sec/liter; nm/sec/litre; nm per s per l; nm per sec per l; nanometers per second per liter; nanometre per second per litre; nanometres per second per litre","LOINC","VelCnc","Clinical","",null,null,null,null,false],[false,"nanomole","nmol","NMOL","amount of substance",602213670000000,[0,0,0,0,0,0,0],"nmol","si",true,null,null,1,false,false,1,"nanomoles","LOINC","Sub","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per 24 hour","nmol/(24.h)","NMOL/HR","amount of substance",6970065625,[0,-1,0,0,0,0,0],"nmol/h","si",true,null,null,1,false,false,1,"nmol/24hr; nmol/24 hr; nanomoles per 24 hours; nmol/day; nanomoles per day; nmol per day; nanomole/day; nanomol/day","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per day","nmol/d","NMOL/D","amount of substance",6970065625,[0,-1,0,0,0,0,0],"nmol/d","si",true,null,null,1,false,false,1,"nmol/day; nanomoles per day; nmol per day; nanomole/day; nanomol/day; nmol/24hr; nmol/24 hr; nanomoles per 24 hours; ","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per deciliter","nmol/dL","NMOL/DL","amount of substance",6022136700000000000,[-3,0,0,0,0,0,0],"nmol/dL","si",true,null,null,1,false,false,1,"nmol per dL; nanomoles per deciliter; nanomole per decilitre; nanomoles per decilitre; nanomole/deciliter; nanomole/decilitre; nanomol/deciliter; nanomol/decilitre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per gram","nmol/g","NMOL/G","amount of substance",602213670000000,[0,0,-1,0,0,0,0],"nmol/g","si",true,null,null,1,false,false,1,"nmol per gram; nanomoles per gram; nanomole/gram","LOINC","SCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per hour per liter","nmol/h/L","(NMOL/HR)/L","amount of substance",167281575000000,[-3,-1,0,0,0,0,0],"(nmol/h)/L","si",true,null,null,1,false,false,1,"nmol/hrs/L; nmol per hrs per L; nanomoles per hours per liter; litre; enzymatic activity per volume; enzyme activities","LOINC","CCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per liter","nmol/L","NMOL/L","amount of substance",602213670000000000,[-3,0,0,0,0,0,0],"nmol/L","si",true,null,null,1,false,false,1,"nmol per L; nanomoles per liter; litre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per milligram","nmol/mg","NMOL/MG","amount of substance",602213670000000000,[0,0,-1,0,0,0,0],"nmol/mg","si",true,null,null,1,false,false,1,"nmol per mg; nanomoles per milligram","LOINC","SCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per milligram per hour","nmol/mg/h","(NMOL/MG)/HR","amount of substance",167281575000000,[0,-1,-1,0,0,0,0],"(nmol/mg)/h","si",true,null,null,1,false,false,1,"nmol/mg/hr; nmol per mg per hr; nanomoles per milligrams per hour","LOINC","SCntRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per milligram of protein","nmol/mg{prot}","NMOL/MG","amount of substance",602213670000000000,[0,0,-1,0,0,0,0],"nmol/mg","si",true,null,null,1,false,false,1,"nanomoles; nmol/mg prot; nmol per mg prot","LOINC","Ratio; CCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per minute","nmol/min","NMOL/MIN","amount of substance",10036894500000,[0,-1,0,0,0,0,0],"nmol/min","si",true,null,null,1,false,false,1,"nmol per min; nanomoles per minute; milli enzyme units; enzyme activity per volume; enzymatic activity","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min. nmol/min = mU (milli enzyme unit)","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per minute per milliliter","nmol/min/mL","(NMOL/MIN)/ML","amount of substance",10036894500000000000,[-3,-1,0,0,0,0,0],"(nmol/min)/mL","si",true,null,null,1,false,false,1,"nmol per min per mL; nanomoles per minutes per milliliter; millilitre; milli enzyme units per volume; enzyme activity; enzymatic activity","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min. nmol/mL/min = mU/mL","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per milliliter","nmol/mL","NMOL/ML","amount of substance",602213670000000000000,[-3,0,0,0,0,0,0],"nmol/mL","si",true,null,null,1,false,false,1,"nmol per mL; nanomoles per milliliter; millilitre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per milliliter per hour","nmol/mL/h","(NMOL/ML)/HR","amount of substance",167281575000000000,[-3,-1,0,0,0,0,0],"(nmol/mL)/h","si",true,null,null,1,false,false,1,"nmol/mL/hr; nmol per mL per hr; nanomoles per milliliters per hour; millilitres; milli enzyme units per volume; enzyme activity; enzymatic activity","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min.","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per milliliter per minute","nmol/mL/min","(NMOL/ML)/MIN","amount of substance",10036894500000000000,[-3,-1,0,0,0,0,0],"(nmol/mL)/min","si",true,null,null,1,false,false,1,"nmol per mL per min; nanomoles per milliliters per min; millilitres; milli enzyme units per volume; enzyme activity; enzymatic activity","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min. nmol/mL/min = mU/mL","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per millimole","nmol/mmol","NMOL/MMOL","amount of substance",0.000001,[0,0,0,0,0,0,0],"nmol/mmol","si",true,null,null,1,false,false,0,"nmol per mmol; nanomoles per millimole","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per millimole of creatinine","nmol/mmol{creat}","NMOL/MMOL","amount of substance",0.000001,[0,0,0,0,0,0,0],"nmol/mmol","si",true,null,null,1,false,false,0,"nanomoles","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per mole","nmol/mol","NMOL/MOL","amount of substance",1e-9,[0,0,0,0,0,0,0],"nmol/mol","si",true,null,null,1,false,false,0,"nmol per mole; nanomoles","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per nanomole","nmol/nmol","NMOL/NMOL","amount of substance",1,[0,0,0,0,0,0,0],"nmol/nmol","si",true,null,null,1,false,false,0,"nmol per nmol; nanomoles","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per second","nmol/s","NMOL/S","amount of substance",602213670000000,[0,-1,0,0,0,0,0],"nmol/s","si",true,null,null,1,false,false,1,"nmol/sec; nmol per sec; nanomoles per sercond; milli enzyme units; enzyme activity; enzymatic activity","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min.","10*23","10*23","6.0221367",6.0221367,false],[false,"nanomole per second per liter","nmol/s/L","(NMOL/S)/L","amount of substance",602213670000000000,[-3,-1,0,0,0,0,0],"(nmol/s)/L","si",true,null,null,1,false,false,1,"nmol/sec/L; nmol per s per L; nmol per sec per L; nanomoles per seconds per liter; litre; milli enzyme units per volume; enzyme activity; enzymatic activity","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min.","10*23","10*23","6.0221367",6.0221367,false],[true,"nanosecond","ns","NS","time",1e-9,[0,1,0,0,0,0,0],"ns",null,false,"T",null,1,false,false,0,"nanoseconds","LOINC","Time","Clinical","",null,null,null,null,false],[false,"nanoenzyme unit per milliliter","nU/mL","NU/ML","catalytic activity",10036894500000,[-3,-1,0,0,0,0,0],"nU/mL","chemical",true,null,null,1,false,false,1,"nU per mL; nanoenzyme units per milliliter; millilitre; enzymatic activity per volume; enzyme activity","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 fU = pmol/min","umol/min","UMOL/MIN","1",1,false],[false,"Ohm meter","Ohm.m","OHM.M","electric resistance",1000,[3,-1,1,0,0,-2,0],"Ω.m","si",true,null,null,1,false,false,0,"electric resistivity; meters; metres","LOINC","","Clinical","unit of electric resistivity","V/A","V/A","1",1,false],[false,"osmole per kilogram","osm/kg","OSM/KG","amount of substance (dissolved particles)",602213670000000000000,[0,0,-1,0,0,0,0],"osm/kg","chemical",true,null,null,1,false,false,1,"osm per kg; osmoles per kilogram; osmols","LOINC","Osmol","Clinical","","mol","MOL","1",1,false],[false,"osmole per liter","osm/L","OSM/L","amount of substance (dissolved particles)",6.0221366999999994e+26,[-3,0,0,0,0,0,0],"osm/L","chemical",true,null,null,1,false,false,1,"osm per L; osmoles per liter; litre; osmols","LOINC","Osmol","Clinical","","mol","MOL","1",1,false],[false,"picoampere","pA","PA","electric current",1e-12,[0,-1,0,0,0,1,0],"pA","si",true,null,null,1,false,false,0,"picoamperes","LOINC","","Clinical","equal to 10^-12 amperes","C/s","C/S","1",1,false],[true,"picogram","pg","PG","mass",1e-12,[0,0,1,0,0,0,0],"pg",null,false,"M",null,1,false,false,0,"picograms","LOINC","Mass; EntMass","Clinical","",null,null,null,null,false],[true,"picogram per deciliter","pg/dL","PG/DL","mass",9.999999999999999e-9,[-3,0,1,0,0,0,0],"pg/dL",null,false,"M",null,1,false,false,0,"pg per dL; picograms; decilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"picogram per liter","pg/L","PG/L","mass",1e-9,[-3,0,1,0,0,0,0],"pg/L",null,false,"M",null,1,false,false,0,"pg per L; picograms; litre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"picogram per milligram","pg/mg","PG/MG","mass",1e-9,[0,0,0,0,0,0,0],"pg/mg",null,false,"M",null,1,false,false,0,"pg per mg; picograms","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"picogram per milliliter","pg/mL","PG/ML","mass",0.000001,[-3,0,1,0,0,0,0],"pg/mL",null,false,"M",null,1,false,false,0,"pg per mL; picograms per milliliter; millilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"picogram per millimeter","pg/mm","PG/MM","mass",1e-9,[-1,0,1,0,0,0,0],"pg/mm",null,false,"M",null,1,false,false,0,"pg per mm; picogram/millimeter; picogram/millimetre; picograms per millimeter; millimetre","LOINC","Lineic Mass","Clinical","",null,null,null,null,false],[false,"picokatal","pkat","PKAT","catalytic activity",602213670000,[0,-1,0,0,0,0,0],"pkat","chemical",true,null,null,1,false,false,1,"pkats; picokatals","LOINC","CAct","Clinical","kat is a unit of catalytic activity with base units = mol/s. Rarely used because its units are too large to practically express catalytic activity. See enzyme unit [U] which is the standard unit for catalytic activity.","mol/s","MOL/S","1",1,false],[false,"picoliter","pL","PL","volume",1e-15,[3,0,0,0,0,0,0],"pL","iso1000",true,null,null,1,false,false,0,"picoliters; picolitres","LOINC","Vol","Clinical","","l",null,"1",1,false],[true,"picometer","pm","PM","length",1e-12,[1,0,0,0,0,0,0],"pm",null,false,"L",null,1,false,false,0,"picometers; picometres","LOINC","Len","Clinical","",null,null,null,null,false],[false,"picomole","pmol","PMOL","amount of substance",602213670000,[0,0,0,0,0,0,0],"pmol","si",true,null,null,1,false,false,1,"picomoles; pmols","LOINC","Sub","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per 24 hour","pmol/(24.h)","PMOL/HR","amount of substance",6970065.625,[0,-1,0,0,0,0,0],"pmol/h","si",true,null,null,1,false,false,1,"pmol/24hrs; pmol/24 hrs; pmol per 24 hrs; 24hrs; days; dy; picomoles per 24 hours","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per day","pmol/d","PMOL/D","amount of substance",6970065.625,[0,-1,0,0,0,0,0],"pmol/d","si",true,null,null,1,false,false,1,"pmol/dy; pmol per day; 24 hours; 24hrs; 24 hrs; picomoles","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per deciliter","pmol/dL","PMOL/DL","amount of substance",6022136700000000,[-3,0,0,0,0,0,0],"pmol/dL","si",true,null,null,1,false,false,1,"pmol per dL; picomoles per deciliter; decilitre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per gram","pmol/g","PMOL/G","amount of substance",602213670000,[0,0,-1,0,0,0,0],"pmol/g","si",true,null,null,1,false,false,1,"pmol per gm; picomoles per gram; picomole/gram","LOINC","SCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per hour per milliliter ","pmol/h/mL","(PMOL/HR)/ML","amount of substance",167281575000000,[-3,-1,0,0,0,0,0],"(pmol/h)/mL","si",true,null,null,1,false,false,1,"pmol/hrs/mL; pmol per hrs per mL; picomoles per hour per milliliter; millilitre; micro enzyme units per volume; enzymatic activity; enzyme activity","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min. ","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per liter","pmol/L","PMOL/L","amount of substance",602213670000000,[-3,0,0,0,0,0,0],"pmol/L","si",true,null,null,1,false,false,1,"picomole/liter; pmol per L; picomoles; litre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per minute","pmol/min","PMOL/MIN","amount of substance",10036894500,[0,-1,0,0,0,0,0],"pmol/min","si",true,null,null,1,false,false,1,"picomole/minute; pmol per min; picomoles per minute; micro enzyme units; enzymatic activity; enzyme activity","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min. pmol/min = uU (micro enzyme unit)","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per milliliter","pmol/mL","PMOL/ML","amount of substance",602213670000000000,[-3,0,0,0,0,0,0],"pmol/mL","si",true,null,null,1,false,false,1,"picomole/milliliter; picomole/millilitre; pmol per mL; picomoles; millilitre; picomols; pmols","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"picomole per micromole","pmol/umol","PMOL/UMOL","amount of substance",0.000001,[0,0,0,0,0,0,0],"pmol/μmol","si",true,null,null,1,false,false,0,"pmol/mcgmol; picomole/micromole; pmol per umol; pmol per mcgmol; picomoles ","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[true,"picosecond","ps","PS","time",1e-12,[0,1,0,0,0,0,0],"ps",null,false,"T",null,1,false,false,0,"picoseconds; psec","LOINC","Time","Clinical","",null,null,null,null,false],[false,"picotesla","pT","PT","magnetic flux density",1e-9,[0,-1,1,0,0,-1,0],"pT","si",true,null,null,1,false,false,0,"picoteslas","LOINC","","Clinical","SI unit of magnetic field strength for magnetic field B","Wb/m2","WB/M2","1",1,false],[false,"enzyme unit per 12 hour","U/(12.h)","U/HR","catalytic activity",232335520833.33334,[0,-2,0,0,0,0,0],"U/h","chemical",true,null,null,1,false,false,1,"U/12hrs; U/ 12hrs; U per 12 hrs; 12hrs; enzyme units per 12 hours; enzyme activity; enzymatic activity per time; umol per min per 12 hours; micromoles per minute per 12 hours; umol/min/12hr","LOINC","CRat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per 2 hour","U/(2.h)","U/HR","catalytic activity",1394013125000,[0,-2,0,0,0,0,0],"U/h","chemical",true,null,null,1,false,false,1,"U/2hrs; U/ 2hrs; U per 2 hrs; 2hrs; enzyme units per 2 hours; enzyme activity; enzymatic activity per time; umol per minute per 2 hours; micromoles per minute; umol/min/2hr; umol per min per 2hr","LOINC","CRat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per 24 hour","U/(24.h)","U/HR","catalytic activity",116167760416.66667,[0,-2,0,0,0,0,0],"U/h","chemical",true,null,null,1,false,false,1,"U/24hrs; U/ 24hrs; U per 24 hrs; 24hrs; enzyme units per 24 hours; enzyme activity; enzymatic activity per time; micromoles per minute per 24 hours; umol/min/24hr; umol per min per 24hr","LOINC","CRat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per 10","U/10","U","catalytic activity",1003689450000000,[0,-1,0,0,0,0,0],"U","chemical",true,null,null,1,false,false,1,"enzyme unit/10; U per 10; enzyme units per 10; enzymatic activity; enzyme activity; micromoles per minute; umol/min/10","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per 10 billion","U/10*10","U/(10*10)","catalytic activity",1003689.45,[0,-1,0,0,0,0,0],"U/(10<sup>10</sup>)","chemical",true,null,null,1,false,false,1,"U per 10*10; enzyme units per 10*10; U per 10 billion; enzyme units; enzymatic activity; micromoles per minute per 10 billion; umol/min/10*10","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per trillion","U/10*12","U/(10*12)","catalytic activity",10036.8945,[0,-1,0,0,0,0,0],"U/(10<sup>12</sup>)","chemical",true,null,null,1,false,false,1,"enzyme unit/10*12; U per 10*12; enzyme units per 10*12; enzyme units per trillion; enzymatic activity; micromoles per minute per trillion; umol/min/10*12; umol per min per 10*12","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per million","U/10*6","U/(10*6)","catalytic activity",10036894500,[0,-1,0,0,0,0,0],"U/(10<sup>6</sup>)","chemical",true,null,null,1,false,false,1,"enzyme unit/10*6; U per 10*6; enzyme units per 10*6; enzyme units; enzymatic activity per volume; micromoles per minute per million; umol/min/10*6; umol per min per 10*6","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per billion","U/10*9","U/(10*9)","catalytic activity",10036894.5,[0,-1,0,0,0,0,0],"U/(10<sup>9</sup>)","chemical",true,null,null,1,false,false,1,"enzyme unit/10*9; U per 10*9; enzyme units per 10*9; enzymatic activity per volume; micromoles per minute per billion; umol/min/10*9; umol per min per 10*9","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per day","U/d","U/D","catalytic activity",116167760416.66667,[0,-2,0,0,0,0,0],"U/d","chemical",true,null,null,1,false,false,1,"U/dy; enzyme units per day; enzyme units; enzyme activity; enzymatic activity per time; micromoles per minute per day; umol/min/day; umol per min per day","LOINC","CRat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per deciliter","U/dL","U/DL","catalytic activity",100368945000000000000,[-3,-1,0,0,0,0,0],"U/dL","chemical",true,null,null,1,false,false,1,"U per dL; enzyme units per deciliter; decilitre; micromoles per minute per deciliter; umol/min/dL; umol per min per dL","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per gram","U/g","U/G","catalytic activity",10036894500000000,[0,-1,-1,0,0,0,0],"U/g","chemical",true,null,null,1,false,false,1,"U/gm; U per gm; enzyme units per gram; micromoles per minute per gram; umol/min/g; umol per min per g","LOINC","CCnt","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per hour","U/h","U/HR","catalytic activity",2788026250000,[0,-2,0,0,0,0,0],"U/h","chemical",true,null,null,1,false,false,1,"U/hr; U per hr; enzyme units per hour; micromoles per minute per hour; umol/min/hr; umol per min per hr","LOINC","CRat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per liter","U/L","U/L","catalytic activity",10036894500000000000,[-3,-1,0,0,0,0,0],"U/L","chemical",true,null,null,1,false,false,1,"enzyme unit/liter; enzyme unit/litre; U per L; enzyme units per liter; enzyme unit per litre; micromoles per minute per liter; umol/min/L; umol per min per L","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per minute","U/min","U/MIN","catalytic activity",167281575000000,[0,-2,0,0,0,0,0],"U/min","chemical",true,null,null,1,false,false,1,"enzyme unit/minute; U per min; enzyme units; umol/min/min; micromoles per minute per minute; micromoles per min per min; umol","LOINC","CRat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per milliliter","U/mL","U/ML","catalytic activity",1.00368945e+22,[-3,-1,0,0,0,0,0],"U/mL","chemical",true,null,null,1,false,false,1,"U per mL; enzyme units per milliliter; millilitre; micromoles per minute per milliliter; umol/min/mL; umol per min per mL","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"enzyme unit per second","U/s","U/S","catalytic activity",10036894500000000,[0,-2,0,0,0,0,0],"U/s","chemical",true,null,null,1,false,false,1,"U/sec; U per second; enzyme units per second; micromoles per minute per second; umol/min/sec; umol per min per sec","LOINC","CRat","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min)","umol/min","UMOL/MIN","1",1,false],[false,"micro international unit","u[IU]","U[IU]","arbitrary",0.000001,[0,0,0,0,0,0,0],"μi.U.","chemical",true,null,null,1,false,true,0,"uIU; u IU; microinternational units","LOINC","Arb","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"micro international unit per liter","u[IU]/L","U[IU]/L","arbitrary",0.001,[-3,0,0,0,0,0,0],"(μi.U.)/L","chemical",true,null,null,1,false,true,0,"uIU/L; u IU/L; uIU per L; microinternational units per liter; litre; ","LOINC","ACnc","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"micro international unit per milliliter","u[IU]/mL","U[IU]/ML","arbitrary",1,[-3,0,0,0,0,0,0],"(μi.U.)/mL","chemical",true,null,null,1,false,true,0,"uIU/mL; u IU/mL; uIU per mL; microinternational units per milliliter; millilitre","LOINC","ACnc","Clinical","International units (IU) are analyte and reference specimen  specific arbitrary units (held at WHO)","[iU]","[IU]","1",1,false],[false,"microequivalent","ueq","UEQ","amount of substance",602213670000000000,[0,0,0,0,0,0,0],"μeq","chemical",true,null,null,1,false,false,1,"microequivalents; 10^-6 equivalents; 10-6 equivalents","LOINC","Sub","Clinical","","mol","MOL","1",1,false],[false,"microequivalent per liter","ueq/L","UEQ/L","amount of substance",602213670000000000000,[-3,0,0,0,0,0,0],"μeq/L","chemical",true,null,null,1,false,false,1,"ueq per liter; litre; microequivalents","LOINC","MCnc","Clinical","","mol","MOL","1",1,false],[false,"microequivalent per milliliter","ueq/mL","UEQ/ML","amount of substance",6.0221367000000003e+23,[-3,0,0,0,0,0,0],"μeq/mL","chemical",true,null,null,1,false,false,1,"ueq per milliliter; millilitre; microequivalents","LOINC","MCnc","Clinical","","mol","MOL","1",1,false],[true,"microgram","ug","UG","mass",0.000001,[0,0,1,0,0,0,0],"μg",null,false,"M",null,1,false,false,0,"mcg; micrograms; 10^-6 grams; 10-6 grams","LOINC","Mass","Clinical","",null,null,null,null,false],[true,"microgram per 100 gram","ug/(100.g)","UG/G","mass",1e-8,[0,0,0,0,0,0,0],"μg/g",null,false,"M",null,1,false,false,0,"ug/100gm; ug/100 gm; mcg; ug per 100g; 100 gm; mcg per 100g; micrograms per 100 grams","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"microgram per 24 hour","ug/(24.h)","UG/HR","mass",1.1574074074074074e-11,[0,-1,1,0,0,0,0],"μg/h",null,false,"M",null,1,false,false,0,"ug/24hrs; ug/24 hrs; mcg/24hrs; ug per 24hrs; mcg per 24hrs; 24 hrs; micrograms per 24 hours","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"microgram per 8 hour","ug/(8.h)","UG/HR","mass",3.472222222222222e-11,[0,-1,1,0,0,0,0],"μg/h",null,false,"M",null,1,false,false,0,"ug/8hrs; ug/8 hrs; mcg/8hrs; ug per 8hrs; mcg per 8hrs; 8 hrs; micrograms per 8 hours; shift","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"microgram per square foot (international)","ug/[sft_i]","UG/[SFT_I]","mass",0.000010763910416709721,[-2,0,1,0,0,0,0],"μg",null,false,"M",null,1,false,false,0,"ug/sft; ug/ft2; ug/ft^2; ug/sq. ft; micrograms; sq. foot; foot squared","LOINC","ArMass","Clinical","",null,null,null,null,false],[true,"microgram per day","ug/d","UG/D","mass",1.1574074074074074e-11,[0,-1,1,0,0,0,0],"μg/d",null,false,"M",null,1,false,false,0,"ug/dy; mcg/dy; ug per day; mcg; micrograms per day","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"microgram per deciliter","ug/dL","UG/DL","mass",0.009999999999999998,[-3,0,1,0,0,0,0],"μg/dL",null,false,"M",null,1,false,false,0,"ug per dL; mcg/dl; mcg per dl; micrograms per deciliter; decilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"microgram per gram","ug/g","UG/G","mass",0.000001,[0,0,0,0,0,0,0],"μg/g",null,false,"M",null,1,false,false,0,"ug per gm; mcg/gm; mcg per g; micrograms per gram","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"microgram per hour","ug/h","UG/HR","mass",2.7777777777777777e-10,[0,-1,1,0,0,0,0],"μg/h",null,false,"M",null,1,false,false,0,"ug/hr; mcg/hr; mcg per hr; ug per hr; ug per hour; micrograms","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"microgram per kilogram","ug/kg","UG/KG","mass",9.999999999999999e-10,[0,0,0,0,0,0,0],"μg/kg",null,false,"M",null,1,false,false,0,"ug per kg; mcg/kg; mcg per kg; micrograms per kilogram","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"microgram per kilogram per 8 hour","ug/kg/(8.h)","(UG/KG)/HR","mass",3.472222222222222e-14,[0,-1,0,0,0,0,0],"(μg/kg)/h",null,false,"M",null,1,false,false,0,"ug/kg/8hrs; mcg/kg/8hrs; ug/kg/8 hrs; mcg/kg/8 hrs; ug per kg per 8hrs; 8 hrs; mcg per kg per 8hrs; micrograms per kilograms per 8 hours; shift","LOINC","","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"microgram per kilogram per day","ug/kg/d","(UG/KG)/D","mass",1.1574074074074072e-14,[0,-1,0,0,0,0,0],"(μg/kg)/d",null,false,"M",null,1,false,false,0,"ug/(kg.d); ug/kg/dy; mcg/kg/day; ug per kg per dy; 24 hours; 24hrs; mcg; kilograms; microgram per kilogram and day","LOINC","","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"microgram per kilogram per hour","ug/kg/h","(UG/KG)/HR","mass",2.7777777777777774e-13,[0,-1,0,0,0,0,0],"(μg/kg)/h",null,false,"M",null,1,false,false,0,"ug/(kg.h); ug/kg/hr; mcg/kg/hr; ug per kg per hr; mcg per kg per hr; kilograms","LOINC","","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"microgram per kilogram per minute","ug/kg/min","(UG/KG)/MIN","mass",1.6666666666666664e-11,[0,-1,0,0,0,0,0],"(μg/kg)/min",null,false,"M",null,1,false,false,0,"ug/kg/min; ug/kg/min; mcg/kg/min; ug per kg per min; mcg; micrograms per kilograms per minute ","LOINC","","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"microgram per liter","ug/L","UG/L","mass",0.001,[-3,0,1,0,0,0,0],"μg/L",null,false,"M",null,1,false,false,0,"mcg/L; ug per L; mcg; micrograms per liter; litre ","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"microgram per liter per 24 hour","ug/L/(24.h)","(UG/L)/HR","mass",1.1574074074074074e-8,[-3,-1,1,0,0,0,0],"(μg/L)/h",null,false,"M",null,1,false,false,0,"ug/L/24hrs; ug/L/24 hrs; mcg/L/24hrs; ug per L per 24hrs; 24 hrs; day; dy mcg; micrograms per liters per 24 hours; litres","LOINC","","Clinical","unit used to measure mass dose rate per patient body mass",null,null,null,null,false],[true,"microgram per square meter","ug/m2","UG/M2","mass",0.000001,[-2,0,1,0,0,0,0],"μg/(m<sup>2</sup>)",null,false,"M",null,1,false,false,0,"ug/m^2; ug/sq. m; mcg/m2; mcg/m^2; mcg/sq. m; ug per m2; m^2; sq. meter; mcg; micrograms per square meter; meter squared; metre","LOINC","ArMass","Clinical","unit used to measure mass dose per patient body surface area",null,null,null,null,false],[true,"microgram per cubic meter","ug/m3","UG/M3","mass",0.000001,[-3,0,1,0,0,0,0],"μg/(m<sup>3</sup>)",null,false,"M",null,1,false,false,0,"ug/m^3; ug/cu. m; mcg/m3; mcg/m^3; mcg/cu. m; ug per m3; ug per m^3; ug per cu. m; mcg; micrograms per cubic meter; meter cubed; metre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"microgram per milligram","ug/mg","UG/MG","mass",0.001,[0,0,0,0,0,0,0],"μg/mg",null,false,"M",null,1,false,false,0,"ug per mg; mcg/mg; mcg per mg; micromilligrams per milligram","LOINC","MCnt","Clinical","",null,null,null,null,false],[true,"microgram per minute","ug/min","UG/MIN","mass",1.6666666666666667e-8,[0,-1,1,0,0,0,0],"μg/min",null,false,"M",null,1,false,false,0,"ug per min; mcg/min; mcg per min; microminutes per minute","LOINC","MRat","Clinical","",null,null,null,null,false],[true,"microgram per milliliter","ug/mL","UG/ML","mass",1,[-3,0,1,0,0,0,0],"μg/mL",null,false,"M",null,1,false,false,0,"ug per mL; mcg/mL; mcg per mL; micrograms per milliliter; millilitre","LOINC","MCnc","Clinical","",null,null,null,null,false],[true,"microgram per millimole","ug/mmol","UG/MMOL","mass",1.660540186674939e-27,[0,0,1,0,0,0,0],"μg/mmol",null,false,"M",null,1,false,false,-1,"ug per mmol; mcg/mmol; mcg per mmol; micrograms per millimole","LOINC","Ratio","Clinical","",null,null,null,null,false],[true,"microgram per nanogram","ug/ng","UG/NG","mass",999.9999999999999,[0,0,0,0,0,0,0],"μg/ng",null,false,"M",null,1,false,false,0,"ug per ng; mcg/ng; mcg per ng; micrograms per nanogram","LOINC","MCnt","Clinical","",null,null,null,null,false],[false,"microkatal","ukat","UKAT","catalytic activity",602213670000000000,[0,-1,0,0,0,0,0],"μkat","chemical",true,null,null,1,false,false,1,"microkatals; ukats","LOINC","CAct","Clinical","kat is a unit of catalytic activity with base units = mol/s. Rarely used because its units are too large to practically express catalytic activity. See enzyme unit [U] which is the standard unit for catalytic activity.","mol/s","MOL/S","1",1,false],[false,"microliter","uL","UL","volume",1e-9,[3,0,0,0,0,0,0],"μL","iso1000",true,null,null,1,false,false,0,"microliters; microlitres; mcl","LOINC","Vol","Clinical","","l",null,"1",1,false],[false,"microliter per 2 hour","uL/(2.h)","UL/HR","volume",1.388888888888889e-13,[3,-1,0,0,0,0,0],"μL/h","iso1000",true,null,null,1,false,false,0,"uL/2hrs; uL/2 hrs; mcg/2hr; mcg per 2hr; uL per 2hr; uL per 2 hrs; microliters per 2 hours; microlitres ","LOINC","VRat","Clinical","","l",null,"1",1,false],[false,"microliter per hour","uL/h","UL/HR","volume",2.777777777777778e-13,[3,-1,0,0,0,0,0],"μL/h","iso1000",true,null,null,1,false,false,0,"uL/hr; mcg/hr; mcg per hr; uL per hr; microliters per hour; microlitres","LOINC","VRat","Clinical","","l",null,"1",1,false],[true,"micrometer","um","UM","length",0.000001,[1,0,0,0,0,0,0],"μm",null,false,"L",null,1,false,false,0,"micrometers; micrometres; μm; microns","LOINC","Len","Clinical","Unit of length that is usually used in tests related to the eye",null,null,null,null,false],[true,"microns per second","um/s","UM/S","length",0.000001,[1,-1,0,0,0,0,0],"μm/s",null,false,"L",null,1,false,false,0,"um/sec; micron/second; microns/second; um per sec; micrometers per second; micrometres","LOINC","Vel","Clinical","",null,null,null,null,false],[false,"micromole","umol","UMOL","amount of substance",602213670000000000,[0,0,0,0,0,0,0],"μmol","si",true,null,null,1,false,false,1,"micromoles; umols","LOINC","Sub","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per 2 hour","umol/(2.h)","UMOL/HR","amount of substance",83640787500000,[0,-1,0,0,0,0,0],"μmol/h","si",true,null,null,1,false,false,1,"umol/2hrs; umol/2 hrs; umol per 2 hrs; 2hrs; micromoles per 2 hours","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per 24 hour","umol/(24.h)","UMOL/HR","amount of substance",6970065625000,[0,-1,0,0,0,0,0],"μmol/h","si",true,null,null,1,false,false,1,"umol/24hrs; umol/24 hrs; umol per 24 hrs; per 24hrs; micromoles per 24 hours","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per 8 hour","umol/(8.h)","UMOL/HR","amount of substance",20910196875000,[0,-1,0,0,0,0,0],"μmol/h","si",true,null,null,1,false,false,1,"umol/8hr; umol/8 hr; umol per 8 hr; umol per 8hr; umols per 8hr; umol per 8 hours; micromoles per 8 hours; shift","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per day","umol/d","UMOL/D","amount of substance",6970065625000,[0,-1,0,0,0,0,0],"μmol/d","si",true,null,null,1,false,false,1,"umol/day; umol per day; umols per day; umol per days; micromoles per days; umol/24hr; umol/24 hr; umol per 24 hr; umol per 24hr; umols per 24hr; umol per 24 hours; micromoles per 24 hours","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per deciliter","umol/dL","UMOL/DL","amount of substance",6.0221367e+21,[-3,0,0,0,0,0,0],"μmol/dL","si",true,null,null,1,false,false,1,"micromole/deciliter; micromole/decilitre; umol per dL; micromoles per deciliters; micromole per decilitres","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per gram","umol/g","UMOL/G","amount of substance",602213670000000000,[0,0,-1,0,0,0,0],"μmol/g","si",true,null,null,1,false,false,1,"micromole/gram; umol per g; micromoles per gram","LOINC","SCnt; Ratio","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per hour","umol/h","UMOL/HR","amount of substance",167281575000000,[0,-1,0,0,0,0,0],"μmol/h","si",true,null,null,1,false,false,1,"umol/hr; umol per hr; umol per hour; micromoles per hours","LOINC","SRat","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per kilogram","umol/kg","UMOL/KG","amount of substance",602213670000000,[0,0,-1,0,0,0,0],"μmol/kg","si",true,null,null,1,false,false,1,"umol per kg; micromoles per kilogram","LOINC","SCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per liter","umol/L","UMOL/L","amount of substance",602213670000000000000,[-3,0,0,0,0,0,0],"μmol/L","si",true,null,null,1,false,false,1,"micromole/liter; micromole/litre; umol per liter; micromoles per liter; litre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per liter per hour","umol/L/h","(UMOL/L)/HR","amount of substance",167281575000000000,[-3,-1,0,0,0,0,0],"(μmol/L)/h","si",true,null,null,1,false,false,1,"umol/liter/hr; umol/litre/hr; umol per L per hr; umol per liter per hour; micromoles per liters per hour; litre","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min; umol/L/h is a derived unit of enzyme units","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per milligram","umol/mg","UMOL/MG","amount of substance",602213670000000000000,[0,0,-1,0,0,0,0],"μmol/mg","si",true,null,null,1,false,false,1,"micromole/milligram; umol per mg; micromoles per milligram","LOINC","SCnt","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per minute","umol/min","UMOL/MIN","amount of substance",10036894500000000,[0,-1,0,0,0,0,0],"μmol/min","si",true,null,null,1,false,false,1,"micromole/minute; umol per min; micromoles per minute; enzyme units","LOINC","CAct","Clinical","unit for the enzyme unit U = umol/min","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per minute per gram","umol/min/g","(UMOL/MIN)/G","amount of substance",10036894500000000,[0,-1,-1,0,0,0,0],"(μmol/min)/g","si",true,null,null,1,false,false,1,"umol/min/gm; umol per min per gm; micromoles per minutes per gram; U/g; enzyme units","LOINC","CCnt","Clinical","unit for the enzyme unit U = umol/min. umol/min/g = U/g","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per minute per liter","umol/min/L","(UMOL/MIN)/L","amount of substance",10036894500000000000,[-3,-1,0,0,0,0,0],"(μmol/min)/L","si",true,null,null,1,false,false,1,"umol/min/liter; umol/minute/liter; micromoles per minutes per liter; litre; enzyme units; U/L","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min. umol/min/L = U/L","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per milliliter","umol/mL","UMOL/ML","amount of substance",6.0221367000000003e+23,[-3,0,0,0,0,0,0],"μmol/mL","si",true,null,null,1,false,false,1,"umol per mL; micromoles per milliliter; millilitre","LOINC","SCnc","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per milliliter per minute","umol/mL/min","(UMOL/ML)/MIN","amount of substance",1.00368945e+22,[-3,-1,0,0,0,0,0],"(μmol/mL)/min","si",true,null,null,1,false,false,1,"umol per mL per min; micromoles per milliliters per minute; millilitres","LOINC","CCnc","Clinical","unit for the enzyme unit U = umol/min. umol/mL/min = U/mL","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per millimole","umol/mmol","UMOL/MMOL","amount of substance",0.001,[0,0,0,0,0,0,0],"μmol/mmol","si",true,null,null,1,false,false,0,"umol per mmol; micromoles per millimole","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per mole","umol/mol","UMOL/MOL","amount of substance",0.000001,[0,0,0,0,0,0,0],"μmol/mol","si",true,null,null,1,false,false,0,"umol per mol; micromoles per mole","LOINC","SRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"micromole per micromole","umol/umol","UMOL/UMOL","amount of substance",1,[0,0,0,0,0,0,0],"μmol/μmol","si",true,null,null,1,false,false,0,"umol per umol; micromoles per micromole","LOINC","Srto; SFr; EntSRto","Clinical","","10*23","10*23","6.0221367",6.0221367,false],[false,"microOhm","uOhm","UOHM","electric resistance",0.001,[2,-1,1,0,0,-2,0],"μΩ","si",true,null,null,1,false,false,0,"microOhms; µΩ","LOINC","","Clinical","unit of electric resistance","V/A","V/A","1",1,false],[true,"microsecond","us","US","time",0.000001,[0,1,0,0,0,0,0],"μs",null,false,"T",null,1,false,false,0,"microseconds","LOINC","Time","Clinical","",null,null,null,null,false],[false,"micro enzyme unit per gram","uU/g","UU/G","catalytic activity",10036894500,[0,-1,-1,0,0,0,0],"μU/g","chemical",true,null,null,1,false,false,1,"uU per gm; micro enzyme units per gram; micro enzymatic activity per mass; enzyme activity","LOINC","CCnt","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 uU = 1pmol/min","umol/min","UMOL/MIN","1",1,false],[false,"micro enzyme unit per liter","uU/L","UU/L","catalytic activity",10036894500000,[-3,-1,0,0,0,0,0],"μU/L","chemical",true,null,null,1,false,false,1,"uU per L; micro enzyme units per liter; litre; enzymatic activity per volume; enzyme activity ","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 uU = 1pmol/min","umol/min","UMOL/MIN","1",1,false],[false,"micro enzyme unit per milliliter","uU/mL","UU/ML","catalytic activity",10036894500000000,[-3,-1,0,0,0,0,0],"μU/mL","chemical",true,null,null,1,false,false,1,"uU per mL; micro enzyme units per milliliter; millilitre; enzymatic activity per volume; enzyme activity","LOINC","CCnc","Clinical","1 U is the standard enzyme unit which equals 1 micromole substrate catalyzed per minute (1 umol/min); 1 uU = 1pmol/min","umol/min","UMOL/MIN","1",1,false],[false,"microvolt","uV","UV","electric potential",0.001,[2,-2,1,0,0,-1,0],"μV","si",true,null,null,1,false,false,0,"microvolts","LOINC","Elpot","Clinical","unit of electric potential (voltage)","J/C","J/C","1",1,false]]}}

@@ -13,21 +13,21 @@ describe('ValueSetDef', () => {
     setup(this, data, [], vsets);
   });
 
-  it('should return a resolved value set when the codeService knows about it', function () {
-    const vs = this.known.exec(this.ctx);
+  it('should return a resolved value set when the codeService knows about it', async function () {
+    const vs = await this.known.exec(this.ctx);
     vs.oid.should.equal('2.16.840.1.113883.3.464.1003.101.12.1061');
     vs.version.should.equal('20140501');
     vs.codes.length.should.equal(3);
   });
 
-  it('should execute one-arg to ValueSet with ID', function () {
-    const vs = this['unknown One Arg'].exec(this.ctx);
+  it('should execute one-arg to ValueSet with ID', async function () {
+    const vs = await this['unknown One Arg'].exec(this.ctx);
     vs.oid.should.equal('1.2.3.4.5.6.7.8.9');
     should.not.exist(vs.version);
   });
 
-  it('should execute two-arg to ValueSet with ID and version', function () {
-    const vs = this['unknown Two Arg'].exec(this.ctx);
+  it('should execute two-arg to ValueSet with ID and version', async function () {
+    const vs = await this['unknown Two Arg'].exec(this.ctx);
     vs.oid.should.equal('1.2.3.4.5.6.7.8.9');
     vs.version.should.equal('1');
   });
@@ -42,8 +42,8 @@ describe('ValueSetRef', () => {
     this.foo.name.should.equal('Acute Pharyngitis');
   });
 
-  it('should execute to the defined value set', function () {
-    this.foo.exec(this.ctx).oid.should.equal('2.16.840.1.113883.3.464.1003.101.12.1001');
+  it('should execute to the defined value set', async function () {
+    (await this.foo.exec(this.ctx)).oid.should.equal('2.16.840.1.113883.3.464.1003.101.12.1001');
   });
 });
 
@@ -52,84 +52,88 @@ describe('InValueSet', () => {
     setup(this, data, [], vsets);
   });
 
-  it('should find string code in value set', function () {
-    this.string.exec(this.ctx).should.be.true();
+  it('should find string code in value set', async function () {
+    (await this.string.exec(this.ctx)).should.be.true();
   });
 
-  it('should throw an error when codes are in several codesystems', function () {
-    should(() => this.sharedCodesFoo.exec(this.ctx)).throw(
-      'In (valueset) is ambiguous -- multiple codes with multiple code systems exist in value set.'
-    );
+  it('should throw an error when codes are in several codesystems', async function () {
+    return this.sharedCodesFoo
+      .exec(this.ctx)
+      .should.be.rejectedWith(
+        'In (valueset) is ambiguous -- multiple codes with multiple code systems exist in value set.'
+      );
   });
 
-  it('should return false when there are multiple codesystems in a valueset but the string does not match any codes in valueset', function () {
-    this.sharedCodesNoMatch.exec(this.ctx).should.be.false();
+  it('should return false when there are multiple codesystems in a valueset but the string does not match any codes in valueset', async function () {
+    (await this.sharedCodesNoMatch.exec(this.ctx)).should.be.false();
   });
 
-  it('should throw an error if not all codes have the same codesystem', function () {
-    should(() => this.improperSharedCodesCodeValue.exec(this.ctx)).throw(
-      'In (valueset) is ambiguous -- multiple codes with multiple code systems exist in value set.'
-    );
+  it('should throw an error if not all codes have the same codesystem', async function () {
+    return this.improperSharedCodesCodeValue
+      .exec(this.ctx)
+      .should.be.rejectedWith(
+        'In (valueset) is ambiguous -- multiple codes with multiple code systems exist in value set.'
+      );
   });
 
-  it('should find string code in versioned value set', function () {
-    this.stringInVersionedValueSet.exec(this.ctx).should.be.true();
+  it('should find string code in versioned value set', async function () {
+    (await this.stringInVersionedValueSet.exec(this.ctx)).should.be.true();
   });
 
-  it('should not find short code in value set (missing code system)', function () {
-    this.shortCode.exec(this.ctx).should.be.false();
+  it('should not find short code in value set (missing code system)', async function () {
+    (await this.shortCode.exec(this.ctx)).should.be.false();
   });
 
-  it('should find medium code in value set', function () {
-    this.mediumCode.exec(this.ctx).should.be.true();
+  it('should find medium code in value set', async function () {
+    (await this.mediumCode.exec(this.ctx)).should.be.true();
   });
 
-  it('should find long code in value set', function () {
-    this.longCode.exec(this.ctx).should.be.true();
+  it('should find long code in value set', async function () {
+    (await this.longCode.exec(this.ctx)).should.be.true();
   });
 
-  it('should not find string code in value set', function () {
-    this.wrongString.exec(this.ctx).should.be.false();
+  it('should not find string code in value set', async function () {
+    (await this.wrongString.exec(this.ctx)).should.be.false();
   });
 
-  it('should not find string code in versioned value set', function () {
-    this.wrongStringInVersionedValueSet.exec(this.ctx).should.be.false();
+  it('should not find string code in versioned value set', async function () {
+    (await this.wrongStringInVersionedValueSet.exec(this.ctx)).should.be.false();
   });
 
-  it('should not find short code in value set (missing code system)', function () {
-    this.wrongShortCode.exec(this.ctx).should.be.false();
+  it('should not find short code in value set (missing code system)', async function () {
+    (await this.wrongShortCode.exec(this.ctx)).should.be.false();
   });
 
-  it('should not find medium code in value set', function () {
-    this.wrongMediumCode.exec(this.ctx).should.be.false();
+  it('should not find medium code in value set', async function () {
+    (await this.wrongMediumCode.exec(this.ctx)).should.be.false();
   });
 
-  it('should find long code with different version in value set', function () {
-    this.longCodeDifferentVersion.exec(this.ctx).should.be.true();
+  it('should find long code with different version in value set', async function () {
+    (await this.longCodeDifferentVersion.exec(this.ctx)).should.be.true();
   });
 
-  it('should not find code if it is null', function () {
-    this.nullCode.exec(this.ctx).should.be.false();
+  it('should not find code if it is null', async function () {
+    (await this.nullCode.exec(this.ctx)).should.be.false();
   });
 
-  it('should return true if code in list is equivalent', function () {
-    this.inListOfCodes.exec(this.ctx).should.be.true();
+  it('should return true if code in list is equivalent', async function () {
+    (await this.inListOfCodes.exec(this.ctx)).should.be.true();
   });
 
-  it('should return true if code in list is equivalent using ExpressionRef', function () {
-    this.inListOfCodesExpressionRef.exec(this.ctx).should.be.true();
+  it('should return true if code in list is equivalent using ExpressionRef', async function () {
+    (await this.inListOfCodesExpressionRef.exec(this.ctx)).should.be.true();
   });
 
-  it('should return false if no code in list is equivalent', function () {
-    this.inWrongListOfCodes.exec(this.ctx).should.be.false();
+  it('should return false if no code in list is equivalent', async function () {
+    (await this.inWrongListOfCodes.exec(this.ctx)).should.be.false();
   });
 
-  it('should ignore null codes in list', function () {
-    this.listOfCodesWithNull.exec(this.ctx).should.be.true();
+  it('should ignore null codes in list', async function () {
+    (await this.listOfCodesWithNull.exec(this.ctx)).should.be.true();
   });
 
-  it('should return false for null list of codes', function () {
-    this.listOfCodesNull.exec(this.ctx).should.be.false();
+  it('should return false for null list of codes', async function () {
+    (await this.listOfCodesNull.exec(this.ctx)).should.be.false();
   });
 });
 
@@ -138,14 +142,14 @@ describe('Patient Property In ValueSet', () => {
     setup(this, data, [], vsets);
   });
 
-  it('should find that John is not female', function () {
+  it('should find that John is not female', async function () {
     this.ctx.patient = new PatientSource([p1]).currentPatient();
-    this.isFemale.exec(this.ctx).should.be.false();
+    (await this.isFemale.exec(this.ctx)).should.be.false();
   });
 
-  it('should find that Sally is female', function () {
+  it('should find that Sally is female', async function () {
     this.ctx.patient = new PatientSource([p2]).currentPatient();
-    this.isFemale.exec(this.ctx).should.be.true();
+    (await this.isFemale.exec(this.ctx)).should.be.true();
   });
 });
 
@@ -160,9 +164,9 @@ describe('CodeDef', () => {
     codeDef.name.should.equal('Tobacco smoking status code');
   });
 
-  it('should execute to a Code datatype', function () {
+  it('should execute to a Code datatype', async function () {
     const codeDef = this.lib.getCode('Tobacco smoking status code');
-    const code = codeDef.exec(this.ctx);
+    const code = await codeDef.exec(this.ctx);
     code.code.should.equal('72166-2');
     code.system.should.equal('http://loinc.org');
     should.not.exist(code.version);
@@ -179,8 +183,8 @@ describe('CodeRef', () => {
     this.foo.name.should.equal('Tobacco smoking status code');
   });
 
-  it('should execute to the defined code', function () {
-    const code = this.foo.exec(this.ctx);
+  it('should execute to the defined code', async function () {
+    const code = await this.foo.exec(this.ctx);
     code.code.should.equal('72166-2');
     code.system.should.equal('http://loinc.org');
     should.not.exist(code.version);
@@ -199,9 +203,9 @@ describe('ConceptDef', () => {
     conceptDef.name.should.equal('Tobacco smoking status');
   });
 
-  it('should execute to a Concept datatype', function () {
-    const conceptDef = this.lib.getConcept('Tobacco smoking status');
-    const concept = conceptDef.exec(this.ctx);
+  it('should execute to a Concept datatype', async function () {
+    const conceptDef = await this.lib.getConcept('Tobacco smoking status');
+    const concept = await conceptDef.exec(this.ctx);
     concept.display.should.equal('Tobacco smoking status');
     concept.codes.should.have.length(1);
     concept.codes[0].code.should.equal('72166-2');
@@ -220,8 +224,8 @@ describe('ConceptRef', () => {
     this.foo.name.should.equal('Tobacco smoking status');
   });
 
-  it('should execute to the defined concept', function () {
-    const concept = this.foo.exec(this.ctx);
+  it('should execute to the defined concept', async function () {
+    const concept = await this.foo.exec(this.ctx);
     concept.display.should.equal('Tobacco smoking status');
     concept.codes.should.have.length(1);
     concept.codes[0].code.should.equal('72166-2');
@@ -231,7 +235,7 @@ describe('ConceptRef', () => {
   });
 });
 
-describe('CalculateAge', () => {
+describe('CalculateAge', function () {
   beforeEach(function () {
     setup(this, data, [p1]);
     // Note, tests are inexact (otherwise test needs to repeat exact logic we're testing)
@@ -259,11 +263,11 @@ describe('CalculateAge', () => {
     this.timediff = this.today.toJSDate() - this.bday;
   }); // diff in milliseconds
 
-  it('should execute age in years', function () {
-    this.years.exec(this.ctx).should.equal(Math.floor(this.full_months / 12));
+  it('should execute age in years', async function () {
+    (await this.years.exec(this.ctx)).should.equal(Math.floor(this.full_months / 12));
   });
 
-  it.skip('should execute age in months', function () {
+  it.skip('should execute age in months', async function () {
     // This test is failing if you run it in the first half of any
     // given month and passing for the second half.
 
@@ -276,50 +280,50 @@ describe('CalculateAge', () => {
       const month_offset = dayOfMonth.getMonth() === 5 && dayOfMonth.getDate() < 17 ? 6 : 5;
       const full_months =
         (dayOfMonth.getFullYear() - 1980) * 12 + (dayOfMonth.getMonth() - month_offset);
-      [full_months, full_months + 1].indexOf(this.months.exec(this.ctx)).should.not.equal(-1);
+      [full_months, full_months + 1].indexOf(await this.months.exec(this.ctx)).should.not.equal(-1);
     }
   });
 
-  it('should execute age in weeks', function () {
+  it('should execute age in weeks', async function () {
     // this is an uncertainty since birthdate is only specfied to days
-    this.weeks
-      .exec(this.ctx)
-      .should.eql(
+    (await this.weeks.exec(this.ctx)).should.eql(
+      Math.floor(
         Math.floor(
-          Math.floor(
-            Math.floor(Math.floor(Math.floor(Math.floor(this.timediff / 1000) / 60) / 60) / 24) / 7
-          )
+          Math.floor(Math.floor(Math.floor(Math.floor(this.timediff / 1000) / 60) / 60) / 24) / 7
         )
-      );
+      )
+    );
   });
 
-  it('should execute age in days', function () {
+  it('should execute age in days', async function () {
     // this is an uncertainty since birthdate is only specfied to days
     const days = Math.floor(
       Math.floor(Math.floor(Math.floor(this.timediff / 1000) / 60) / 60) / 24
     );
-    this.days.exec(this.ctx).should.eql(new Uncertainty(days - 1, days));
+    (await this.days.exec(this.ctx)).should.eql(new Uncertainty(days - 1, days));
   });
 
   // temporarily skip since this test only works when DST is in effect
-  it.skip('should execute age in hours', function () {
+  it.skip('should execute age in hours', async function () {
     // this is an uncertainty since birthdate is only specfied to days
     const hours = Math.floor(Math.floor(Math.floor(this.timediff / 1000) / 60) / 60);
-    this.hours.exec(this.ctx).should.eql(new Uncertainty(hours - 24, hours));
+    (await this.hours.exec(this.ctx)).should.eql(new Uncertainty(hours - 24, hours));
   });
 
   // temporarily skip since this test only works when DST is in effect
-  it.skip('should execute age in minutes', function () {
+  it.skip('should execute age in minutes', async function () {
     // this is an uncertainty since birthdate is only specfied to days
     const minutes = Math.floor(Math.floor(this.timediff / 1000) / 60);
-    this.minutes.exec(this.ctx).should.eql(new Uncertainty(minutes - 24 * 60, minutes));
+    (await this.minutes.exec(this.ctx)).should.eql(new Uncertainty(minutes - 24 * 60, minutes));
   });
 
   // temporarily skip since this test only works when DST is in effect
-  it.skip('should execute age in seconds', function () {
+  it.skip('should execute age in seconds', async function () {
     // this is an uncertainty since birthdate is only specfied to days
     const seconds = Math.floor(this.timediff / 1000);
-    this.seconds.exec(this.ctx).should.eql(new Uncertainty(seconds - 24 * 60 * 60, seconds));
+    (await this.seconds.exec(this.ctx)).should.eql(
+      new Uncertainty(seconds - 24 * 60 * 60, seconds)
+    );
   });
 });
 
@@ -328,35 +332,35 @@ describe('CalculateAgeAt', () => {
     setup(this, data, [p1]);
   });
 
-  it('should execute age at 2012 as 31 - 32 (since 2012 is not precise to days)', function () {
-    this.ageAt2012.exec(this.ctx).should.eql(new Uncertainty(31, 32));
+  it('should execute age at 2012 as 31 - 32 (since 2012 is not precise to days)', async function () {
+    (await this.ageAt2012.exec(this.ctx)).should.eql(new Uncertainty(31, 32));
   });
 
-  it('should execute age at 19810216 as 0', function () {
-    this.ageAt19810216.exec(this.ctx).should.equal(0);
+  it('should execute age at 19810216 as 0', async function () {
+    (await this.ageAt19810216.exec(this.ctx)).should.equal(0);
   });
 
-  it('should execute age at 1975 as -5 to -4 (since 1975 is not precise to days)', function () {
-    this.ageAt1975.exec(this.ctx).should.eql(new Uncertainty(-5, -4));
+  it('should execute age at 1975 as -5 to -4 (since 1975 is not precise to days)', async function () {
+    (await this.ageAt1975.exec(this.ctx)).should.eql(new Uncertainty(-5, -4));
   });
 
-  it('should give an uncertainty due to birthdate time component with (using AgeInYearsAt)', function () {
+  it('should give an uncertainty due to birthdate time component with (using AgeInYearsAt)', async function () {
     setup(this, data, [p3]);
-    this.ageInYearsDateTimeArg.exec(this.ctx).should.eql(new Uncertainty(17, 18));
+    (await this.ageInYearsDateTimeArg.exec(this.ctx)).should.eql(new Uncertainty(17, 18));
   });
 
-  it('should give an uncertainty due to birthdate time component (using CalculateAgeInYearsAt)', function () {
+  it('should give an uncertainty due to birthdate time component (using CalculateAgeInYearsAt)', async function () {
     setup(this, data, [p3]);
-    this.calculateAgeInYearsDateTimeArg.exec(this.ctx).should.eql(new Uncertainty(17, 18));
+    (await this.calculateAgeInYearsDateTimeArg.exec(this.ctx)).should.eql(new Uncertainty(17, 18));
   });
 
-  it('should convert birthdate to date, give 18 (using AgeInYearsAt)', function () {
+  it('should convert birthdate to date, give 18 (using AgeInYearsAt)', async function () {
     setup(this, data, [p3]);
-    this.ageInYearsDateArg.exec(this.ctx).should.eql(18);
+    (await this.ageInYearsDateArg.exec(this.ctx)).should.eql(18);
   });
 
-  it('should convert date to DateTime, give 17 (using CalculateAgeInYearsAt)', function () {
+  it('should convert date to DateTime, give 17 (using CalculateAgeInYearsAt)', async function () {
     setup(this, data, [p3]);
-    this.calculateAgeInYearsDateArg.exec(this.ctx).should.eql(17);
+    (await this.calculateAgeInYearsDateArg.exec(this.ctx)).should.eql(17);
   });
 });
