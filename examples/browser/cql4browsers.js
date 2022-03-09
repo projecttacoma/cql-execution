@@ -5772,6 +5772,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -5827,36 +5838,44 @@ var Retrieve = /** @class */ (function (_super) {
     }
     Retrieve.prototype.exec = function (ctx) {
         return __awaiter(this, void 0, void 0, function () {
-            var records, codes, range_1;
-            var _a;
+            var retrieveDetails, resolvedCodes, _a, records;
+            var _b;
             var _this = this;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0: return [4 /*yield*/, ctx.findRecords(this.templateId != null ? this.templateId : this.datatype)];
-                    case 1:
-                        records = _b.sent();
-                        codes = this.codes;
-                        if (!(this.codes && typeof this.codes.exec === 'function')) return [3 /*break*/, 3];
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        retrieveDetails = __assign(__assign({ datatype: this.datatype }, (this.codeProperty ? { codeProperty: this.codeProperty } : {})), (this.dateProperty ? { dateProperty: this.dateProperty } : {}));
+                        if (!this.codes) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.codes.execute(ctx)];
-                    case 2:
-                        codes = _b.sent();
-                        if (codes == null) {
+                    case 1:
+                        resolvedCodes = _c.sent();
+                        if (resolvedCodes == null) {
                             return [2 /*return*/, []];
                         }
-                        _b.label = 3;
-                    case 3:
-                        if (codes) {
-                            records = records.filter(function (r) { return _this.recordMatchesCodesOrVS(r, codes); });
-                        }
-                        if (!(this.dateRange && this.dateProperty)) return [3 /*break*/, 5];
+                        retrieveDetails.codes = resolvedCodes;
+                        _c.label = 2;
+                    case 2:
+                        if (!this.dateRange) return [3 /*break*/, 4];
+                        _a = retrieveDetails;
                         return [4 /*yield*/, this.dateRange.execute(ctx)];
+                    case 3:
+                        _a.dateRange = _c.sent();
+                        _c.label = 4;
                     case 4:
-                        range_1 = _b.sent();
-                        records = records.filter(function (r) { return range_1.includes(r.getDateOrInterval(_this.dateProperty)); });
-                        _b.label = 5;
+                        if (this.templateId) {
+                            retrieveDetails.templateId = this.templateId;
+                        }
+                        return [4 /*yield*/, ctx.findRecords(this.templateId != null ? this.templateId : this.datatype, retrieveDetails)];
                     case 5:
+                        records = _c.sent();
+                        if (retrieveDetails.codes) {
+                            records = records.filter(function (r) { return _this.recordMatchesCodesOrVS(r, retrieveDetails.codes); });
+                        }
+                        if (retrieveDetails.dateRange && this.dateProperty) {
+                            records = records.filter(function (r) { var _a; return (_a = retrieveDetails.dateRange) === null || _a === void 0 ? void 0 : _a.includes(r.getDateOrInterval(_this.dateProperty)); });
+                        }
                         if (Array.isArray(records)) {
-                            (_a = ctx.evaluatedRecords).push.apply(_a, records);
+                            (_b = ctx.evaluatedRecords).push.apply(_b, records);
                         }
                         else {
                             ctx.evaluatedRecords.push(records);
@@ -11789,10 +11808,10 @@ var Context = /** @class */ (function () {
             return this;
         }
     };
-    Context.prototype.findRecords = function (profile) {
+    Context.prototype.findRecords = function (profile, retrieveDetails) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.parent && this.parent.findRecords(profile)];
+                return [2 /*return*/, this.parent && this.parent.findRecords(profile, retrieveDetails)];
             });
         });
     };
@@ -12139,10 +12158,10 @@ var PatientContext = /** @class */ (function (_super) {
         }
         return this.localId_context[localId];
     };
-    PatientContext.prototype.findRecords = function (profile) {
+    PatientContext.prototype.findRecords = function (profile, retrieveDetails) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.patient && this.patient.findRecords(profile)];
+                return [2 /*return*/, this.patient && this.patient.findRecords(profile, retrieveDetails)];
             });
         });
     };
