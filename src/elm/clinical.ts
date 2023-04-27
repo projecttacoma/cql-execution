@@ -69,12 +69,17 @@ export class AnyInValueSet extends Expression {
 
 export class InValueSet extends Expression {
   code: any;
-  valueset: ValueSetRef;
+  valueset?: ValueSetRef;
+  valuesetExpression?: any;
 
   constructor(json: any) {
     super(json);
     this.code = build(json.code);
-    this.valueset = new ValueSetRef(json.valueset);
+    if (json.valueset) {
+      this.valueset = new ValueSetRef(json.valueset);
+    } else if (json.valuesetExpression) {
+      this.valuesetExpression = build(json.valuesetExpression);
+    }
   }
 
   async exec(ctx: Context) {
@@ -82,7 +87,7 @@ export class InValueSet extends Expression {
     if (this.code == null) {
       return false;
     }
-    if (this.valueset == null) {
+    if (this.valueset == null && this.valuesetExpression == null) {
       throw new Error('ValueSet must be provided to InValueSet function');
     }
     const code = await this.code.execute(ctx);
@@ -90,9 +95,16 @@ export class InValueSet extends Expression {
     if (code == null) {
       return false;
     }
-    const valueset = await this.valueset.execute(ctx);
-    if (valueset == null || !valueset.isValueSet) {
-      throw new Error('ValueSet must be provided to InValueSet function');
+    let valueset;
+    if (this.valueset) {
+      valueset = await this.valueset.execute(ctx);
+      if (valueset == null || !valueset.isValueSet) {
+        throw new Error('ValueSet must be provided to InValueSet function');
+      }
+    } else if (this.valuesetExpression) {
+      valueset = await this.valuesetExpression.execute(ctx);
+      // todo: find the valueset in the ctx and if it exists, then replace the valueset with that one
+      // match it by id to the list of valuesets in the engine
     }
     // If there is a code and valueset return whether or not the valueset has the code
     return valueset.hasMatch(code);
